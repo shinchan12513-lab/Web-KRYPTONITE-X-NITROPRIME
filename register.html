@@ -5,42 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สมัครสมาชิก - Kryptonite X Nitroprime</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="fade-page auth-page-body">
 
     <div class="auth-container">
-        <!-- กล่องฟอร์ม Register -->
         <div class="auth-card">
             <div class="auth-header">
                 <a href="shop.html" class="brand-logo">KRYPTONITE <span class="x-mark">X</span> NITROPRIME</a>
                 <p>สร้างบัญชีใหม่เพื่อเริ่มต้นใช้งาน</p>
             </div>
 
-            <!-- เพิ่ม id="registerForm" ให้ฟอร์ม -->
             <form class="auth-form" id="registerForm">
                 <div class="input-group">
                     <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน (Username)</label>
-                    <!-- เพิ่ม id="usernameInput" -->
                     <input type="text" id="usernameInput" placeholder="กำหนดชื่อผู้ใช้งาน" required>
                 </div>
 
                 <div class="input-group">
                     <label><i class="fa-solid fa-envelope"></i> อีเมล</label>
-                    <input type="email" placeholder="กรอกอีเมลของคุณ" required>
+                    <input type="email" id="emailInput" placeholder="กรอกอีเมลของคุณ" required>
                 </div>
 
                 <div class="input-group">
                     <label><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
-                    <input type="password" placeholder="กำหนดรหัสผ่าน" required>
+                    <input type="password" id="passwordInput" placeholder="กำหนดรหัสผ่าน" required>
                 </div>
 
                 <div class="input-group">
                     <label><i class="fa-solid fa-lock"></i> ยืนยันรหัสผ่าน</label>
-                    <input type="password" placeholder="ยืนยันรหัสผ่านอีกครั้ง" required>
+                    <input type="password" id="confirmPasswordInput" placeholder="ยืนยันรหัสผ่านอีกครั้ง" required>
                 </div>
 
                 <button type="submit" class="btn-auth-submit">สมัครสมาชิก</button>
@@ -52,44 +47,41 @@
         </div>
     </div>
 
-    <!-- Script สำหรับบันทึกข้อมูลสมาชิก -->
     <script>
         document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรชทันที
-
+            e.preventDefault();
             const username = document.getElementById('usernameInput').value.trim();
-            if (!username) return;
+            const password = document.getElementById('passwordInput').value;
+            const confirmPassword = document.getElementById('confirmPasswordInput').value;
 
-            // ดึงข้อมูลสมาชิกเดิมจาก localStorage (หรือสร้างอาเรย์ใหม่ถ้ายังไม่มี)
-            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
-
-            // ตรวจสอบว่าชื่อผู้ใช้นี้ซ้ำหรือไม่
-            const existingUser = allMembers.find(member => member.username === username);
-            if (existingUser) {
-                alert('ชื่อผู้ใช้นี้ถูกใช้งานแล้ว กรุณาใช้ชื่ออื่น');
+            if (password !== confirmPassword) {
+                alert('⚠️ รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่อีกครั้ง');
                 return;
             }
 
-            // จัดรูปแบบวันที่สมัคร
+            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
+
+            // ตรวจสอบชื่อซ้ำ
+            if (allMembers.some(m => m.username === username)) {
+                alert('⚠️ ชื่อผู้ใช้นี้ถูกใช้งานแล้วในระบบ');
+                return;
+            }
+
             let now = new Date();
             let formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-            // เพิ่มข้อมูลยูสเซอร์ใหม่เข้าไป
+            // เพิ่มข้อมูลลงในฐานข้อมูลกลางแอดมิน
             allMembers.push({
                 username: username,
-                role: 'MEMBER',
+                role: username === 'admin' ? 'ADMIN' : 'MEMBER',
                 registerDate: formattedDate,
                 balance: 0.00
             });
 
-            // บันทึกกลับลง localStorage
             localStorage.setItem('allMembers', JSON.stringify(allMembers));
-
-            alert('สมัครสมาชิกสำเร็จ!');
-            // พาผู้ใช้ไปยังหน้าเข้าสู่ระบบ
+            alert('✅ สมัครสมาชิกสำเร็จ!');
             window.location.href = 'login.html';
         });
     </script>
-
 </body>
 </html>
