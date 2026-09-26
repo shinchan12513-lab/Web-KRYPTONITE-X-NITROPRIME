@@ -4,207 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>kryptonitexnitroprime - หน้าหลัก</title>
-    <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cloudflare Turnstile Official Script -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
-        /* สไตล์ Modal และฟอร์มพรีเมียม (กระชับพิเศษเพื่อไม่ให้เกิด Scrollbar) */
-        .auth-modal-overlay {
-            display: flex;
-            opacity: 0;
-            visibility: hidden;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
-        }
-        .auth-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .auth-modal-box {
-            background: #09090b;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 100%;
-            max-width: 400px;
-            max-height: 100vh;
-            overflow-y: visible;
-            border-radius: 20px;
-            padding: 16px 22px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
-            position: relative;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #050507;
             color: #fff;
             font-family: 'Prompt', sans-serif;
-            transform: scale(0.92) translateY(10px);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 100vh;
         }
 
-        .auth-modal-overlay.active .auth-modal-box {
-            transform: scale(1) translateY(0);
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(9, 9, 11, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .auth-close-btn {
-            position: absolute;
-            top: 14px; right: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .auth-close-btn:hover { 
-            background: rgba(255, 255, 255, 0.1); 
-            color: #fff; 
-        }
-        .auth-brand {
-            display: flex; align-items: center; gap: 6px;
-            font-weight: 600; font-size: 13px; margin-bottom: 12px;
+        .nav-left { display: flex; align-items: center; gap: 40px; }
+        .brand-logo {
+            font-size: 20px; font-weight: 700; color: #fff; text-decoration: none;
             letter-spacing: 0.5px;
-            color: #e2e8f0;
         }
+        .brand-logo .x-mark { color: #ff3385; }
+        .nav-menu { display: flex; gap: 20px; }
+        .nav-menu a {
+            color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 500;
+            display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: #ff3385; }
         
-        /* แท็บสลับหน้าแบบกระชับ */
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .btn-contact, .btn-login, .btn-register {
+            padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px;
+        }
+        .btn-contact { background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.08); }
+        .btn-login { background: rgba(255, 51, 133, 0.1); color: #ff3385; border: 1px solid rgba(255, 51, 133, 0.3); }
+        .btn-register { background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%); color: #fff; }
+
+        /* MAIN CONTAINER */
+        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .news-section {
+            background: rgba(18, 18, 21, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 16px 20px; margin-bottom: 30px;
+        }
+        .news-header { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #ff3385; margin-bottom: 8px; }
+        .news-tag { background: rgba(255,51,133,0.1); padding: 2px 8px; border-radius: 6px; font-size: 10px; }
+        .news-ticker-text { font-size: 13px; color: #94a3b8; }
+
+        /* AUTH MODAL */
+        .auth-modal-overlay {
+            display: flex; opacity: 0; visibility: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+            z-index: 99999; justify-content: center; align-items: center;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        .auth-modal-overlay.active { opacity: 1; visibility: visible; }
+        .auth-modal-box {
+            background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%; max-width: 400px; border-radius: 20px; padding: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9); position: relative;
+            transform: scale(0.92) translateY(10px); transition: transform 0.3s ease;
+        }
+        .auth-modal-overlay.active .auth-modal-box { transform: scale(1) translateY(0); }
+        .auth-close-btn {
+            position: absolute; top: 14px; right: 16px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8; width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .auth-close-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .auth-brand { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; margin-bottom: 15px; color: #e2e8f0; }
+        
         .auth-tabs {
-            display: flex; 
-            background: #121215;
-            border-radius: 10px; 
-            padding: 3px; 
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            position: relative;
+            display: flex; background: #121215; border-radius: 10px; padding: 3px; margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.04); position: relative;
         }
         .auth-tab {
-            flex: 1; text-align: center; padding: 8px;
-            font-size: 12px; font-weight: 600; color: #64748b;
-            cursor: pointer; border-radius: 8px; 
-            transition: color 0.3s ease;
-            position: relative; z-index: 2;
+            flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 600;
+            color: #64748b; cursor: pointer; border-radius: 8px; position: relative; z-index: 2; transition: color 0.3s;
         }
-        .auth-tab.active {
-            color: #ffffff;
-        }
+        .auth-tab.active { color: #ffffff; }
         .auth-tab-indicator {
-            position: absolute;
-            top: 3px; bottom: 3px; left: 3px;
-            width: calc(50% - 3px);
-            background: #000000;
-            border-radius: 7px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1;
+            position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px);
+            background: #000000; border-radius: 7px; border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1;
         }
-        .auth-tabs.register-mode .auth-tab-indicator {
-            transform: translateX(100%);
-        }
+        .auth-tabs.register-mode .auth-tab-indicator { transform: translateX(100%); }
 
-        .auth-forms-container {
-            position: relative;
-            overflow: visible;
-        }
-        .auth-form-panel {
-            position: absolute;
-            top: 0; left: 0; width: 100%;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-            pointer-events: none;
-        }
-        .auth-form-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
-            position: relative;
-        }
-
-        .auth-form-group { margin-bottom: 8px; }
-        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; font-weight: 500; }
-        
-        .auth-input-wrap {
-            position: relative; display: flex; align-items: center;
-        }
-        .auth-input-wrap > i:first-child {
-            position: absolute; left: 12px; color: #64748b; font-size: 12px; transition: color 0.2s;
-        }
+        .auth-form-panel { display: none; }
+        .auth-form-panel.active { display: block; }
+        .auth-form-group { margin-bottom: 12px; }
+        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; font-weight: 500; }
+        .auth-input-wrap { position: relative; display: flex; align-items: center; }
+        .auth-input-wrap > i:first-child { position: absolute; left: 12px; color: #64748b; font-size: 12px; }
         .auth-input-wrap input {
             width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px;
-            outline: none; transition: all 0.25s ease; font-family: 'Prompt', sans-serif;
+            border-radius: 10px; padding: 9px 12px 9px 36px; color: #fff; font-size: 12px; outline: none; font-family: 'Prompt', sans-serif;
         }
-        .auth-input-wrap input::placeholder {
-            color: #475569;
-        }
-        .auth-input-wrap input:focus { 
-            border-color: #ff3385; 
-            background: #16161a;
-            box-shadow: 0 0 10px rgba(255, 51, 133, 0.15); 
-        }
-        .auth-input-wrap input:focus ~ i { color: #ff3385; }
+        .auth-input-wrap input:focus { border-color: #ff3385; background: #16161a; }
+        .password-toggle { position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; }
         
-        .password-toggle {
-            position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; transition: color 0.2s;
-        }
-        .password-toggle:hover { color: #fff; }
-
-        /* จัดระเบียบกล่อง Turnstile ของแท้ให้เข้ากับดีไซน์มืด */
-        .turnstile-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 8px;
-            transform: scale(0.92);
-            transform-origin: center;
-        }
-
-        /* ปุ่มยืนยัน */
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%);
             border: none; color: #fff; padding: 10px; border-radius: 10px;
-            font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 2px;
-            box-shadow: 0 4px 12px rgba(255, 26, 117, 0.3); transition: all 0.25s ease;
-            font-family: 'Prompt', sans-serif;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 6px;
+            font-family: 'Prompt', sans-serif; display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .auth-submit-btn:hover { 
-            opacity: 0.95; 
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(255, 26, 117, 0.45);
-        }
-        .auth-submit-btn:active { transform: translateY(0); }
+        .auth-switch-text { text-align: center; font-size: 11px; color: #64748b; margin-top: 12px; }
+        .auth-switch-text span { color: #ff3385; cursor: pointer; font-weight: 600; }
 
-        .auth-switch-text {
-            text-align: center; font-size: 11px; color: #64748b; margin-top: 10px;
-        }
-        .auth-switch-text span {
-            color: #ff3385; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
-        }
-        .auth-switch-text span:hover { opacity: 0.8; text-decoration: underline; }
+        /* FOOTER */
+        .footer-bar { text-align: center; padding: 30px; color: #64748b; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
     </style>
 </head>
-<body class="fade-page">
+<body>
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-left">
-            <a href="shop.html" class="brand-logo">kryptonite<span class="x-mark">x</span>nitroprime</a>
+            <a href="#" class="brand-logo">kryptonite<span class="x-mark">x</span>nitroprime</a>
             <nav class="nav-menu">
-                <a href="shop.html" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
+                <a href="#" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
                 <a href="#"><i class="fa-solid fa-store"></i> ร้านค้า</a>
                 <a href="#"><i class="fa-solid fa-wallet"></i> เติมเงิน</a>
                 <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการสั่งซื้อ</a>
-                <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
         </div>
         <div class="nav-right" id="navRightSection">
@@ -214,61 +149,19 @@
         </div>
     </header>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="main-container full-width-layout">
-        
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
         <div class="news-section">
             <div class="news-header">
                 <i class="fa-solid fa-bullhorn"></i> ประกาศแจ้งข่าวสาร <span class="news-tag">Promotion & News</span>
             </div>
-            <div class="news-ticker-container">
-                <div class="news-ticker-text">
-                    ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.
-                </div>
+            <div class="news-ticker-text">
+                ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.
             </div>
         </div>
-
-        <div class="categories-section">
-            <div class="cat-header-top">
-                <span class="cat-subtitle-tag">— CATEGORIES</span>
-                <div class="cat-title-row">
-                    <h2>หมวดหมู่สินค้า</h2>
-                    <a href="#" class="cat-all-link">ทุกหมวดหมู่ <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <div class="banners-grid-row">
-                <div class="banner-card-wrapper">
-                    <div class="hero-banner banner-one">
-                        <div class="banner-content">
-                            <span class="banner-tag-small">โปรแกรม FiveM</span>
-                            <h1>FIVE-M PROJECT</h1>
-                            <span class="banner-sub">CLICK TO SHOP</span>
-                        </div>
-                    </div>
-                    <div class="banner-footer-label">
-                        <span><span class="num">01</span> KRYPTONITE</span>
-                        <a href="#">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="banner-card-wrapper">
-                    <a href="fivem-project.html" style="text-decoration: none;">
-                        <div class="hero-banner banner-image-box">
-                            <img src="banner2.png" alt="Candy Store" class="banner-img">
-                        </div>
-                    </a>
-                    <div class="banner-footer-label">
-                        <span><span class="num">02</span> PREMIUM STORE</span>
-                        <a href="fivem-project.html">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
-    <!-- ================= AUTH MODAL POPUP ================= -->
+    <!-- AUTH MODAL POPUP -->
     <div id="authModalOverlay" class="auth-modal-overlay">
         <div class="auth-modal-box">
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
@@ -302,14 +195,12 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
-                        <button type="submit" class="auth-submit-btn" style="margin-top: 10px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
-                    <div class="auth-switch-text">
-                        ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
-                    </div>
+                    <div class="auth-switch-text">ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span></div>
                 </div>
 
-                <!-- ฟอร์มสมัครสมาชิก พร้อม Cloudflare Turnstile ของแท้ -->
+                <!-- ฟอร์มสมัครสมาชิก -->
                 <div id="registerPanel" class="auth-form-panel">
                     <form onsubmit="handleRegisterSubmit(event)">
                         <div class="auth-form-group">
@@ -323,7 +214,7 @@
                             <label>อีเมล (ถ้ามี)</label>
                             <div class="auth-input-wrap">
                                 <i class="fa-solid fa-envelope"></i>
-                                <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                                <input type="email" id="regEmail" placeholder="name@example.com">
                             </div>
                         </div>
                         <div class="auth-form-group">
@@ -342,29 +233,19 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
                             </div>
                         </div>
-                        
-                        <!-- Cloudflare Turnstile ของแท้ -->
-                        <div class="turnstile-container">
-                            <!-- ใช้ Site Key ทดสอบ (เปลี่ยนเป็นของคุณเองได้ที่ Cloudflare Dashboard) -->
-                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAFETHfOSngKW-9FO" data-theme="dark"></div>
-                        </div>
-
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
-                    <div class="auth-switch-text">
-                        มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span>
-                    </div>
+                    <div class="auth-switch-text">มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ================= FOOTER ================= -->
     <footer class="footer-bar">
         <p>&copy; 2026 kryptonitexnitroprime — All rights reserved.</p>
     </footer>
 
-    <!-- ================= SCRIPT ================= -->
+    <!-- SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -399,9 +280,7 @@
         if (openLoginBtn) openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
         if (openRegisterBtn) openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
         if (closeBtn) closeBtn.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
         window.switchAuthTab = function(tab) {
             const loginPanel = document.getElementById('loginPanel');
@@ -420,7 +299,7 @@
                 tabsContainer.classList.add('register-mode');
                 registerPanel.classList.add('active');
                 loginPanel.classList.remove('active');
-                regTabBtn.classList.add('active');
+                regTabBtn.classList.add('ask') || regTabBtn.classList.add('active');
                 loginTabBtn.classList.remove('active');
             }
         }
@@ -429,12 +308,10 @@
             const field = document.getElementById(fieldId);
             if (field.type === 'password') {
                 field.type = 'text';
-                iconEl.classList.remove('fa-eye');
-                iconEl.classList.add('fa-eye-slash');
+                iconEl.className = 'fa-solid fa-eye-slash password-toggle';
             } else {
                 field.type = 'password';
-                iconEl.classList.remove('fa-eye-slash');
-                iconEl.classList.add('fa-eye');
+                iconEl.className = 'fa-solid fa-eye password-toggle';
             }
         }
 
@@ -455,7 +332,6 @@
             try {
                 const q = query(collection(db, "members"), where("username", "==", username), where("password", "==", password));
                 const querySnapshot = await getDocs(q);
-
                 if (!querySnapshot.empty) {
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('username', username);
@@ -466,164 +342,38 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
+                alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อ');
             }
         }
 
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
-
-            // ตรวจสอบสถานะ Cloudflare Turnstile ของจริง
-            const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
-            if (!turnstileResponse || !turnstileResponse.value) {
-                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
-                return;
-            }
-
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
 
-            if (password !== confirmPassword) {
-                alert('❌ รหัสผ่านทั้งสองช่องไม่ตรงกัน');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป');
-                return;
-            }
+            if (password !== confirmPassword) { alert('❌ รหัสผ่านไม่ตรงกัน'); return; }
+            if (password.length < 6) { alert('❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return; }
 
             try {
                 const checkQ = query(collection(db, "members"), where("username", "==", username));
                 const checkSnap = await getDocs(checkQ);
-
                 if (!checkSnap.empty) {
-                    alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว');
+                    alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานแล้ว');
                     return;
                 }
 
-                const registerDate = new Date().toLocaleDateString('th-TH');
                 await addDoc(collection(db, "members"), {
-                    username: username,
-                    email: email || '-',
-                    password: password,
-                    balance: 0.00,
-                    role: 'MEMBER',
-                    registerDate: registerDate
+                    username, email: email || '-', password, balance: 0.00, role: 'MEMBER', registerDate: new Date().toLocaleDateString('th-TH')
                 });
 
-                alert('🎉 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+                alert('🎉 สมัครสมาชิกสำเร็จ!');
                 switchAuthTab('login');
             } catch (err) {
                 console.error(err);
-                alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก');
+                alert('❌ เกิดข้อผิดพลาด');
             }
-        }
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const username = localStorage.getItem('username');
-
-            if (isLoggedIn && username) {
-                if (username === 'admin') {
-                    renderNavbar('admin', 0, true);
-                    return;
-                }
-
-                try {
-                    const q = query(collection(db, "members"), where("username", "==", username));
-                    const querySnapshot = await getDocs(q);
-
-                    if (querySnapshot.empty) {
-                        localStorage.clear();
-                        return;
-                    }
-
-                    let userData = null;
-                    querySnapshot.forEach((docSnap) => {
-                        userData = docSnap.data();
-                    });
-
-                    const userBalance = (parseFloat(userData.balance) || 0).toFixed(2);
-                    const isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin') === 'true';
-
-                    renderNavbar(username, userBalance, isAdmin);
-
-                } catch (error) {
-                    console.error("Error checking user:", error);
-                }
-            }
-        });
-
-        function renderNavbar(username, userBalance, isAdmin) {
-            const navRight = document.getElementById('navRightSection');
-            navRight.innerHTML = `
-                <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
-                <div style="position: relative; display: inline-block;">
-                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121215; border: 1px solid rgba(255, 51, 133, 0.3); padding: 5px 12px; border-radius: 30px;">
-                        <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
-                        <span style="font-size: 12px; color: #ff3385; font-weight: 700;">฿${userBalance}</span>
-                        <div style="width: 32px; height: 32px; background: #1a1a20; border: 1px solid #ff3385; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ff3385;">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                    </div>
-
-                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
-                        <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid #ff3385; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ff3385; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
-                            <div>
-                                <div style="font-size: 14px; font-weight: 600;">${username}</div>
-                                <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#ff3385'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
-                            </div>
-                        </div>
-
-                        <div style="background: #121215; border: 1px solid rgba(255, 51, 133, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 11px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
-                                <div style="font-size: 16px; font-weight: 700; color: #ff3385;">฿${userBalance} บาท</div>
-                            </div>
-                            <button style="background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;">เติมเงิน</button>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
-                            ${isAdmin ? `
-                                <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 4px;">
-                                    <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน</span>
-                                    <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#00AFFF;"></i>
-                                </a>
-                            ` : ''}
-
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#ff3385;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#ff3385;"></i> กรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#ff3385;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                        </div>
-
-                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 8px; padding: 6px 10px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            const toggleBtn = document.getElementById('profileToggleBtn');
-            const dropdown = document.getElementById('profileDropdown');
-            
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
-
-            window.addEventListener('click', () => {
-                dropdown.style.display = 'none';
-            });
-
-            document.getElementById('logoutBtn').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.clear();
-                location.reload();
-            });
         }
     </script>
 </body>
