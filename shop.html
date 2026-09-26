@@ -91,23 +91,41 @@
         <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
     </footer>
 
-    <!-- ================= SCRIPT (อัปเดตระบบ Admin เรียบร้อย) ================= -->
+    <!-- ================= SCRIPT ================= -->
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const username = localStorage.getItem('username') || 'ผู้ใช้งาน';
-            
-            // ตรวจสอบสถานะแอดมินจากชื่อผู้ใช้หรือ localStorage
-            const isAdmin = localStorage.getItem('isAdmin') === 'true' || username === 'admin';
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const username = localStorage.getItem('username');
 
-            if (isLoggedIn === 'true') {
+            // 1. ตรวจสอบความปลอดภัย: หากล็อกอินอยู่ ต้องเช็กว่าบัญชีนี้ยังอยู่ใน allMembers หรือไม่ (ป้องกันกรณีโดนแอดมินลบแต่ค้างหน้าเว็บ)
+            if (isLoggedIn && username) {
+                let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
+                let userExists = allMembers.find(m => m.username === username);
+
+                if (!userExists) {
+                    alert('⚠️ บัญชีของคุณถูกลบออกจากระบบโดยผู้ดูแลระบบ');
+                    localStorage.clear(); // เคลียร์ข้อมูลทั้งหมด
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+
+            // 2. ดึงข้อมูลล่าสุดของผู้ใช้เพื่อแสดงยอดเครดิตจริง
+            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
+            let currentUserObj = allMembers.find(m => m.username === username);
+            let userBalance = currentUserObj ? (parseFloat(currentUserObj.balance) || 0).toFixed(2) : '0.00';
+            
+            // ตรวจสอบสถานะแอดมินปัจจุบันจากฐานข้อมูล
+            let isAdmin = (currentUserObj && currentUserObj.role === 'ADMIN') || (localStorage.getItem('isAdmin') === 'true') || (username === 'admin');
+
+            if (isLoggedIn) {
                 const navRight = document.getElementById('navRightSection');
                 navRight.innerHTML = `
                     <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
                     <div style="position: relative; display: inline-block;">
                         <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 30px;">
                             <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
-                            <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿15.97</span>
+                            <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
                             <div style="width: 32px; height: 32px; background: #1a1a1a; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
                                 <i class="fa-solid fa-user"></i>
                             </div>
@@ -125,7 +143,7 @@
                             <div style="background: #181818; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
                                 <div>
                                     <div style="font-size: 11px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
-                                    <div style="font-size: 16px; font-weight: 700; color: #00AFFF;">15.97 บาท</div>
+                                    <div style="font-size: 16px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
                                 </div>
                                 <button style="background: linear-gradient(135deg, #ff0055 0%, #00AFFF 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 0 10px rgba(0,175,255,0.4);">เติมเงิน</button>
                             </div>
@@ -169,6 +187,7 @@
                     localStorage.removeItem('isLoggedIn');
                     localStorage.removeItem('username');
                     localStorage.removeItem('isAdmin');
+                    localStorage.removeItem('userBalance');
                     location.reload();
                 });
             }
