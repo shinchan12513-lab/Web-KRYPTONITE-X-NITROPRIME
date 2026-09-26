@@ -9,6 +9,92 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* สไตล์สำหรับ Modal Popup และ ฉากหลังเบลอ */
+        .auth-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 5, 5, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .auth-modal-box {
+            background: #121212;
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            position: relative;
+            color: #fff;
+            font-family: 'Prompt', sans-serif;
+        }
+        .auth-close-btn {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .auth-close-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .auth-brand {
+            display: flex; align-items: center; gap: 8px;
+            font-weight: 700; font-size: 16px; margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+        .auth-tabs {
+            display: flex; background: #1a1a1a;
+            border-radius: 10px; padding: 4px; margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .auth-tab {
+            flex: 1; text-align: center; padding: 10px;
+            font-size: 14px; font-weight: 600; color: #94a3b8;
+            cursor: pointer; border-radius: 8px; transition: 0.2s;
+        }
+        .auth-tab.active {
+            background: #0B0B0B; color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 175, 255, 0.2);
+        }
+        .auth-form-group { margin-bottom: 16px; }
+        .auth-form-group label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 6px; font-weight: 500; }
+        .auth-input-wrap {
+            position: relative; display: flex; align-items: center;
+        }
+        .auth-input-wrap i {
+            position: absolute; left: 14px; color: #64748b; font-size: 14px;
+        }
+        .auth-input-wrap input {
+            width: 100%; background: #181818; border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px; padding: 11px 15px 11px 40px; color: #fff; font-size: 14px;
+            outline: none; transition: 0.2s; font-family: 'Prompt', sans-serif;
+        }
+        .auth-input-wrap input:focus { border-color: #00AFFF; box-shadow: 0 0 10px rgba(0,175,255,0.15); }
+        .auth-submit-btn {
+            width: 100%; background: linear-gradient(135deg, #ff007f 0%, #00AFFF 100%);
+            border: none; color: #fff; padding: 12px; border-radius: 10px;
+            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3); transition: 0.2s;
+            font-family: 'Prompt', sans-serif;
+        }
+        .auth-submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    </style>
 </head>
 <body class="fade-page">
 
@@ -27,8 +113,8 @@
         <!-- ส่วนนี้จะสลับเปลี่ยนอัตโนมัติเมื่อเข้าสู่ระบบ -->
         <div class="nav-right" id="navRightSection">
             <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
-            <a href="login.html" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
-            <a href="register.html" class="btn-register"><i class="fa-solid fa-user-plus"></i> สมัครสมาชิก</a>
+            <a href="#" id="openLoginModal" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
+            <a href="#" id="openRegisterModal" class="btn-register"><i class="fa-solid fa-user-plus"></i> สมัครสมาชิก</a>
         </div>
     </header>
 
@@ -86,6 +172,74 @@
 
     </main>
 
+    <!-- ================= AUTH MODAL POPUP ================= -->
+    <div id="authModalOverlay" class="auth-modal-overlay">
+        <div class="auth-modal-box">
+            <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
+            
+            <div class="auth-brand">
+                <i class="fa-solid fa-shield-halved" style="color: #00AFFF;"></i> KRYPTONITE X NITROPRIME
+            </div>
+
+            <div class="auth-tabs">
+                <div id="tabLoginBtn" class="auth-tab active" onclick="switchAuthTab('login')">เข้าสู่ระบบ</div>
+                <div id="tabRegisterBtn" class="auth-tab" onclick="switchAuthTab('register')">สมัครสมาชิก</div>
+            </div>
+
+            <!-- ฟอร์มเข้าสู่ระบบ -->
+            <form id="loginFormContainer" onsubmit="handleLoginSubmit(event)">
+                <div class="auth-form-group">
+                    <label>ชื่อผู้ใช้</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้" required>
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>รหัสผ่าน</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน" required>
+                    </div>
+                </div>
+                <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+            </form>
+
+            <!-- ฟอร์มสมัครสมาชิก -->
+            <form id="registerFormContainer" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+                <div class="auth-form-group">
+                    <label>ชื่อผู้ใช้</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>อีเมล (ถ้ามี)</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>รหัสผ่าน</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>ยืนยันรหัสผ่าน</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                    </div>
+                </div>
+                <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+            </form>
+        </div>
+    </div>
+
     <!-- ================= FOOTER ================= -->
     <footer class="footer-bar">
         <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
@@ -94,7 +248,7 @@
     <!-- ================= SCRIPT ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
@@ -109,26 +263,140 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // จัดการเปิด/ปิด Modal และสลับแท็บ
+        const modalOverlay = document.getElementById('authModalOverlay');
+        const openLoginBtn = document.getElementById('openLoginModal');
+        const openRegisterBtn = document.getElementById('openRegisterModal');
+        const closeBtn = document.getElementById('closeAuthModal');
+
+        function openModal(tabName) {
+            modalOverlay.style.display = 'flex';
+            switchAuthTab(tabName);
+        }
+
+        openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
+        openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
+        closeBtn.addEventListener('click', () => { modalOverlay.style.display = 'none'; });
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) modalOverlay.style.display = 'none';
+        });
+
+        window.switchAuthTab = function(tab) {
+            const loginForm = document.getElementById('loginFormContainer');
+            const registerForm = document.getElementById('registerFormContainer');
+            const loginTabBtn = document.getElementById('tabLoginBtn');
+            const regTabBtn = document.getElementById('tabRegisterBtn');
+
+            if (tab === 'login') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                loginTabBtn.classList.add('active');
+                regTabBtn.classList.remove('active');
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                regTabBtn.classList.add('active');
+                loginTabBtn.classList.remove('active');
+            }
+        }
+
+        // ฟังก์ชันเข้าสู่ระบบผ่าน Firebase
+        window.handleLoginSubmit = async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // บัญชีแอดมินจำลอง
+            if (username === 'admin' && password === '123') {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', 'admin');
+                localStorage.setItem('isAdmin', 'true');
+                alert('✅ เข้าสู่ระบบสำเร็จ (Admin)');
+                location.reload();
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "members"), where("username", "==", username), where("password", "==", password));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', username);
+                    alert('✅ เข้าสู่ระบบสำเร็จ!');
+                    location.reload();
+                } else {
+                    alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
+            }
+        }
+
+        // ฟังก์ชันสมัครสมาชิกผ่าน Firebase
+        window.handleRegisterSubmit = async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('❌ รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป');
+                return;
+            }
+
+            try {
+                // ตรวจสอบชื่อผู้ใช้ซ้ำ
+                const checkQ = query(collection(db, "members"), where("username", "==", username));
+                const checkSnap = await getDocs(checkQ);
+
+                if (!checkSnap.empty) {
+                    alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว');
+                    return;
+                }
+
+                const registerDate = new Date().toLocaleDateString('th-TH');
+                await addDoc(collection(db, "members"), {
+                    username: username,
+                    email: email || '-',
+                    password: password,
+                    balance: 0.00,
+                    role: 'MEMBER',
+                    registerDate: registerDate
+                });
+
+                alert('🎉 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+                switchAuthTab('login');
+            } catch (err) {
+                console.error(err);
+                alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก');
+            }
+        }
+
+        // โหลดข้อมูลสถานะล็อกอินเมื่อเปิดหน้าเว็บ
         window.addEventListener('DOMContentLoaded', async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
 
             if (isLoggedIn && username) {
-                // กรณีเป็นแอดมินจำลอง (admin / 123)
                 if (username === 'admin') {
                     renderNavbar('admin', 0, true);
                     return;
                 }
 
                 try {
-                    // ตรวจสอบข้อมูลผู้ใช้จาก Firebase Cloud
                     const q = query(collection(db, "members"), where("username", "==", username));
                     const querySnapshot = await getDocs(q);
 
                     if (querySnapshot.empty) {
-                        // ถ้าไม่พบในฐานข้อมูล Firebase จริงๆ ถึงจะเคลียร์และออก
                         localStorage.clear();
-                        window.location.href = 'login.html';
                         return;
                     }
 
