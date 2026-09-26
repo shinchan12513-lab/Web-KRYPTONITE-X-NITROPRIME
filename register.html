@@ -20,10 +20,12 @@
                 <p>สร้างบัญชีใหม่เพื่อเริ่มต้นใช้งาน</p>
             </div>
 
-            <form class="auth-form" action="login.html" method="GET">
+            <!-- เพิ่ม id="registerForm" ให้ฟอร์ม -->
+            <form class="auth-form" id="registerForm">
                 <div class="input-group">
                     <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน (Username)</label>
-                    <input type="text" placeholder="กำหนดชื่อผู้ใช้งาน" required>
+                    <!-- เพิ่ม id="usernameInput" -->
+                    <input type="text" id="usernameInput" placeholder="กำหนดชื่อผู้ใช้งาน" required>
                 </div>
 
                 <div class="input-group">
@@ -49,6 +51,45 @@
             </div>
         </div>
     </div>
+
+    <!-- Script สำหรับบันทึกข้อมูลสมาชิก -->
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรชทันที
+
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) return;
+
+            // ดึงข้อมูลสมาชิกเดิมจาก localStorage (หรือสร้างอาเรย์ใหม่ถ้ายังไม่มี)
+            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
+
+            // ตรวจสอบว่าชื่อผู้ใช้นี้ซ้ำหรือไม่
+            const existingUser = allMembers.find(member => member.username === username);
+            if (existingUser) {
+                alert('ชื่อผู้ใช้นี้ถูกใช้งานแล้ว กรุณาใช้ชื่ออื่น');
+                return;
+            }
+
+            // จัดรูปแบบวันที่สมัคร
+            let now = new Date();
+            let formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            // เพิ่มข้อมูลยูสเซอร์ใหม่เข้าไป
+            allMembers.push({
+                username: username,
+                role: 'MEMBER',
+                registerDate: formattedDate,
+                balance: 0.00
+            });
+
+            // บันทึกกลับลง localStorage
+            localStorage.setItem('allMembers', JSON.stringify(allMembers));
+
+            alert('สมัครสมาชิกสำเร็จ!');
+            // พาผู้ใช้ไปยังหน้าเข้าสู่ระบบ
+            window.location.href = 'login.html';
+        });
+    </script>
 
 </body>
 </html>
