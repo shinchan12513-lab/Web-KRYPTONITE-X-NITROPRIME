@@ -8,7 +8,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0B0B0B; color: #ffffff; padding: 20px; }
-        .container { max-width: 1050px; margin: 30px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .container { max-width: 1100px; margin: 30px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         h2 { color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: #00AFFF; }
         .admin-badge { display: inline-block; background: rgba(0, 175, 255, 0.15); color: #00AFFF; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid rgba(0, 175, 255, 0.3); margin-top: 5px; }
@@ -29,6 +29,8 @@
         .btn-primary:hover { background: #0088cc; }
         .btn-warning { background: #f59e0b; color: #0B0B0B; }
         .btn-danger { background: #ef4444; color: #fff; }
+        .btn-role { background: #8b5cf6; color: #fff; }
+        .btn-role:hover { background: #7c3aed; }
         
         .back-link { display: inline-block; margin-top: 25px; color: #94a3b8; text-decoration: none; font-size: 13px; }
         .back-link:hover { color: #00AFFF; }
@@ -39,7 +41,7 @@
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ</h2>
         <p>ยินดีต้อนรับคุณ <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span> (ผู้ดูแลระบบสูงสุด)</p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการสมาชิก</div>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการสมาชิกและสิทธิ์</div>
         
         <hr>
 
@@ -53,10 +55,11 @@
                 <thead>
                     <tr>
                         <th>ชื่อยูสเซอร์ (Username)</th>
-                        <th>สถานะ</th>
+                        <th>สถานะสิทธิ์</th>
                         <th>วันที่สมัครสมาชิก</th>
                         <th>ยอดเครดิตคงเหลือ</th>
                         <th>จัดการเครดิต</th>
+                        <th>จัดการสิทธิ์</th>
                         <th>การจัดการอื่นๆ</th>
                     </tr>
                 </thead>
@@ -70,31 +73,36 @@
     </div>
 
     <script>
-        // 1. ตรวจสอบสิทธิ์ความปลอดภัย
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        const isAdmin = localStorage.getItem('isAdmin') === 'true';
-
-        if (!isLoggedIn || !isAdmin) {
-            alert('⚠️ แจ้งเตือน: คุณไม่มีสิทธิ์เข้าถึงหน้านี้!');
-            window.location.href = 'shop.html';
-        } else {
-            document.getElementById('adminName').innerText = localStorage.getItem('username') || 'admin';
-        }
-
-        // 2. โหลดข้อมูลสมาชิก (รองรับระบบเครดิตแบบกลาง ใช้ key ร่วมกันกับหน้าหลัก)
+        // 1. ตรวจสอบสิทธิ์ความปลอดภัย (เช็คทั้ง isAdmin เป็น true หรือ role ใน allMembers เป็น ADMIN)
+        const currentUsername = localStorage.getItem('username');
         let members = JSON.parse(localStorage.getItem('allMembers')) || [
-            { username: localStorage.getItem('username') || 'sasdsasdas', role: 'ADMIN', registerDate: '26/09/2026 12:00', balance: parseFloat(localStorage.getItem('userBalance')) || 15.97 },
+            { username: currentUsername || 'sasdsasdas', role: 'ADMIN', registerDate: '26/09/2026 12:00', balance: parseFloat(localStorage.getItem('userBalance')) || 15.97 },
             { username: 'testuser01', role: 'MEMBER', registerDate: '25/09/2026 18:30', balance: 100.00 },
             { username: 'pro_gamer99', role: 'VIP', registerDate: '24/09/2026 09:15', balance: 500.50 }
         ];
 
+        const currentUserObj = members.find(m => m.username === currentUsername);
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const isUserAdmin = (localStorage.getItem('isAdmin') === 'true') || (currentUserObj && currentUserObj.role === 'ADMIN');
+
+        if (!isLoggedIn || !isUserAdmin) {
+            alert('⚠️ แจ้งเตือน: คุณไม่มีสิทธิ์เข้าถึงหน้านี้!');
+            window.location.href = 'shop.html';
+        } else {
+            document.getElementById('adminName').innerText = currentUsername || 'admin';
+        }
+
         function saveMembersData() {
             localStorage.setItem('allMembers', JSON.stringify(members));
-            // ถ้าเป็นบัญชีตัวเอง ให้ซิงค์ยอดเงินเข้า `userBalance` เพื่อให้อัปเดตทันทีที่หน้าหลัก
-            const currentLoginUser = localStorage.getItem('username');
-            const me = members.find(m => m.username === currentLoginUser);
+            // ซิงค์ยอดเงินและสถานะของตัวเอง
+            const me = members.find(m => m.username === currentUsername);
             if (me) {
                 localStorage.setItem('userBalance', me.balance);
+                if (me.role === 'ADMIN') {
+                    localStorage.setItem('isAdmin', 'true');
+                } else {
+                    localStorage.removeItem('isAdmin');
+                }
             }
         }
 
@@ -103,19 +111,26 @@
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
                 return;
             }
 
             data.forEach((member) => {
+                let badgeColor = 'rgba(255,255,255,0.05); color:#94a3b8';
+                if (member.role === 'ADMIN') badgeColor = 'rgba(0,175,255,0.2); color:#00AFFF';
+                if (member.role === 'VIP') badgeColor = 'rgba(245,158,11,0.2); color:#f59e0b';
+
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${member.username}</td>
-                        <td><span style="font-size:11px; padding: 2px 6px; border-radius: 4px; background: ${member.role === 'ADMIN' ? 'rgba(0,175,255,0.2); color:#00AFFF' : 'rgba(255,255,255,0.05); color:#94a3b8'}">${member.role}</span></td>
+                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${member.role}</span></td>
                         <td style="color: #94a3b8; font-size: 12px;"><i class="fa-regular fa-calendar-days" style="margin-right: 4px;"></i> ${member.registerDate || 'ไม่ระบุ'}</td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${member.balance.toFixed(2)}</td>
                         <td>
                             <button class="btn btn-primary" onclick="addCredit('${member.username}')"><i class="fa-solid fa-plus"></i> เพิ่มเครดิต</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-role" onclick="changeRole('${member.username}')"><i class="fa-solid fa-user-gear"></i> เปลี่ยนสถานะ</button>
                         </td>
                         <td>
                             <button class="btn btn-warning" onclick="resetHwid('${member.username}')"><i class="fa-solid fa-key"></i> รีเซ็ต HWID</button>
@@ -133,7 +148,7 @@
             renderTable(filtered);
         }
 
-        // ฟังก์ชันเพิ่มเครดิต (ซิงค์ยอดเงินทันที)
+        // ฟังก์ชันเพิ่มเครดิต
         function addCredit(username) {
             const amountStr = prompt(`ระบุจำนวนเครดิตที่ต้องการเพิ่มให้ ${username}:`, "100");
             if (amountStr !== null) {
@@ -144,10 +159,34 @@
                         target.balance += amount;
                         saveMembersData();
                         renderTable(members);
-                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ! (ยอดเงินอัปเดตทันที)`);
+                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ!`);
                     }
                 } else {
                     alert('❌ กรุณากรอกตัวเลขจำนวนเงินให้ถูกต้อง');
+                }
+            }
+        }
+
+        // ฟังก์ชันเปลี่ยนสถานะ (ROLE)
+        function changeRole(username) {
+            const newRole = prompt(`เปลี่ยนสถานะของ ${username}\nกรุณาพิมพ์ชื่อสถานะที่ต้องการ (MEMBER, VIP, ADMIN):`, "ADMIN");
+            if (newRole !== null) {
+                const upperRole = newRole.trim().toUpperCase();
+                if (['MEMBER', 'VIP', 'ADMIN'].includes(upperRole)) {
+                    const target = members.find(m => m.username === username);
+                    if (target) {
+                        target.role = upperRole;
+                        saveMembersData();
+                        renderTable(members);
+                        alert(`✅ เปลี่ยนสถานะของ ${username} เป็น ${upperRole} สำเร็จ!`);
+                        
+                        // หากเปลี่ยนสถานะตัวเองเป็นอย่างอื่นที่ไม่ใช่ ADMIN ให้เด้งออกทันที
+                        if (username === currentUsername && upperRole !== 'ADMIN') {
+                            window.location.href = 'shop.html';
+                        }
+                    }
+                } else {
+                    alert('❌ สถานะไม่ถูกต้อง! กรุณาใส่เฉพาะ MEMBER, VIP หรือ ADMIN เท่านั้น');
                 }
             }
         }
@@ -161,8 +200,8 @@
 
         // ฟังก์ชันลบบัญชีผู้ใช้
         function deleteUser(username) {
-            if (username === 'admin') {
-                alert('⚠️ ไม่สามารถลบบัญชีผู้ดูแลระบบหลักได้!');
+            if (username === 'admin' && members.filter(m => m.role === 'ADMIN').length <= 1) {
+                alert('⚠️ ไม่สามารถลบบัญชีผู้ดูแลระบบคนสุดท้ายของระบบได้!');
                 return;
             }
             if (confirm(`⚠️ คำเตือน: คุณต้องการลบบัญชี ${username} ออกจากระบบใช่หรือไม่?`)) {
@@ -173,7 +212,7 @@
             }
         }
 
-        // บันทึกค่าเริ่มต้นและเรนเดอร์ตาราง
+        // บันทึกและแสดงผล
         saveMembersData();
         renderTable(members);
     </script>
