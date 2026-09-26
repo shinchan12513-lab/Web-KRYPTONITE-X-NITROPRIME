@@ -159,7 +159,7 @@
         }
         .password-toggle:hover { color: #fff; }
 
-        /* จัดระเบียบกล่อง Turnstile ของแท้ให้เข้ากับดีไซน์มืด */
+        /* จัดระเบียบกล่อง Turnstile ให้พอดีและดูดี */
         .turnstile-container {
             display: flex;
             justify-content: center;
@@ -216,7 +216,6 @@
 
     <!-- ================= MAIN CONTENT ================= -->
     <main class="main-container full-width-layout">
-        
         <div class="news-section">
             <div class="news-header">
                 <i class="fa-solid fa-bullhorn"></i> ประกาศแจ้งข่าวสาร <span class="news-tag">Promotion & News</span>
@@ -265,7 +264,6 @@
                 </div>
             </div>
         </div>
-
     </main>
 
     <!-- ================= AUTH MODAL POPUP ================= -->
@@ -284,7 +282,7 @@
             </div>
 
             <div class="auth-forms-container">
-                <!-- ฟอร์มเข้าสู่ระบบ -->
+                <!-- ฟอร์มเข้าสู่ระบบ (เพิ่ม Cloudflare Turnstile และระบบเช็ค) -->
                 <div id="loginPanel" class="auth-form-panel">
                     <form onsubmit="handleLoginSubmit(event)">
                         <div class="auth-form-group">
@@ -302,14 +300,20 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
-                        <button type="submit" class="auth-submit-btn" style="margin-top: 10px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                        
+                        <!-- Turnstile สำหรับหน้า Login -->
+                        <div class="turnstile-container">
+                            <div class="cf-turnstile" id="loginTurnstile" data-sitekey="0x4AAAAAAAFETHfOSngKW-9FO" data-theme="dark"></div>
+                        </div>
+
+                        <button type="submit" class="auth-submit-btn" style="margin-top: 5px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">
                         ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
                     </div>
                 </div>
 
-                <!-- ฟอร์มสมัครสมาชิก พร้อม Cloudflare Turnstile ของแท้ -->
+                <!-- ฟอร์มสมัครสมาชิก -->
                 <div id="registerPanel" class="auth-form-panel">
                     <form onsubmit="handleRegisterSubmit(event)">
                         <div class="auth-form-group">
@@ -343,10 +347,9 @@
                             </div>
                         </div>
                         
-                        <!-- Cloudflare Turnstile ของแท้ -->
+                        <!-- Turnstile สำหรับหน้า Register -->
                         <div class="turnstile-container">
-                            <!-- ใช้ Site Key ทดสอบ (เปลี่ยนเป็นของคุณเองได้ที่ Cloudflare Dashboard) -->
-                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAFETHfOSngKW-9FO" data-theme="dark"></div>
+                            <div class="cf-turnstile" id="regTurnstile" data-sitekey="0x4AAAAAAAFETHfOSngKW-9FO" data-theme="dark"></div>
                         </div>
 
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
@@ -403,12 +406,21 @@
             if (e.target === modalOverlay) closeModal();
         });
 
+        // ฟังก์ชันสลับแท็บ และสั่งรีเซ็ต Turnstile ให้ต้องติกใหม่ทุกครั้ง
         window.switchAuthTab = function(tab) {
             const loginPanel = document.getElementById('loginPanel');
             const registerPanel = document.getElementById('registerPanel');
             const loginTabBtn = document.getElementById('tabLoginBtn');
             const regTabBtn = document.getElementById('tabRegisterBtn');
             const tabsContainer = document.getElementById('authTabsContainer');
+
+            if (window.turnstile) {
+                try {
+                    window.turnstile.reset();
+                } catch (err) {
+                    console.log("Turnstile reset error:", err);
+                }
+            }
 
             if (tab === 'login') {
                 tabsContainer.classList.remove('register-mode');
@@ -440,6 +452,15 @@
 
         window.handleLoginSubmit = async function(e) {
             e.preventDefault();
+
+            // เช็ค Turnstile ในฟอร์ม Login
+            const loginPanel = document.getElementById('loginPanel');
+            const turnstileResponse = loginPanel.querySelector('[name="cf-turnstile-response"]');
+            if (!turnstileResponse || !turnstileResponse.value) {
+                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
+                return;
+            }
+
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
 
@@ -463,6 +484,7 @@
                     location.reload();
                 } else {
                     alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                    if (window.turnstile) window.turnstile.reset();
                 }
             } catch (err) {
                 console.error(err);
@@ -473,8 +495,9 @@
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
 
-            // ตรวจสอบสถานะ Cloudflare Turnstile ของจริง
-            const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
+            // เช็ค Turnstile ในฟอร์ม Register
+            const registerPanel = document.getElementById('registerPanel');
+            const turnstileResponse = registerPanel.querySelector('[name="cf-turnstile-response"]');
             if (!turnstileResponse || !turnstileResponse.value) {
                 alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
                 return;
@@ -501,6 +524,7 @@
 
                 if (!checkSnap.empty) {
                     alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว');
+                    if (window.turnstile) window.turnstile.reset();
                     return;
                 }
 
