@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kryptonite X Nitroprime - หน้าหลัก</title>
+    <title>CANDYXSTORE - หน้าหลัก</title>
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* สไตล์ Modal แบบพรีเมียมและสมูท */
+        /* สไตล์ Modal และฟอร์มพรีเมียม */
         .auth-modal-overlay {
             display: flex;
             opacity: 0;
             visibility: hidden;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 5, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             z-index: 99999;
@@ -30,13 +30,13 @@
             visibility: visible;
         }
         .auth-modal-box {
-            background: linear-gradient(145deg, #121212 0%, #0a0a0a 100%);
-            border: 1px solid rgba(0, 175, 255, 0.25);
+            background: #09090b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             width: 100%;
-            max-width: 420px;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 175, 255, 0.1);
+            max-width: 440px;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
             position: relative;
             color: #fff;
             font-family: 'Prompt', sans-serif;
@@ -48,89 +48,113 @@
         }
         .auth-close-btn {
             position: absolute;
-            top: 20px; right: 20px;
-            background: rgba(255, 255, 255, 0.03);
+            top: 24px; right: 24px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #94a3b8;
-            width: 34px; height: 34px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
         }
         .auth-close-btn:hover { 
-            background: rgba(0, 175, 255, 0.15); 
-            color: #00AFFF; 
-            border-color: rgba(0, 175, 255, 0.4);
-            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.1); 
+            color: #fff; 
         }
         .auth-brand {
             display: flex; align-items: center; gap: 10px;
-            font-weight: 700; font-size: 16px; margin-bottom: 24px;
+            font-weight: 600; font-size: 16px; margin-bottom: 24px;
             letter-spacing: 0.5px;
+            color: #e2e8f0;
         }
+        
+        /* แท็บสลับหน้า */
         .auth-tabs {
-            display: flex; background: #161616;
-            border-radius: 12px; padding: 4px; margin-bottom: 24px;
+            display: flex; 
+            background: #121215;
+            border-radius: 14px; 
+            padding: 4px; 
+            margin-bottom: 24px;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
         .auth-tab {
-            flex: 1; text-align: center; padding: 10px;
-            font-size: 14px; font-weight: 600; color: #94a3b8;
-            cursor: pointer; border-radius: 9px; transition: all 0.25s ease;
+            flex: 1; text-align: center; padding: 12px;
+            font-size: 14px; font-weight: 600; color: #64748b;
+            cursor: pointer; border-radius: 10px; transition: all 0.25s ease;
         }
         .auth-tab.active {
-            background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%); 
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            text-shadow: 0 0 10px rgba(0,175,255,0.4);
+            background: #000000; 
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .auth-form-panel {
             display: none;
             opacity: 0;
-            transform: translateY(5px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(6px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
         .auth-form-panel.active {
             display: block;
             opacity: 1;
             transform: translateY(0);
         }
-        .auth-form-group { margin-bottom: 18px; }
-        .auth-form-group label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 7px; font-weight: 500; }
+        .auth-form-group { margin-bottom: 16px; }
+        .auth-form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
+        
         .auth-input-wrap {
             position: relative; display: flex; align-items: center;
         }
-        .auth-input-wrap i {
-            position: absolute; left: 15px; color: #64748b; font-size: 14px; transition: color 0.2s;
+        .auth-input-wrap > i:first-child {
+            position: absolute; left: 16px; color: #64748b; font-size: 14px; transition: color 0.2s;
         }
         .auth-input-wrap input {
-            width: 100%; background: #181818; border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 11px; padding: 12px 15px 12px 42px; color: #fff; font-size: 14px;
+            width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px; padding: 13px 16px 13px 45px; color: #fff; font-size: 14px;
             outline: none; transition: all 0.25s ease; font-family: 'Prompt', sans-serif;
         }
-        .auth-input-wrap input:focus { 
-            border-color: #00AFFF; 
-            background: #1c1c1c;
-            box-shadow: 0 0 15px rgba(0, 175, 255, 0.2); 
+        .auth-input-wrap input::placeholder {
+            color: #475569;
         }
-        .auth-input-wrap input:focus + i, .auth-input-wrap input:focus ~ i { color: #00AFFF; }
+        .auth-input-wrap input:focus { 
+            border-color: #ff3385; 
+            background: #16161a;
+            box-shadow: 0 0 15px rgba(255, 51, 133, 0.15); 
+        }
+        .auth-input-wrap input:focus ~ i { color: #ff3385; }
+        
+        /* ปุ่มเปิด-ปิดรหัสผ่าน */
+        .password-toggle {
+            position: absolute; right: 16px; color: #64748b; font-size: 14px; cursor: pointer; transition: color 0.2s;
+        }
+        .password-toggle:hover { color: #fff; }
+
+        /* ปุ่มยืนยัน */
         .auth-submit-btn {
-            width: 100%; background: linear-gradient(135deg, #ff007f 0%, #00AFFF 100%);
-            border: none; color: #fff; padding: 13px; border-radius: 11px;
-            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px;
-            box-shadow: 0 6px 20px rgba(0, 175, 255, 0.35); transition: all 0.25s ease;
+            width: 100%; background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%);
+            border: none; color: #fff; padding: 14px; border-radius: 14px;
+            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 18px;
+            box-shadow: 0 6px 20px rgba(255, 26, 117, 0.35); transition: all 0.25s ease;
             font-family: 'Prompt', sans-serif;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .auth-submit-btn:hover { 
             opacity: 0.95; 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 175, 255, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(255, 26, 117, 0.5);
         }
-        .auth-submit-btn:active {
-            transform: translateY(0);
+        .auth-submit-btn:active { transform: translateY(0); }
+
+        /* ข้อความสลับด้านล่าง */
+        .auth-switch-text {
+            text-align: center; font-size: 13px; color: #64748b; margin-top: 20px;
         }
+        .auth-switch-text span {
+            color: #ff3385; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
+        }
+        .auth-switch-text span:hover { opacity: 0.8; text-decoration: underline; }
     </style>
 </head>
 <body class="fade-page">
@@ -138,7 +162,7 @@
     <!-- ================= NAVBAR ================= -->
     <header class="navbar">
         <div class="nav-left">
-            <a href="shop.html" class="brand-logo">KRYPTONITE <span class="x-mark">X</span> NITROPRIME</a>
+            <a href="shop.html" class="brand-logo">CANDY <span class="x-mark">X</span> STORE</a>
             <nav class="nav-menu">
                 <a href="shop.html" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
                 <a href="#"><i class="fa-solid fa-store"></i> ร้านค้า</a>
@@ -164,7 +188,7 @@
             </div>
             <div class="news-ticker-container">
                 <div class="news-ticker-text">
-                    บริการเพิ่มประสิทธิภาพ Fivem และดูแลระบบพร้อมให้บริการตลอด 24 ชม. — ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการ Fivem พรีเมียม ปลอดภัย 100%
+                    ยินดีต้อนรับสู่ CANDYXSTORE แหล่งรวมบริการ Fivem พรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.
                 </div>
             </div>
         </div>
@@ -188,7 +212,7 @@
                         </div>
                     </div>
                     <div class="banner-footer-label">
-                        <span><span class="num">01</span> KRYPTONITE STORE</span>
+                        <span><span class="num">01</span> CANDY STORE</span>
                         <a href="#">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -196,11 +220,11 @@
                 <div class="banner-card-wrapper">
                     <a href="fivem-project.html" style="text-decoration: none;">
                         <div class="hero-banner banner-image-box">
-                            <img src="banner2.png" alt="Nitro Prime Store" class="banner-img">
+                            <img src="banner2.png" alt="Candy Store" class="banner-img">
                         </div>
                     </a>
                     <div class="banner-footer-label">
-                        <span><span class="num">02</span> NITROPRIME STORE</span>
+                        <span><span class="num">02</span> PREMIUM STORE</span>
                         <a href="fivem-project.html">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -215,7 +239,7 @@
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
             
             <div class="auth-brand">
-                <i class="fa-solid fa-shield-halved" style="color: #00AFFF; filter: drop-shadow(0 0 8px rgba(0,175,255,0.6));"></i> KRYPTONITE X NITROPRIME
+                <i class="fa-solid fa-gem" style="color: #ff3385;"></i> CANDYXSTORE
             </div>
 
             <div class="auth-tabs">
@@ -230,18 +254,22 @@
                         <label>ชื่อผู้ใช้</label>
                         <div class="auth-input-wrap">
                             <i class="fa-solid fa-user"></i>
-                            <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้" required>
+                            <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้" required>
                         </div>
                     </div>
                     <div class="auth-form-group">
                         <label>รหัสผ่าน</label>
                         <div class="auth-input-wrap">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน" required>
+                            <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+                            <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                         </div>
                     </div>
-                    <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+                    <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                 </form>
+                <div class="auth-switch-text">
+                    ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
+                </div>
             </div>
 
             <!-- ฟอร์มสมัครสมาชิก -->
@@ -266,6 +294,7 @@
                         <div class="auth-input-wrap">
                             <i class="fa-solid fa-lock"></i>
                             <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                            <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
                         </div>
                     </div>
                     <div class="auth-form-group">
@@ -273,17 +302,21 @@
                         <div class="auth-input-wrap">
                             <i class="fa-solid fa-lock"></i>
                             <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                            <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
                         </div>
                     </div>
-                    <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+                    <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
                 </form>
+                <div class="auth-switch-text">
+                    มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- ================= FOOTER ================= -->
     <footer class="footer-bar">
-        <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
+        <p>&copy; 2026 CANDYXSTORE — All rights reserved.</p>
     </footer>
 
     <!-- ================= SCRIPT ================= -->
@@ -304,7 +337,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // จัดการเปิด/ปิด Modal และสลับแท็บแบบสมูท
+        // จัดการเปิด/ปิด Modal และสลับแท็บ
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
         const openRegisterBtn = document.getElementById('openRegisterModal');
@@ -319,9 +352,9 @@
             modalOverlay.classList.remove('active');
         }
 
-        openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
-        openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
-        closeBtn.addEventListener('click', closeModal);
+        if (openLoginBtn) openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
+        if (openRegisterBtn) openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) closeModal();
         });
@@ -349,13 +382,26 @@
             }
         }
 
+        // ฟังก์ชันเปิด-ปิดดูรหัสผ่าน
+        window.togglePassword = function(fieldId, iconEl) {
+            const field = document.getElementById(fieldId);
+            if (field.type === 'password') {
+                field.type = 'text';
+                iconEl.classList.remove('fa-eye');
+                iconEl.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                iconEl.classList.remove('fa-eye-slash');
+                iconEl.classList.add('fa-eye');
+            }
+        }
+
         // ฟังก์ชันเข้าสู่ระบบผ่าน Firebase
         window.handleLoginSubmit = async function(e) {
             e.preventDefault();
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            // บัญชีแอดมินจำลอง
             if (username === 'admin' && password === '123') {
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('username', 'admin');
@@ -469,42 +515,42 @@
             navRight.innerHTML = `
                 <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
                 <div style="position: relative; display: inline-block;">
-                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 30px;">
+                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121215; border: 1px solid rgba(255, 51, 133, 0.3); padding: 5px 12px; border-radius: 30px;">
                         <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
-                        <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
-                        <div style="width: 32px; height: 32px; background: #1a1a1a; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
+                        <span style="font-size: 12px; color: #ff3385; font-weight: 700;">฿${userBalance}</span>
+                        <div style="width: 32px; height: 32px; background: #1a1a20; border: 1px solid #ff3385; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ff3385;">
                             <i class="fa-solid fa-user"></i>
                         </div>
                     </div>
 
-                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
                         <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid ${isAdmin ? '#00AFFF' : '#ff4d94'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: ${isAdmin ? '#00AFFF' : '#ff4d94'}; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
+                            <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid #ff3385; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ff3385; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
                             <div>
                                 <div style="font-size: 14px; font-weight: 600;">${username}</div>
-                                <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#94a3b8'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
+                                <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#ff3385'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
                             </div>
                         </div>
 
-                        <div style="background: #181818; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="background: #121215; border: 1px solid rgba(255, 51, 133, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <div style="font-size: 11px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
-                                <div style="font-size: 16px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #ff3385;">฿${userBalance} บาท</div>
                             </div>
-                            <button style="background: linear-gradient(135deg, #ff0055 0%, #00AFFF 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 0 10px rgba(0,175,255,0.4);">เติมเงิน</button>
+                            <button style="background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;">เติมเงิน</button>
                         </div>
 
                         <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
                             ${isAdmin ? `
                                 <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 4px;">
-                                    <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน <span style="font-size:11px; color:#94a3b8; display:block;">Admin Panel</span></span>
+                                    <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน</span>
                                     <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#00AFFF;"></i>
                                 </a>
                             ` : ''}
 
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> ทรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#ff3385;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#ff3385;"></i> กรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#ff3385;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
                         </div>
 
                         <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
