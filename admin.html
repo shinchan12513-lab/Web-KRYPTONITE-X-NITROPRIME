@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Vortex Official</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0B0B0B; color: #ffffff; padding: 20px; }
+        .container { max-width: 900px; margin: 40px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        h2 { color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        h2 i { color: #00AFFF; }
+        .admin-badge { display: inline-block; background: rgba(0, 175, 255, 0.15); color: #00AFFF; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid rgba(0, 175, 255, 0.3); margin-top: 5px; }
+        hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { background: #1a1a1a; border: 1px solid rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; }
+        .card h4 { color: #00AFFF; margin-bottom: 8px; font-size: 16px; }
+        .card p { color: #94a3b8; font-size: 13px; margin-bottom: 15px; }
+        .btn { display: inline-block; background: #00AFFF; color: #0B0B0B; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.2s; cursor: pointer; border: none; }
+        .btn:hover { background: #0088cc; }
+        .back-link { display: inline-block; margin-top: 25px; color: #94a3b8; text-decoration: none; font-size: 13px; }
+        .back-link:hover { color: #00AFFF; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ</h2>
+        <p>ยินดีต้อนรับคุณ <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span> เข้าสู่ระบบหลังบ้าน</p>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> สถานะ: ผู้ดูแลระบบสูงสุด</div>
+        
+        <hr>
+
+        <h3>เมนูจัดการระบบ</h3>
+        <div class="card-grid">
+            <div class="card">
+                <h4><i class="fa-solid fa-box"></i> จัดการสินค้า</h4>
+                <p>เพิ่ม แก้ไข หรือลบสินค้าสคริปต์และบริการในร้าน</p>
+                <button class="btn" onclick="alert('ฟีเจอร์นี้กำลังพัฒนาเพิ่มครับ')">จัดการสินค้า</button>
+            </div>
+            <div class="card">
+                <h4><i class="fa-solid fa-users"></i> สมาชิกทั้งหมด</h4>
+                <p>ตรวจสอบรายชื่อบัญชีผู้ใช้งานที่เข้าสู่ระบบ</p>
+                <button class="btn" onclick="alert('ฟีเจอร์นี้กำลังพัฒนาเพิ่มครับ')">ดูรายชื่อ</button>
+            </div>
+        </div>
+
+        <a href="shop.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> กลับสู่หน้าหลักร้านค้า</a>
+    </div>
+
+    <!-- ระบบป้องกันความปลอดภัย: ถ้าไม่ใช่แอดมินหรือยังไม่ล็อกอิน จะดีดกลับทันที -->
+    <script>
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+        if (!isLoggedIn || !isAdmin) {
+            alert('⚠️ แจ้งเตือน: คุณไม่มีสิทธิ์เข้าถึงหน้านี้!');
+            window.location.href = 'shop.html';
+        } else {
+            document.getElementById('adminName').innerText = localStorage.getItem('username');
+        }
+    </script>
+</body>
+</html>
