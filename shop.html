@@ -91,11 +91,15 @@
         <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
     </footer>
 
+    <!-- ================= SCRIPT (อัปเดตระบบ Admin เรียบร้อย) ================= -->
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const username = localStorage.getItem('username') || 'sasdsasdas';
+            const username = localStorage.getItem('username') || 'ผู้ใช้งาน';
             
+            // ตรวจสอบสถานะแอดมินจากชื่อผู้ใช้หรือ localStorage
+            const isAdmin = localStorage.getItem('isAdmin') === 'true' || username === 'admin';
+
             if (isLoggedIn === 'true') {
                 const navRight = document.getElementById('navRightSection');
                 navRight.innerHTML = `
@@ -111,10 +115,10 @@
 
                         <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
                             <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                                <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid #ff4d94; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ff4d94; font-weight: 700;">SA</div>
+                                <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid ${isAdmin ? '#00AFFF' : '#ff4d94'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: ${isAdmin ? '#00AFFF' : '#ff4d94'}; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
                                 <div>
                                     <div style="font-size: 14px; font-weight: 600;">${username}</div>
-                                    <div style="font-size: 11px; color: #94a3b8; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">MEMBER</div>
+                                    <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#94a3b8'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
                                 </div>
                             </div>
 
@@ -127,6 +131,14 @@
                             </div>
 
                             <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+                                <!-- ปุ่มระบบหลังบ้าน (แสดงเฉพาะตอนเป็นแอดมิน) -->
+                                ${isAdmin ? `
+                                    <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 4px;">
+                                        <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน <span style="font-size:11px; color:#94a3b8; display:block;">Admin Panel</span></span>
+                                        <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#00AFFF;"></i>
+                                    </a>
+                                ` : ''}
+
                                 <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์ <span style="font-size:11px; color:#94a3b8; display:block;">จัดการบัญชี</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
                                 <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> ทรอกโค้ด <span style="font-size:11px; color:#94a3b8; display:block;">รับ Point และส่วนลด</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
                                 <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ <span style="font-size:11px; color:#94a3b8; display:block;">รายการสั่งซื้อของคุณ</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
@@ -156,6 +168,7 @@
                     e.preventDefault();
                     localStorage.removeItem('isLoggedIn');
                     localStorage.removeItem('username');
+                    localStorage.removeItem('isAdmin');
                     location.reload();
                 });
             }
