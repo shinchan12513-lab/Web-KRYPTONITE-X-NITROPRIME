@@ -47,22 +47,35 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const username = document.getElementById('usernameInput'].value.trim();
+            
+            // [จุดที่แก้] แก้ไขวงเล็บเหลี่ยม ] เป็นวงเล็บโค้ง ) ให้ถูกต้อง
+            const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value;
 
             // ดึงข้อมูลสมาชิกทั้งหมดจากฐานข้อมูลกลาง
             let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
             
+            // (เผื่อกรณีฐานข้อมูลว่างเปล่า) สร้างบัญชีแอดมินตัวอย่างให้อัตโนมัติ เพื่อให้กดเข้าทดสอบได้
+            if (allMembers.length === 0) {
+                allMembers.push({
+                    username: 'admin',
+                    password: '123', // รหัสผ่านตั้งต้นถ้ายังไม่เคยสมัคร
+                    role: 'ADMIN',
+                    balance: 100.00
+                });
+                localStorage.setItem('allMembers', JSON.stringify(allMembers));
+            }
+            
             // ค้นหายูสเซอร์ที่ตรงกันทั้งชื่อและรหัสผ่าน
             let user = allMembers.find(m => m.username === username && m.password === password);
 
-            // ถ้าไม่พบ (แสดงว่าอาจจะโดนลบไปแล้ว หรือกรอกรหัสผิด)
+            // ถ้าไม่พบ (แสดงว่ากรอกชื่อหรือรหัสผ่านผิด หรือบัญชีถูกลบไปแล้ว)
             if (!user) {
                 alert('❌ ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง หรือบัญชีนี้อาจถูกลบออกจากระบบแล้ว');
                 return;
             }
 
-            // บันทึกสถานะล็อกอินปัจจุบันจากฐานข้อมูลจริง
+            // บันทึกสถานะล็อกอินปัจจุบันลงใน localStorage
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', user.username);
             localStorage.setItem('userBalance', user.balance || 0);
