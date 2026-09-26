@@ -24,11 +24,6 @@
                 </div>
 
                 <div class="input-group">
-                    <label><i class="fa-solid fa-envelope"></i> อีเมล</label>
-                    <input type="email" id="emailInput" placeholder="กรอกอีเมลของคุณ" required>
-                </div>
-
-                <div class="input-group">
                     <label><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
                     <input type="password" id="passwordInput" placeholder="กำหนดรหัสผ่าน" required>
                 </div>
@@ -73,12 +68,21 @@
             // เพิ่มข้อมูลลงในฐานข้อมูลกลางแอดมิน
             allMembers.push({
                 username: username,
+                password: password,
                 role: username === 'admin' ? 'ADMIN' : 'MEMBER',
                 registerDate: formattedDate,
                 balance: 0.00
             });
 
+            // บันทึกลง localStorage ทั้ง allMembers และ users
             localStorage.setItem('allMembers', JSON.stringify(allMembers));
+            
+            let usersList = JSON.parse(localStorage.getItem('users')) || [];
+            if (!usersList.some(u => u.username === username)) {
+                usersList.push({ username, password });
+                localStorage.setItem('users', JSON.stringify(usersList));
+            }
+
             alert('✅ สมัครสมาชิกสำเร็จ!');
             window.location.href = 'login.html';
         });
