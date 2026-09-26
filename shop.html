@@ -9,8 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cloudflare Turnstile Official Script (แบบอัตโนมัติ) -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- Cloudflare Turnstile Official Script (แบบ Explicit Render) -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <style>
         /* สไตล์ Modal และฟอร์มพรีเมียม */
         .auth-modal-overlay {
@@ -289,10 +289,8 @@
                             </div>
                         </div>
                         
-                        <!-- จุดแสดง Turnstile หน้า Login แบบอัตโนมัติ -->
-                        <div class="turnstile-container">
-                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAFETHfOSngKW-9FO" data-theme="dark"></div>
-                        </div>
+                        <!-- จุดแสดง Turnstile หน้า Login -->
+                        <div class="turnstile-container" id="loginTurnstileBox"></div>
 
                         <button type="submit" class="auth-submit-btn" style="margin-top: 5px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
@@ -335,10 +333,8 @@
                             </div>
                         </div>
                         
-                        <!-- จุดแสดง Turnstile หน้า Register แบบอัตโนมัติ -->
-                        <div class="turnstile-container">
-                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAFETHfOSngKW-9FO" data-theme="dark"></div>
-                        </div>
+                        <!-- จุดแสดง Turnstile หน้า Register -->
+                        <div class="turnstile-container" id="regTurnstileBox"></div>
 
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
@@ -378,9 +374,38 @@
         const openRegisterBtn = document.getElementById('openRegisterModal');
         const closeBtn = document.getElementById('closeAuthModal');
 
+        let loginWidgetId = null;
+        let regWidgetId = null;
+        const siteKey = "0x4AAAAAAAFETHfOSngKW-9FO";
+
+        function renderTurnstiles() {
+            if (window.turnstile) {
+                const loginBox = document.getElementById('loginTurnstileBox');
+                if (loginBox && loginBox.childElementCount === 0) {
+                    loginWidgetId = window.turnstile.render(loginBox, {
+                        sitekey: siteKey,
+                        theme: 'dark'
+                    });
+                } else if (window.turnstile && loginWidgetId !== null) {
+                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
+                }
+
+                const regBox = document.getElementById('regTurnstileBox');
+                if (regBox && regBox.childElementCount === 0) {
+                    regWidgetId = window.turnstile.render(regBox, {
+                        sitekey: siteKey,
+                        theme: 'dark'
+                    });
+                } else if (window.turnstile && regWidgetId !== null) {
+                    try { window.turnstile.reset(regWidgetId); } catch(e){}
+                }
+            }
+        }
+
         function openModal(tabName) {
             modalOverlay.classList.add('active');
             switchAuthTab(tabName);
+            setTimeout(renderTurnstiles, 150);
         }
 
         function closeModal() {
@@ -394,7 +419,6 @@
             if (e.target === modalOverlay) closeModal();
         });
 
-        // ฟังก์ชันสลับแท็บ
         window.switchAuthTab = function(tab) {
             const loginPanel = document.getElementById('loginPanel');
             const registerPanel = document.getElementById('registerPanel');
@@ -408,17 +432,18 @@
                 registerPanel.classList.remove('active');
                 loginTabBtn.classList.add('active');
                 regTabBtn.classList.remove('active');
+                if (window.turnstile && loginWidgetId !== null) {
+                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
+                }
             } else {
                 tabsContainer.classList.add('register-mode');
                 registerPanel.classList.add('active');
                 loginPanel.classList.remove('active');
                 regTabBtn.classList.add('active');
                 loginTabBtn.classList.remove('active');
-            }
-
-            // สั่งรีเซ็ต Turnstile (ถ้ามีฟังก์ชัน turnstile โหลดอยู่) เมื่อมีการสลับแท็บ
-            if (window.turnstile) {
-                try { window.turnstile.reset(); } catch(e) {}
+                if (window.turnstile && regWidgetId !== null) {
+                    try { window.turnstile.reset(regWidgetId); } catch(e){}
+                }
             }
         }
 
@@ -468,7 +493,7 @@
                     location.reload();
                 } else {
                     alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-                    if (window.turnstile) { try { window.turnstile.reset(); } catch(e) {} }
+                    if (window.turnstile && loginWidgetId !== null) window.turnstile.reset(loginWidgetId);
                 }
             } catch (err) {
                 console.error(err);
@@ -507,7 +532,7 @@
 
                 if (!checkSnap.empty) {
                     alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว');
-                    if (window.turnstile) { try { window.turnstile.reset(); } catch(e) {} }
+                    if (window.turnstile && regWidgetId !== null) window.turnstile.reset(regWidgetId);
                     return;
                 }
 
