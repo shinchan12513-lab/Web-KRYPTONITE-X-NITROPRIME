@@ -7,6 +7,69 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- โหลด Firebase SDK และเชื่อมต่อฐานข้อมูล -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
+            authDomain: "kryptonite-nitroprime.firebaseapp.com",
+            projectId: "kryptonite-nitroprime",
+            storageBucket: "kryptonite-nitroprime.firebasestorage.app",
+            messagingSenderId: "802119898761",
+            appId: "1:802119898761:web:6ac8099014fab7ea41d858",
+            measurementId: "G-MMTCVN81ZS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('registerForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const username = document.getElementById('usernameInput').value.trim();
+                const password = document.getElementById('passwordInput').value;
+                const confirmPassword = document.getElementById('confirmPasswordInput').value;
+
+                if (password !== confirmPassword) {
+                    alert('⚠️ รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่อีกครั้ง');
+                    return;
+                }
+
+                try {
+                    // ตรวจสอบชื่อผู้ใช้ซ้ำใน Firebase Cloud
+                    const q = query(collection(db, "members"), where("username", "==", username));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        alert('⚠️ ชื่อผู้ใช้นี้ถูกใช้งานแล้วในระบบ');
+                        return;
+                    }
+
+                    let now = new Date();
+                    let formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+                    // บันทึกข้อมูลลง Cloud Firestore
+                    await addDoc(collection(db, "members"), {
+                        username: username,
+                        password: password,
+                        role: username === 'admin' ? 'ADMIN' : 'MEMBER',
+                        registerDate: formattedDate,
+                        balance: 0.00
+                    });
+
+                    alert('✅ สมัครสมาชิกสำเร็จ!');
+                    window.location.href = 'login.html';
+
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก กรุณาลองใหม่อีกครั้ง');
+                }
+            });
+        });
+    </script>
 </head>
 <body class="fade-page auth-page-body">
 
@@ -41,51 +104,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('usernameInput').value.trim();
-            const password = document.getElementById('passwordInput').value;
-            const confirmPassword = document.getElementById('confirmPasswordInput').value;
-
-            if (password !== confirmPassword) {
-                alert('⚠️ รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่อีกครั้ง');
-                return;
-            }
-
-            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
-
-            // ตรวจสอบชื่อซ้ำ
-            if (allMembers.some(m => m.username === username)) {
-                alert('⚠️ ชื่อผู้ใช้นี้ถูกใช้งานแล้วในระบบ');
-                return;
-            }
-
-            let now = new Date();
-            let formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-            // เพิ่มข้อมูลลงในฐานข้อมูลกลางแอดมิน
-            allMembers.push({
-                username: username,
-                password: password,
-                role: username === 'admin' ? 'ADMIN' : 'MEMBER',
-                registerDate: formattedDate,
-                balance: 0.00
-            });
-
-            // บันทึกลง localStorage ทั้ง allMembers และ users
-            localStorage.setItem('allMembers', JSON.stringify(allMembers));
-            
-            let usersList = JSON.parse(localStorage.getItem('users')) || [];
-            if (!usersList.some(u => u.username === username)) {
-                usersList.push({ username, password });
-                localStorage.setItem('users', JSON.stringify(usersList));
-            }
-
-            alert('✅ สมัครสมาชิกสำเร็จ!');
-            window.location.href = 'login.html';
-        });
-    </script>
 </body>
 </html>
