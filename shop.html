@@ -92,106 +92,130 @@
     </footer>
 
     <!-- ================= SCRIPT ================= -->
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
+            authDomain: "kryptonite-nitroprime.firebaseapp.com",
+            projectId: "kryptonite-nitroprime",
+            storageBucket: "kryptonite-nitroprime.firebasestorage.app",
+            messagingSenderId: "802119898761",
+            appId: "1:802119898761:web:6ac8099014fab7ea41d858",
+            measurementId: "G-MMTCVN81ZS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.addEventListener('DOMContentLoaded', async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
 
-            // 1. ตรวจสอบความปลอดภัย: หากล็อกอินอยู่ ต้องเช็กว่าบัญชีนี้ยังอยู่ใน allMembers หรือไม่ (ป้องกันกรณีโดนแอดมินลบแต่ค้างหน้าเว็บ)
             if (isLoggedIn && username) {
-                let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
-                let userExists = allMembers.find(m => m.username === username);
-
-                if (!userExists) {
-                    alert('⚠️ บัญชีของคุณถูกลบออกจากระบบโดยผู้ดูแลระบบ');
-                    localStorage.clear(); // เคลียร์ข้อมูลทั้งหมด
-                    window.location.href = 'login.html';
+                // กรณีเป็นแอดมินจำลอง (admin / 123)
+                if (username === 'admin') {
+                    renderNavbar('admin', 0, true);
                     return;
                 }
-            }
 
-            // 2. ดึงข้อมูลล่าสุดของผู้ใช้เพื่อแสดงยอดเครดิตจริง
-            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
-            let currentUserObj = allMembers.find(m => m.username === username);
-            let userBalance = currentUserObj ? (parseFloat(currentUserObj.balance) || 0).toFixed(2) : '0.00';
-            
-            // ตรวจสอบสถานะแอดมินปัจจุบันจากฐานข้อมูล
-            let isAdmin = (currentUserObj && currentUserObj.role === 'ADMIN') || (localStorage.getItem('isAdmin') === 'true') || (username === 'admin');
+                try {
+                    // ตรวจสอบข้อมูลผู้ใช้จาก Firebase Cloud
+                    const q = query(collection(db, "members"), where("username", "==", username));
+                    const querySnapshot = await getDocs(q);
 
-            if (isLoggedIn) {
-                const navRight = document.getElementById('navRightSection');
-                navRight.innerHTML = `
-                    <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
-                    <div style="position: relative; display: inline-block;">
-                        <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 30px;">
-                            <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
-                            <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
-                            <div style="width: 32px; height: 32px; background: #1a1a1a; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                        </div>
+                    if (querySnapshot.empty) {
+                        // ถ้าไม่พบในฐานข้อมูล Firebase จริงๆ ถึงจะเคลียร์และออก
+                        localStorage.clear();
+                        window.location.href = 'login.html';
+                        return;
+                    }
 
-                        <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
-                            <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                                <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid ${isAdmin ? '#00AFFF' : '#ff4d94'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: ${isAdmin ? '#00AFFF' : '#ff4d94'}; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
-                                <div>
-                                    <div style="font-size: 14px; font-weight: 600;">${username}</div>
-                                    <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#94a3b8'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
-                                </div>
-                            </div>
+                    let userData = null;
+                    querySnapshot.forEach((docSnap) => {
+                        userData = docSnap.data();
+                    });
 
-                            <div style="background: #181818; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 11px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
-                                    <div style="font-size: 16px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
-                                </div>
-                                <button style="background: linear-gradient(135deg, #ff0055 0%, #00AFFF 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 0 10px rgba(0,175,255,0.4);">เติมเงิน</button>
-                            </div>
+                    const userBalance = (parseFloat(userData.balance) || 0).toFixed(2);
+                    const isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin') === 'true';
 
-                            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
-                                <!-- ปุ่มระบบหลังบ้าน (แสดงเฉพาะตอนเป็นแอดมิน) -->
-                                ${isAdmin ? `
-                                    <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 4px;">
-                                        <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน <span style="font-size:11px; color:#94a3b8; display:block;">Admin Panel</span></span>
-                                        <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#00AFFF;"></i>
-                                    </a>
-                                ` : ''}
+                    renderNavbar(username, userBalance, isAdmin);
 
-                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์ <span style="font-size:11px; color:#94a3b8; display:block;">จัดการบัญชี</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> ทรอกโค้ด <span style="font-size:11px; color:#94a3b8; display:block;">รับ Point และส่วนลด</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ <span style="font-size:11px; color:#94a3b8; display:block;">รายการสั่งซื้อของคุณ</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                                <a href="shop.html" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-store" style="color:#00AFFF;"></i> ร้านค้า <span style="font-size:11px; color:#94a3b8; display:block;">สินค้าทั้งหมด</span></span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            </div>
-
-                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-                                <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 8px; padding: 6px 10px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                const toggleBtn = document.getElementById('profileToggleBtn');
-                const dropdown = document.getElementById('profileDropdown');
-                
-                toggleBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                });
-
-                window.addEventListener('click', () => {
-                    dropdown.style.display = 'none';
-                });
-
-                document.getElementById('logoutBtn').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('isAdmin');
-                    localStorage.removeItem('userBalance');
-                    location.reload();
-                });
+                } catch (error) {
+                    console.error("Error checking user:", error);
+                }
             }
         });
+
+        function renderNavbar(username, userBalance, isAdmin) {
+            const navRight = document.getElementById('navRightSection');
+            navRight.innerHTML = `
+                <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
+                <div style="position: relative; display: inline-block;">
+                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 30px;">
+                        <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
+                        <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
+                        <div style="width: 32px; height: 32px; background: #1a1a1a; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <div style="width: 42px; height: 42px; background: #2a1b22; border: 1px solid ${isAdmin ? '#00AFFF' : '#ff4d94'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: ${isAdmin ? '#00AFFF' : '#ff4d94'}; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 600;">${username}</div>
+                                <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#94a3b8'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #181818; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 11px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
+                            </div>
+                            <button style="background: linear-gradient(135deg, #ff0055 0%, #00AFFF 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 0 10px rgba(0,175,255,0.4);">เติมเงิน</button>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+                            ${isAdmin ? `
+                                <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 4px;">
+                                    <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน <span style="font-size:11px; color:#94a3b8; display:block;">Admin Panel</span></span>
+                                    <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#00AFFF;"></i>
+                                </a>
+                            ` : ''}
+
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> ทรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                        </div>
+
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 8px; padding: 6px 10px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const toggleBtn = document.getElementById('profileToggleBtn');
+            const dropdown = document.getElementById('profileDropdown');
+            
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            window.addEventListener('click', () => {
+                dropdown.style.display = 'none';
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.clear();
+                location.reload();
+            });
+        }
     </script>
 </body>
 </html>
