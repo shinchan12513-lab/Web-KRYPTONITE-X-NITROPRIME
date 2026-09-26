@@ -9,8 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cloudflare Turnstile Official Script -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <style>
         /* สไตล์หน้าแรก (Landing Page) */
         .landing-wrapper {
@@ -163,7 +161,7 @@
         .auth-tabs.register-mode .auth-tab-indicator { transform: translateX(100%); }
         .auth-form-panel { display: none; }
         .auth-form-panel.active { display: block; }
-        .auth-form-group { margin-bottom: 8px; }
+        .auth-form-group { margin-bottom: 10px; }
         .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; font-weight: 500; }
         .auth-input-wrap { position: relative; display: flex; align-items: center; }
         .auth-input-wrap > i:first-child { position: absolute; left: 12px; color: #64748b; font-size: 12px; }
@@ -174,11 +172,10 @@
         }
         .auth-input-wrap input:focus { border-color: #ff3385; background: #16161a; }
         .password-toggle { position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; }
-        .turnstile-container { display: flex; justify-content: center; margin-bottom: 8px; transform: scale(0.92); min-height: 65px; }
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%);
             border: none; color: #fff; padding: 10px; border-radius: 10px;
-            font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 2px;
+            font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px;
             font-family: 'Prompt', sans-serif; display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .auth-switch-text { text-align: center; font-size: 11px; color: #64748b; margin-top: 10px; }
@@ -271,7 +268,6 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
-                        <div class="turnstile-container" id="loginTurnstileBox"></div>
                         <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span></div>
@@ -310,7 +306,6 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
                             </div>
                         </div>
-                        <div class="turnstile-container" id="regTurnstileBox"></div>
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span></div>
@@ -321,13 +316,9 @@
 
     <!-- ================= SCRIPTS ================= -->
     <script>
-        // ควบคุมการกดเข้าเว็บจากหน้า Landing Page
         document.getElementById('enterWebsiteBtn').addEventListener('click', () => {
-            const landing = document.getElementById('landingWrapper');
-            const mainContent = document.getElementById('mainWebsiteContent');
-            
-            landing.classList.add('hidden');
-            mainContent.classList.add('visible');
+            document.getElementById('landingWrapper').classList.add('hidden');
+            document.getElementById('mainWebsiteContent').classList.add('visible');
         });
     </script>
 
@@ -353,32 +344,9 @@
         const openRegisterBtn = document.getElementById('openRegisterModal');
         const closeBtn = document.getElementById('closeAuthModal');
 
-        let loginWidgetId = null;
-        let regWidgetId = null;
-        const siteKey = "0x4AAAAAAAFETHfOSngKW-9FO";
-
-        function renderTurnstiles() {
-            if (window.turnstile) {
-                const loginBox = document.getElementById('loginTurnstileBox');
-                if (loginBox && loginBox.childElementCount === 0) {
-                    loginWidgetId = window.turnstile.render(loginBox, { sitekey: siteKey, theme: 'dark' });
-                } else if (loginWidgetId !== null) {
-                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
-                }
-
-                const regBox = document.getElementById('regTurnstileBox');
-                if (regBox && regBox.childElementCount === 0) {
-                    regWidgetId = window.turnstile.render(regBox, { sitekey: siteKey, theme: 'dark' });
-                } else if (regWidgetId !== null) {
-                    try { window.turnstile.reset(regWidgetId); } catch(e){}
-                }
-            }
-        }
-
         function openModal(tabName) {
             modalOverlay.classList.add('active');
             switchAuthTab(tabName);
-            setTimeout(renderTurnstiles, 150);
         }
 
         function closeModal() {
@@ -403,14 +371,12 @@
                 registerPanel.classList.remove('active');
                 loginTabBtn.classList.add('active');
                 regTabBtn.classList.remove('active');
-                if (window.turnstile && loginWidgetId !== null) window.turnstile.reset(loginWidgetId);
             } else {
                 tabsContainer.classList.add('register-mode');
                 registerPanel.classList.add('active');
                 loginPanel.classList.remove('active');
                 regTabBtn.classList.add('active');
                 loginTabBtn.classList.remove('active');
-                if (window.turnstile && regWidgetId !== null) window.turnstile.reset(regWidgetId);
             }
         }
 
@@ -427,11 +393,6 @@
 
         window.handleLoginSubmit = async function(e) {
             e.preventDefault();
-            const turnstileResponse = document.querySelector('#loginPanel [name="cf-turnstile-response"]');
-            if (!turnstileResponse || !turnstileResponse.value) {
-                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท');
-                return;
-            }
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
 
@@ -454,7 +415,6 @@
                     location.reload();
                 } else {
                     alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-                    if (window.turnstile && loginWidgetId !== null) window.turnstile.reset(loginWidgetId);
                 }
             } catch (err) {
                 console.error(err);
@@ -464,11 +424,6 @@
 
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
-            const turnstileResponse = document.querySelector('#registerPanel [name="cf-turnstile-response"]');
-            if (!turnstileResponse || !turnstileResponse.value) {
-                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท');
-                return;
-            }
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
@@ -482,7 +437,6 @@
                 const checkSnap = await getDocs(checkQ);
                 if (!checkSnap.empty) {
                     alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานแล้ว');
-                    if (window.turnstile && regWidgetId !== null) window.turnstile.reset(regWidgetId);
                     return;
                 }
 
