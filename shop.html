@@ -10,7 +10,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* สไตล์ Modal และฟอร์มพรีเมียม */
+        /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับความกระชับไม่ให้ล้นหน้าจอ) */
         .auth-modal-overlay {
             display: flex;
             opacity: 0;
@@ -33,11 +33,11 @@
             background: #09090b;
             border: 1px solid rgba(255, 255, 255, 0.08);
             width: 100%;
-            max-width: 440px;
-            max-height: 90vh; /* จำกัดความสูงไม่ให้ล้นหน้าจอ[cite: 9] */
-            overflow-y: auto; /* เพิ่ม Scrollbar ให้เลื่อนดูเนื้อหาด้านล่างได้[cite: 9] */
-            border-radius: 24px;
-            padding: 30px;
+            max-width: 420px;
+            max-height: 98vh;
+            overflow-y: auto;
+            border-radius: 22px;
+            padding: 22px 26px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
             position: relative;
             color: #fff;
@@ -46,16 +46,12 @@
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        /* ตกแต่ง Scrollbar ให้สวยงามกลมกลืนกับธีมเว็บ */
         .auth-modal-box::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         .auth-modal-box::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.15);
             border-radius: 10px;
-        }
-        .auth-modal-box::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
         }
 
         .auth-modal-overlay.active .auth-modal-box {
@@ -63,11 +59,11 @@
         }
         .auth-close-btn {
             position: absolute;
-            top: 24px; right: 24px;
+            top: 20px; right: 20px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #94a3b8;
-            width: 32px; height: 32px;
+            width: 30px; height: 30px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
@@ -78,8 +74,8 @@
             color: #fff; 
         }
         .auth-brand {
-            display: flex; align-items: center; gap: 10px;
-            font-weight: 600; font-size: 15px; margin-bottom: 24px;
+            display: flex; align-items: center; gap: 8px;
+            font-weight: 600; font-size: 14px; margin-bottom: 16px;
             letter-spacing: 0.5px;
             color: #e2e8f0;
         }
@@ -88,15 +84,15 @@
         .auth-tabs {
             display: flex; 
             background: #121215;
-            border-radius: 14px; 
-            padding: 4px; 
-            margin-bottom: 24px;
+            border-radius: 12px; 
+            padding: 3px; 
+            margin-bottom: 18px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             position: relative;
         }
         .auth-tab {
-            flex: 1; text-align: center; padding: 12px;
-            font-size: 14px; font-weight: 600; color: #64748b;
+            flex: 1; text-align: center; padding: 10px;
+            font-size: 13px; font-weight: 600; color: #64748b;
             cursor: pointer; border-radius: 10px; 
             transition: color 0.3s ease;
             position: relative; z-index: 2;
@@ -104,13 +100,12 @@
         .auth-tab.active {
             color: #ffffff;
         }
-        /* แอนิเมชันแถบพื้นหลังปุ่มแท็บเลื่อนนุ่มๆ */
         .auth-tab-indicator {
             position: absolute;
-            top: 4px; bottom: 4px; left: 4px;
-            width: calc(50% - 4px);
+            top: 3px; bottom: 3px; left: 3px;
+            width: calc(50% - 3px);
             background: #000000;
-            border-radius: 10px;
+            border-radius: 9px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -120,19 +115,17 @@
             transform: translateX(100%);
         }
 
-        /* คอนเทนต์ฟอร์มแบบซ้อนทับป้องกันการกระพริบ */
         .auth-forms-container {
             position: relative;
-            overflow: visible; /* ป้องกันการซ่อนเนื้อหาฟอร์มสมัครสมาชิกที่ยาวกว่าปกติ[cite: 9] */
-            min-height: 420px; /* ขยายความสูงขั้นต่ำให้รองรับฟอร์มสมัครที่มีหลายช่อง[cite: 9] */
+            overflow: visible;
         }
         .auth-form-panel {
             position: absolute;
             top: 0; left: 0; width: 100%;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(12px);
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            transform: translateY(10px);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
             pointer-events: none;
         }
         .auth-form-panel.active {
@@ -140,20 +133,21 @@
             visibility: visible;
             transform: translateY(0);
             pointer-events: auto;
+            position: relative; /* ให้ดันความสูงกล่องตามจริงเมื่อใช้งาน */
         }
 
-        .auth-form-group { margin-bottom: 16px; }
-        .auth-form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
+        .auth-form-group { margin-bottom: 12px; }
+        .auth-form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: 500; }
         
         .auth-input-wrap {
             position: relative; display: flex; align-items: center;
         }
         .auth-input-wrap > i:first-child {
-            position: absolute; left: 16px; color: #64748b; font-size: 14px; transition: color 0.2s;
+            position: absolute; left: 14px; color: #64748b; font-size: 13px; transition: color 0.2s;
         }
         .auth-input-wrap input {
             width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px; padding: 13px 16px 13px 45px; color: #fff; font-size: 14px;
+            border-radius: 12px; padding: 10px 14px 10px 40px; color: #fff; font-size: 13px;
             outline: none; transition: all 0.25s ease; font-family: 'Prompt', sans-serif;
         }
         .auth-input-wrap input::placeholder {
@@ -162,36 +156,35 @@
         .auth-input-wrap input:focus { 
             border-color: #ff3385; 
             background: #16161a;
-            box-shadow: 0 0 15px rgba(255, 51, 133, 0.15); 
+            box-shadow: 0 0 12px rgba(255, 51, 133, 0.15); 
         }
         .auth-input-wrap input:focus ~ i { color: #ff3385; }
         
-        /* ปุ่มเปิด-ปิดรหัสผ่าน */
         .password-toggle {
-            position: absolute; right: 16px; color: #64748b; font-size: 14px; cursor: pointer; transition: color 0.2s;
+            position: absolute; right: 14px; color: #64748b; font-size: 13px; cursor: pointer; transition: color 0.2s;
         }
         .password-toggle:hover { color: #fff; }
 
-        /* Cloudflare Turnstile Verification Box */
+        /* Cloudflare Verify Box ให้กะทัดรัดขึ้น */
         .cloudflare-box {
             background: #121215;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 14px 18px;
+            border-radius: 10px;
+            padding: 10px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
         .cloudflare-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             cursor: pointer;
         }
         .cloudflare-checkbox {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             background: #09090b;
             border: 2px solid #3f3f46;
             border-radius: 4px;
@@ -206,14 +199,14 @@
         }
         .cloudflare-checkbox i {
             color: #fff;
-            font-size: 13px;
+            font-size: 11px;
             display: none;
         }
         .cloudflare-box.verified .cloudflare-checkbox i {
             display: block;
         }
         .cloudflare-text {
-            font-size: 14px;
+            font-size: 13px;
             color: #e4e4e7;
             font-weight: 500;
         }
@@ -221,19 +214,19 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 2px;
+            gap: 1px;
         }
         .cloudflare-logo {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #f97316;
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
         .cloudflare-links {
-            font-size: 10px;
+            font-size: 9px;
             color: #71717a;
         }
         .cloudflare-links a {
@@ -247,22 +240,21 @@
         /* ปุ่มยืนยัน */
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%);
-            border: none; color: #fff; padding: 14px; border-radius: 14px;
-            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 4px;
-            box-shadow: 0 6px 20px rgba(255, 26, 117, 0.35); transition: all 0.25s ease;
+            border: none; color: #fff; padding: 12px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 2px;
+            box-shadow: 0 4px 15px rgba(255, 26, 117, 0.3); transition: all 0.25s ease;
             font-family: 'Prompt', sans-serif;
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .auth-submit-btn:hover { 
             opacity: 0.95; 
             transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(255, 26, 117, 0.5);
+            box-shadow: 0 6px 20px rgba(255, 26, 117, 0.45);
         }
         .auth-submit-btn:active { transform: translateY(0); }
 
-        /* ข้อความสลับด้านล่าง */
         .auth-switch-text {
-            text-align: center; font-size: 13px; color: #64748b; margin-top: 20px;
+            text-align: center; font-size: 12px; color: #64748b; margin-top: 14px;
         }
         .auth-switch-text span {
             color: #ff3385; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
@@ -284,7 +276,6 @@
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
         </div>
-        <!-- ส่วนนี้จะสลับเปลี่ยนอัตโนมัติเมื่อเข้าสู่ระบบ -->
         <div class="nav-right" id="navRightSection">
             <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
             <a href="#" id="openLoginModal" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
@@ -352,7 +343,7 @@
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
             
             <div class="auth-brand">
-                <i class="fa-solid fa-gem" style="color: #ff3385; font-size: 16px;"></i> kryptonitexnitroprime
+                <i class="fa-solid fa-gem" style="color: #ff3385; font-size: 15px;"></i> kryptonitexnitroprime
             </div>
 
             <div class="auth-tabs" id="authTabsContainer">
@@ -380,14 +371,14 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
-                        <button type="submit" class="auth-submit-btn" style="margin-top: 18px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="submit" class="auth-submit-btn" style="margin-top: 14px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">
                         ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
                     </div>
                 </div>
 
-                <!-- ฟอร์มสมัครสมาชิก -->
+                <!-- ฟอร์มสมัครสมาชิก (ปรับแต่งระยะห่างให้พอดีหน้าจอด้านใน ไม่ต้องเลื่อน Scrollbar) -->
                 <div id="registerPanel" class="auth-form-panel">
                     <form onsubmit="handleRegisterSubmit(event)">
                         <div class="auth-form-group">
@@ -468,7 +459,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ตัวแปรเช็คการติ๊ก Verify
         let isHumanVerified = false;
         window.toggleCloudflareVerify = function() {
             const cfBox = document.getElementById('cloudflareBox');
@@ -480,7 +470,6 @@
             }
         }
 
-        // จัดการเปิด/ปิด Modal และสลับแท็บ
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
         const openRegisterBtn = document.getElementById('openRegisterModal');
@@ -524,7 +513,6 @@
             }
         }
 
-        // ฟังก์ชันเปิด-ปิดดูรหัสผ่าน
         window.togglePassword = function(fieldId, iconEl) {
             const field = document.getElementById(fieldId);
             if (field.type === 'password') {
@@ -538,7 +526,6 @@
             }
         }
 
-        // ฟังก์ชันเข้าสู่ระบบผ่าน Firebase
         window.handleLoginSubmit = async function(e) {
             e.preventDefault();
             const username = document.getElementById('loginUsername').value.trim();
@@ -571,7 +558,6 @@
             }
         }
 
-        // ฟังก์ชันสมัครสมาชิกผ่าน Firebase
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
 
@@ -622,7 +608,6 @@
             }
         }
 
-        // โหลดข้อมูลสถานะล็อกอินเมื่อเปิดหน้าเว็บ
         window.addEventListener('DOMContentLoaded', async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
