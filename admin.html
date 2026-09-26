@@ -3,22 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Vortex Official</title>
+    <title>Admin Dashboard - Kryptonite X Nitroprime</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0B0B0B; color: #ffffff; padding: 20px; }
-        .container { max-width: 900px; margin: 40px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .container { max-width: 1000px; margin: 30px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         h2 { color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: #00AFFF; }
         .admin-badge { display: inline-block; background: rgba(0, 175, 255, 0.15); color: #00AFFF; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid rgba(0, 175, 255, 0.3); margin-top: 5px; }
         hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
-        .card { background: #1a1a1a; border: 1px solid rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; }
-        .card h4 { color: #00AFFF; margin-bottom: 8px; font-size: 16px; }
-        .card p { color: #94a3b8; font-size: 13px; margin-bottom: 15px; }
-        .btn { display: inline-block; background: #00AFFF; color: #0B0B0B; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.2s; cursor: pointer; border: none; }
-        .btn:hover { background: #0088cc; }
+        
+        /* Search & Table Styles */
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-box input { flex: 1; padding: 10px 15px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        .search-box input:focus { border-color: #00AFFF; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #181818; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: #1f1f1f; color: #00AFFF; font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.02); }
+        
+        .btn { padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-primary { background: #00AFFF; color: #0B0B0B; }
+        .btn-primary:hover { background: #0088cc; }
+        .btn-warning { background: #f59e0b; color: #0B0B0B; }
+        .btn-danger { background: #ef4444; color: #fff; }
+        
         .back-link { display: inline-block; margin-top: 25px; color: #94a3b8; text-decoration: none; font-size: 13px; }
         .back-link:hover { color: #00AFFF; }
     </style>
@@ -27,30 +38,39 @@
 
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ</h2>
-        <p>ยินดีต้อนรับคุณ <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span> เข้าสู่ระบบหลังบ้าน</p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> สถานะ: ผู้ดูแลระบบสูงสุด</div>
+        <p>ยินดีต้อนรับคุณ <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span> (ผู้ดูแลระบบสูงสุด)</p>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการสมาชิก</div>
         
         <hr>
 
-        <h3>เมนูจัดการระบบ</h3>
-        <div class="card-grid">
-            <div class="card">
-                <h4><i class="fa-solid fa-box"></i> จัดการสินค้า</h4>
-                <p>เพิ่ม แก้ไข หรือลบสินค้าสคริปต์และบริการในร้าน</p>
-                <button class="btn" onclick="alert('ฟีเจอร์นี้กำลังพัฒนาเพิ่มครับ')">จัดการสินค้า</button>
-            </div>
-            <div class="card">
-                <h4><i class="fa-solid fa-users"></i> สมาชิกทั้งหมด</h4>
-                <p>ตรวจสอบรายชื่อบัญชีผู้ใช้งานที่เข้าสู่ระบบ</p>
-                <button class="btn" onclick="alert('ฟีเจอร์นี้กำลังพัฒนาเพิ่มครับ')">ดูรายชื่อ</button>
-            </div>
+        <h3><i class="fa-solid fa-users"></i> ค้นหาและจัดการสมาชิก</h3>
+        <div class="search-box" style="margin-top: 15px;">
+            <input type="text" id="searchInput" placeholder="พิมพ์ชื่อยูสเซอร์ลูกค้าเพื่อค้นหา..." onkeyup="filterTable()">
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table id="memberTable">
+                <thead>
+                    <tr>
+                        <th>ชื่อยูสเซอร์ (Username)</th>
+                        <th>สถานะ</th>
+                        <th>ยอดเครดิตคงเหลือ</th>
+                        <th>จัดการเครดิต</th>
+                        <th>การจัดการอื่นๆ</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody">
+                    <!-- ข้อมูลจะถูกดึงมาแสดงด้วย JavaScript ตรงนี้ -->
+                </tbody>
+            </table>
         </div>
 
         <a href="shop.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> กลับสู่หน้าหลักร้านค้า</a>
     </div>
 
-    <!-- ระบบป้องกันความปลอดภัย: ถ้าไม่ใช่แอดมินหรือยังไม่ล็อกอิน จะดีดกลับทันที -->
+    <!-- สคริปต์ระบบแอดมินจัดการสมาชิก -->
     <script>
+        // 1. ตรวจสอบสิทธิ์ความปลอดภัย
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
@@ -58,8 +78,92 @@
             alert('⚠️ แจ้งเตือน: คุณไม่มีสิทธิ์เข้าถึงหน้านี้!');
             window.location.href = 'shop.html';
         } else {
-            document.getElementById('adminName').innerText = localStorage.getItem('username');
+            document.getElementById('adminName').innerText = localStorage.getItem('username') || 'admin';
         }
+
+        // 2. จำลองข้อมูลสมาชิกในระบบ (สามารถดึงหรือเพิ่มจำลองไว้เทสได้)
+        let members = JSON.parse(localStorage.getItem('allMembers')) || [
+            { username: localStorage.getItem('username') || 'sasdsasdas', role: 'MEMBER', balance: 15.97 },
+            { username: 'testuser01', role: 'MEMBER', balance: 100.00 },
+            { username: 'pro_gamer99', role: 'VIP', balance: 500.50 }
+        ];
+
+        function renderTable(data) {
+            const tbody = document.getElementById('memberTableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
+                return;
+            }
+
+            data.forEach((member, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${member.username}</td>
+                        <td><span style="font-size:11px; padding: 2px 6px; border-radius: 4px; background: ${member.role === 'ADMIN' ? 'rgba(0,175,255,0.2); color:#00AFFF' : 'rgba(255,255,255,0.05); color:#94a3b8'}">${member.role}</span></td>
+                        <td style="color: #00AFFF; font-weight: bold;">฿${member.balance.toFixed(2)}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="addCredit('${member.username}')"><i class="fa-solid fa-plus"></i> เพิ่มเครดิต</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning" onclick="resetHwid('${member.username}')"><i class="fa-solid fa-key"></i> รีเซ็ต HWID</button>
+                            <button class="btn btn-danger" onclick="deleteUser('${member.username}')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ฟังก์ชันค้นหาสมาชิกแบบเรียลไทม์
+        function filterTable() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = members.filter(m => m.username.toLowerCase().includes(keyword));
+            renderTable(filtered);
+        }
+
+        // ฟังก์ชันเพิ่มเครดิตให้ยูสเซอร์
+        function addCredit(username) {
+            const amountStr = prompt(`ระบุจำนวนเครดิตที่ต้องการเพิ่มให้ ${username}:`, "100");
+            if (amountStr !== null) {
+                const amount = parseFloat(amountStr);
+                if (!isNaN(amount) && amount > 0) {
+                    const target = members.find(m => m.username === username);
+                    if (target) {
+                        target.balance += amount;
+                        localStorage.setItem('allMembers', JSON.stringify(members));
+                        renderTable(members);
+                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ! (เพิ่ม ${amount} บาท)`);
+                    }
+                } else {
+                    alert('❌ กรุณากรอกตัวเลขจำนวนเงินให้ถูกต้อง');
+                }
+            }
+        }
+
+        // ฟังก์ชันรีเซ็ต HWID
+        function resetHwid(username) {
+            if (confirm(`คุณต้องการรีเซ็ต HWID ให้กับบัญชี ${username} ใช่หรือไม่?`)) {
+                alert(`✅ รีเซ็ต HWID ของ ${username} เรียบร้อยแล้ว`);
+            }
+        }
+
+        // ฟังก์ชันลบบัญชีผู้ใช้
+        function deleteUser(username) {
+            if (username === 'admin') {
+                alert('⚠️ ไม่สามารถลบบัญชีผู้ดูแลระบบหลักได้!');
+                return;
+            }
+            if (confirm(`⚠️ คำเตือน: คุณต้องการลบบัญชี ${username} ออกจากระบบใช่หรือไม่?`)) {
+                members = members.filter(m => m.username !== username);
+                localStorage.setItem('allMembers', JSON.stringify(members));
+                renderTable(members);
+                alert(`🗑️ ลบบัญชี ${username} สำเร็จ`);
+            }
+        }
+
+        // โหลดข้อมูลแสดงผลครั้งแรก
+        renderTable(members);
     </script>
 </body>
 </html>
