@@ -34,6 +34,8 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             width: 100%;
             max-width: 440px;
+            max-height: 90vh; /* จำกัดความสูงไม่ให้ล้นหน้าจอ[cite: 9] */
+            overflow-y: auto; /* เพิ่ม Scrollbar ให้เลื่อนดูเนื้อหาด้านล่างได้[cite: 9] */
             border-radius: 24px;
             padding: 30px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
@@ -43,6 +45,19 @@
             transform: scale(0.92) translateY(10px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        
+        /* ตกแต่ง Scrollbar ให้สวยงามกลมกลืนกับธีมเว็บ */
+        .auth-modal-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .auth-modal-box::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+        .auth-modal-box::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         .auth-modal-overlay.active .auth-modal-box {
             transform: scale(1) translateY(0);
         }
@@ -108,8 +123,8 @@
         /* คอนเทนต์ฟอร์มแบบซ้อนทับป้องกันการกระพริบ */
         .auth-forms-container {
             position: relative;
-            overflow: hidden;
-            min-height: 280px;
+            overflow: visible; /* ป้องกันการซ่อนเนื้อหาฟอร์มสมัครสมาชิกที่ยาวกว่าปกติ[cite: 9] */
+            min-height: 420px; /* ขยายความสูงขั้นต่ำให้รองรับฟอร์มสมัครที่มีหลายช่อง[cite: 9] */
         }
         .auth-form-panel {
             position: absolute;
