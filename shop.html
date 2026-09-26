@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CANDYXSTORE - หน้าหลัก</title>
+    <title>kryptonitexnitroprime - หน้าหลัก</title>
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -64,7 +64,7 @@
         }
         .auth-brand {
             display: flex; align-items: center; gap: 10px;
-            font-weight: 600; font-size: 16px; margin-bottom: 24px;
+            font-weight: 600; font-size: 15px; margin-bottom: 24px;
             letter-spacing: 0.5px;
             color: #e2e8f0;
         }
@@ -109,7 +109,7 @@
         .auth-forms-container {
             position: relative;
             overflow: hidden;
-            min-height: 280px; /* ป้องกันการยุบตัวของความสูง */
+            min-height: 280px;
         }
         .auth-form-panel {
             position: absolute;
@@ -157,11 +157,83 @@
         }
         .password-toggle:hover { color: #fff; }
 
+        /* Cloudflare Turnstile Verification Box */
+        .cloudflare-box {
+            background: #121215;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .cloudflare-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+        }
+        .cloudflare-checkbox {
+            width: 24px;
+            height: 24px;
+            background: #09090b;
+            border: 2px solid #3f3f46;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .cloudflare-box.verified .cloudflare-checkbox {
+            background: #10b981;
+            border-color: #10b981;
+        }
+        .cloudflare-checkbox i {
+            color: #fff;
+            font-size: 13px;
+            display: none;
+        }
+        .cloudflare-box.verified .cloudflare-checkbox i {
+            display: block;
+        }
+        .cloudflare-text {
+            font-size: 14px;
+            color: #e4e4e7;
+            font-weight: 500;
+        }
+        .cloudflare-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+        .cloudflare-logo {
+            font-size: 12px;
+            font-weight: 700;
+            color: #f97316;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cloudflare-links {
+            font-size: 10px;
+            color: #71717a;
+        }
+        .cloudflare-links a {
+            color: #71717a;
+            text-decoration: underline;
+        }
+        .cloudflare-links a:hover {
+            color: #a1a1aa;
+        }
+
         /* ปุ่มยืนยัน */
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%);
             border: none; color: #fff; padding: 14px; border-radius: 14px;
-            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 18px;
+            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 4px;
             box-shadow: 0 6px 20px rgba(255, 26, 117, 0.35); transition: all 0.25s ease;
             font-family: 'Prompt', sans-serif;
             display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -188,7 +260,7 @@
     <!-- ================= NAVBAR ================= -->
     <header class="navbar">
         <div class="nav-left">
-            <a href="shop.html" class="brand-logo">CANDY <span class="x-mark">X</span> STORE</a>
+            <a href="shop.html" class="brand-logo">kryptonite<span class="x-mark">x</span>nitroprime</a>
             <nav class="nav-menu">
                 <a href="shop.html" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
                 <a href="#"><i class="fa-solid fa-store"></i> ร้านค้า</a>
@@ -214,7 +286,7 @@
             </div>
             <div class="news-ticker-container">
                 <div class="news-ticker-text">
-                    ยินดีต้อนรับสู่ CANDYXSTORE แหล่งรวมบริการ Fivem พรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.
+                    ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.
                 </div>
             </div>
         </div>
@@ -238,7 +310,7 @@
                         </div>
                     </div>
                     <div class="banner-footer-label">
-                        <span><span class="num">01</span> CANDY STORE</span>
+                        <span><span class="num">01</span> KRYPTONITE</span>
                         <a href="#">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -265,18 +337,18 @@
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
             
             <div class="auth-brand">
-                <i class="fa-solid fa-gem" style="color: #ff3385;"></i> CANDYXSTORE
+                <i class="fa-solid fa-gem" style="color: #ff3385; font-size: 16px;"></i> kryptonitexnitroprime
             </div>
 
             <div class="auth-tabs" id="authTabsContainer">
                 <div class="auth-tab-indicator"></div>
-                <div id="tabLoginBtn" class="auth-tab active" onclick="switchAuthTab('login')">เข้าสู่ระบบ</div>
+                <div id="tabLoginBtn" class="auth-tab" onclick="switchAuthTab('login')">เข้าสู่ระบบ</div>
                 <div id="tabRegisterBtn" class="auth-tab" onclick="switchAuthTab('register')">สมัครสมาชิก</div>
             </div>
 
             <div class="auth-forms-container">
                 <!-- ฟอร์มเข้าสู่ระบบ -->
-                <div id="loginPanel" class="auth-form-panel active">
+                <div id="loginPanel" class="auth-form-panel">
                     <form onsubmit="handleLoginSubmit(event)">
                         <div class="auth-form-group">
                             <label>ชื่อผู้ใช้</label>
@@ -293,7 +365,7 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
-                        <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="submit" class="auth-submit-btn" style="margin-top: 18px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">
                         ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
@@ -333,6 +405,21 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
                             </div>
                         </div>
+                        
+                        <!-- Cloudflare Verify Box -->
+                        <div class="cloudflare-box" id="cloudflareBox" onclick="toggleCloudflareVerify()">
+                            <div class="cloudflare-left">
+                                <div class="cloudflare-checkbox" id="cfCheckbox">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span class="cloudflare-text">Verify you are human</span>
+                            </div>
+                            <div class="cloudflare-brand">
+                                <div class="cloudflare-logo"><i class="fa-solid fa-cloud"></i> CLOUDFLARE</div>
+                                <div class="cloudflare-links"><a href="#" onclick="event.stopPropagation()">Privacy</a> • <a href="#" onclick="event.stopPropagation()">Help</a></div>
+                            </div>
+                        </div>
+
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">
@@ -345,7 +432,7 @@
 
     <!-- ================= FOOTER ================= -->
     <footer class="footer-bar">
-        <p>&copy; 2026 CANDYXSTORE — All rights reserved.</p>
+        <p>&copy; 2026 kryptonitexnitroprime — All rights reserved.</p>
     </footer>
 
     <!-- ================= SCRIPT ================= -->
@@ -365,6 +452,18 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // ตัวแปรเช็คการติ๊ก Verify
+        let isHumanVerified = false;
+        window.toggleCloudflareVerify = function() {
+            const cfBox = document.getElementById('cloudflareBox');
+            isHumanVerified = !isHumanVerified;
+            if (isHumanVerified) {
+                cfBox.classList.add('verified');
+            } else {
+                cfBox.classList.remove('verified');
+            }
+        }
 
         // จัดการเปิด/ปิด Modal และสลับแท็บ
         const modalOverlay = document.getElementById('authModalOverlay');
@@ -460,6 +559,12 @@
         // ฟังก์ชันสมัครสมาชิกผ่าน Firebase
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
+
+            if (!isHumanVerified) {
+                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
+                return;
+            }
+
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
