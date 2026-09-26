@@ -69,7 +69,7 @@
             color: #e2e8f0;
         }
         
-        /* แท็บสลับหน้า */
+        /* แท็บสลับหน้าแบบสมูท */
         .auth-tabs {
             display: flex; 
             background: #121215;
@@ -77,30 +77,56 @@
             padding: 4px; 
             margin-bottom: 24px;
             border: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative;
         }
         .auth-tab {
             flex: 1; text-align: center; padding: 12px;
             font-size: 14px; font-weight: 600; color: #64748b;
-            cursor: pointer; border-radius: 10px; transition: all 0.25s ease;
+            cursor: pointer; border-radius: 10px; 
+            transition: color 0.3s ease;
+            position: relative; z-index: 2;
         }
         .auth-tab.active {
-            background: #000000; 
             color: #ffffff;
+        }
+        /* แอนิเมชันแถบพื้นหลังปุ่มแท็บเลื่อนนุ่มๆ */
+        .auth-tab-indicator {
+            position: absolute;
+            top: 4px; bottom: 4px; left: 4px;
+            width: calc(50% - 4px);
+            background: #000000;
+            border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+        .auth-tabs.register-mode .auth-tab-indicator {
+            transform: translateX(100%);
         }
 
+        /* คอนเทนต์ฟอร์มแบบซ้อนทับป้องกันการกระพริบ */
+        .auth-forms-container {
+            position: relative;
+            overflow: hidden;
+            min-height: 280px; /* ป้องกันการยุบตัวของความสูง */
+        }
         .auth-form-panel {
-            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%;
             opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.25s ease, transform 0.25s ease;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            pointer-events: none;
         }
         .auth-form-panel.active {
-            display: block;
             opacity: 1;
+            visibility: visible;
             transform: translateY(0);
+            pointer-events: auto;
         }
+
         .auth-form-group { margin-bottom: 16px; }
         .auth-form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
         
@@ -242,73 +268,76 @@
                 <i class="fa-solid fa-gem" style="color: #ff3385;"></i> CANDYXSTORE
             </div>
 
-            <div class="auth-tabs">
+            <div class="auth-tabs" id="authTabsContainer">
+                <div class="auth-tab-indicator"></div>
                 <div id="tabLoginBtn" class="auth-tab active" onclick="switchAuthTab('login')">เข้าสู่ระบบ</div>
                 <div id="tabRegisterBtn" class="auth-tab" onclick="switchAuthTab('register')">สมัครสมาชิก</div>
             </div>
 
-            <!-- ฟอร์มเข้าสู่ระบบ -->
-            <div id="loginPanel" class="auth-form-panel active">
-                <form onsubmit="handleLoginSubmit(event)">
-                    <div class="auth-form-group">
-                        <label>ชื่อผู้ใช้</label>
-                        <div class="auth-input-wrap">
-                            <i class="fa-solid fa-user"></i>
-                            <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้" required>
+            <div class="auth-forms-container">
+                <!-- ฟอร์มเข้าสู่ระบบ -->
+                <div id="loginPanel" class="auth-form-panel active">
+                    <form onsubmit="handleLoginSubmit(event)">
+                        <div class="auth-form-group">
+                            <label>ชื่อผู้ใช้</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="auth-form-group">
-                        <label>รหัสผ่าน</label>
-                        <div class="auth-input-wrap">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
-                            <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+                        <div class="auth-form-group">
+                            <label>รหัสผ่าน</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+                            </div>
                         </div>
+                        <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                    <div class="auth-switch-text">
+                        ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
                     </div>
-                    <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
-                </form>
-                <div class="auth-switch-text">
-                    ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
                 </div>
-            </div>
 
-            <!-- ฟอร์มสมัครสมาชิก -->
-            <div id="registerPanel" class="auth-form-panel">
-                <form onsubmit="handleRegisterSubmit(event)">
-                    <div class="auth-form-group">
-                        <label>ชื่อผู้ใช้</label>
-                        <div class="auth-input-wrap">
-                            <i class="fa-solid fa-user"></i>
-                            <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+                <!-- ฟอร์มสมัครสมาชิก -->
+                <div id="registerPanel" class="auth-form-panel">
+                    <form onsubmit="handleRegisterSubmit(event)">
+                        <div class="auth-form-group">
+                            <label>ชื่อผู้ใช้</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="auth-form-group">
-                        <label>อีเมล (ถ้ามี)</label>
-                        <div class="auth-input-wrap">
-                            <i class="fa-solid fa-envelope"></i>
-                            <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                        <div class="auth-form-group">
+                            <label>อีเมล (ถ้ามี)</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                            </div>
                         </div>
-                    </div>
-                    <div class="auth-form-group">
-                        <label>รหัสผ่าน</label>
-                        <div class="auth-input-wrap">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
-                            <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
+                        <div class="auth-form-group">
+                            <label>รหัสผ่าน</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="auth-form-group">
-                        <label>ยืนยันรหัสผ่าน</label>
-                        <div class="auth-input-wrap">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
-                            <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
+                        <div class="auth-form-group">
+                            <label>ยืนยันรหัสผ่าน</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
+                            </div>
                         </div>
+                        <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                    <div class="auth-switch-text">
+                        มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span>
                     </div>
-                    <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
-                </form>
-                <div class="auth-switch-text">
-                    มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span>
                 </div>
             </div>
         </div>
@@ -364,19 +393,18 @@
             const registerPanel = document.getElementById('registerPanel');
             const loginTabBtn = document.getElementById('tabLoginBtn');
             const regTabBtn = document.getElementById('tabRegisterBtn');
+            const tabsContainer = document.getElementById('authTabsContainer');
 
             if (tab === 'login') {
+                tabsContainer.classList.remove('register-mode');
+                loginPanel.classList.add('active');
                 registerPanel.classList.remove('active');
-                setTimeout(() => {
-                    loginPanel.classList.add('active');
-                }, 50);
                 loginTabBtn.classList.add('active');
                 regTabBtn.classList.remove('active');
             } else {
+                tabsContainer.classList.add('register-mode');
+                registerPanel.classList.add('active');
                 loginPanel.classList.remove('active');
-                setTimeout(() => {
-                    registerPanel.classList.add('active');
-                }, 50);
                 regTabBtn.classList.add('active');
                 loginTabBtn.classList.remove('active');
             }
