@@ -10,90 +10,127 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* สไตล์สำหรับ Modal Popup และ ฉากหลังเบลอ */
+        /* สไตล์ Modal แบบพรีเมียมและสมูท */
         .auth-modal-overlay {
-            display: none;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 5, 5, 0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 99999;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.2s ease-in-out;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .auth-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         .auth-modal-box {
-            background: #121212;
-            border: 1px solid rgba(0, 175, 255, 0.3);
+            background: linear-gradient(145deg, #121212 0%, #0a0a0a 100%);
+            border: 1px solid rgba(0, 175, 255, 0.25);
             width: 100%;
             max-width: 420px;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 175, 255, 0.1);
             position: relative;
             color: #fff;
             font-family: 'Prompt', sans-serif;
+            transform: scale(0.92) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .auth-modal-overlay.active .auth-modal-box {
+            transform: scale(1) translateY(0);
         }
         .auth-close-btn {
             position: absolute;
             top: 20px; right: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #94a3b8;
-            width: 32px; height: 32px;
+            width: 34px; height: 34px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
-        .auth-close-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .auth-close-btn:hover { 
+            background: rgba(0, 175, 255, 0.15); 
+            color: #00AFFF; 
+            border-color: rgba(0, 175, 255, 0.4);
+            transform: rotate(90deg);
+        }
         .auth-brand {
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 10px;
             font-weight: 700; font-size: 16px; margin-bottom: 24px;
             letter-spacing: 0.5px;
         }
         .auth-tabs {
-            display: flex; background: #1a1a1a;
-            border-radius: 10px; padding: 4px; margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; background: #161616;
+            border-radius: 12px; padding: 4px; margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
         .auth-tab {
             flex: 1; text-align: center; padding: 10px;
             font-size: 14px; font-weight: 600; color: #94a3b8;
-            cursor: pointer; border-radius: 8px; transition: 0.2s;
+            cursor: pointer; border-radius: 9px; transition: all 0.25s ease;
         }
         .auth-tab.active {
-            background: #0B0B0B; color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            border: 1px solid rgba(0, 175, 255, 0.2);
+            background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%); 
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            text-shadow: 0 0 10px rgba(0,175,255,0.4);
         }
-        .auth-form-group { margin-bottom: 16px; }
-        .auth-form-group label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 6px; font-weight: 500; }
+        .auth-form-panel {
+            display: none;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .auth-form-panel.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .auth-form-group { margin-bottom: 18px; }
+        .auth-form-group label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 7px; font-weight: 500; }
         .auth-input-wrap {
             position: relative; display: flex; align-items: center;
         }
         .auth-input-wrap i {
-            position: absolute; left: 14px; color: #64748b; font-size: 14px;
+            position: absolute; left: 15px; color: #64748b; font-size: 14px; transition: color 0.2s;
         }
         .auth-input-wrap input {
-            width: 100%; background: #181818; border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px; padding: 11px 15px 11px 40px; color: #fff; font-size: 14px;
-            outline: none; transition: 0.2s; font-family: 'Prompt', sans-serif;
+            width: 100%; background: #181818; border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 11px; padding: 12px 15px 12px 42px; color: #fff; font-size: 14px;
+            outline: none; transition: all 0.25s ease; font-family: 'Prompt', sans-serif;
         }
-        .auth-input-wrap input:focus { border-color: #00AFFF; box-shadow: 0 0 10px rgba(0,175,255,0.15); }
+        .auth-input-wrap input:focus { 
+            border-color: #00AFFF; 
+            background: #1c1c1c;
+            box-shadow: 0 0 15px rgba(0, 175, 255, 0.2); 
+        }
+        .auth-input-wrap input:focus + i, .auth-input-wrap input:focus ~ i { color: #00AFFF; }
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #ff007f 0%, #00AFFF 100%);
-            border: none; color: #fff; padding: 12px; border-radius: 10px;
+            border: none; color: #fff; padding: 13px; border-radius: 11px;
             font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3); transition: 0.2s;
+            box-shadow: 0 6px 20px rgba(0, 175, 255, 0.35); transition: all 0.25s ease;
             font-family: 'Prompt', sans-serif;
         }
-        .auth-submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .auth-submit-btn:hover { 
+            opacity: 0.95; 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 175, 255, 0.5);
+        }
+        .auth-submit-btn:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="fade-page">
@@ -178,7 +215,7 @@
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
             
             <div class="auth-brand">
-                <i class="fa-solid fa-shield-halved" style="color: #00AFFF;"></i> KRYPTONITE X NITROPRIME
+                <i class="fa-solid fa-shield-halved" style="color: #00AFFF; filter: drop-shadow(0 0 8px rgba(0,175,255,0.6));"></i> KRYPTONITE X NITROPRIME
             </div>
 
             <div class="auth-tabs">
@@ -187,56 +224,60 @@
             </div>
 
             <!-- ฟอร์มเข้าสู่ระบบ -->
-            <form id="loginFormContainer" onsubmit="handleLoginSubmit(event)">
-                <div class="auth-form-group">
-                    <label>ชื่อผู้ใช้</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้" required>
+            <div id="loginPanel" class="auth-form-panel active">
+                <form onsubmit="handleLoginSubmit(event)">
+                    <div class="auth-form-group">
+                        <label>ชื่อผู้ใช้</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้" required>
+                        </div>
                     </div>
-                </div>
-                <div class="auth-form-group">
-                    <label>รหัสผ่าน</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน" required>
+                    <div class="auth-form-group">
+                        <label>รหัสผ่าน</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน" required>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
-            </form>
+                    <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+                </form>
+            </div>
 
             <!-- ฟอร์มสมัครสมาชิก -->
-            <form id="registerFormContainer" style="display: none;" onsubmit="handleRegisterSubmit(event)">
-                <div class="auth-form-group">
-                    <label>ชื่อผู้ใช้</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+            <div id="registerPanel" class="auth-form-panel">
+                <form onsubmit="handleRegisterSubmit(event)">
+                    <div class="auth-form-group">
+                        <label>ชื่อผู้ใช้</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+                        </div>
                     </div>
-                </div>
-                <div class="auth-form-group">
-                    <label>อีเมล (ถ้ามี)</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-envelope"></i>
-                        <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                    <div class="auth-form-group">
+                        <label>อีเมล (ถ้ามี)</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                        </div>
                     </div>
-                </div>
-                <div class="auth-form-group">
-                    <label>รหัสผ่าน</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                    <div class="auth-form-group">
+                        <label>รหัสผ่าน</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                        </div>
                     </div>
-                </div>
-                <div class="auth-form-group">
-                    <label>ยืนยันรหัสผ่าน</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                    <div class="auth-form-group">
+                        <label>ยืนยันรหัสผ่าน</label>
+                        <div class="auth-input-wrap">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
-            </form>
+                    <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -263,38 +304,46 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // จัดการเปิด/ปิด Modal และสลับแท็บ
+        // จัดการเปิด/ปิด Modal และสลับแท็บแบบสมูท
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
         const openRegisterBtn = document.getElementById('openRegisterModal');
         const closeBtn = document.getElementById('closeAuthModal');
 
         function openModal(tabName) {
-            modalOverlay.style.display = 'flex';
+            modalOverlay.classList.add('active');
             switchAuthTab(tabName);
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
         }
 
         openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
         openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
-        closeBtn.addEventListener('click', () => { modalOverlay.style.display = 'none'; });
+        closeBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) modalOverlay.style.display = 'none';
+            if (e.target === modalOverlay) closeModal();
         });
 
         window.switchAuthTab = function(tab) {
-            const loginForm = document.getElementById('loginFormContainer');
-            const registerForm = document.getElementById('registerFormContainer');
+            const loginPanel = document.getElementById('loginPanel');
+            const registerPanel = document.getElementById('registerPanel');
             const loginTabBtn = document.getElementById('tabLoginBtn');
             const regTabBtn = document.getElementById('tabRegisterBtn');
 
             if (tab === 'login') {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
+                registerPanel.classList.remove('active');
+                setTimeout(() => {
+                    loginPanel.classList.add('active');
+                }, 50);
                 loginTabBtn.classList.add('active');
                 regTabBtn.classList.remove('active');
             } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
+                loginPanel.classList.remove('active');
+                setTimeout(() => {
+                    registerPanel.classList.add('active');
+                }, 50);
                 regTabBtn.classList.add('active');
                 loginTabBtn.classList.remove('active');
             }
@@ -353,7 +402,6 @@
             }
 
             try {
-                // ตรวจสอบชื่อผู้ใช้ซ้ำ
                 const checkQ = query(collection(db, "members"), where("username", "==", username));
                 const checkSnap = await getDocs(checkQ);
 
