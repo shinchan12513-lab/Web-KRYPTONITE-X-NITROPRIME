@@ -75,11 +75,11 @@
     <script>
         const currentUsername = localStorage.getItem('username');
         
-        // ดึงข้อมูลจริงจากระบบกลาง ถ้ายังไม่มีให้สร้างโครงสร้างพื้นฐานสำหรับแอดมิน
+        // โหลดข้อมูลสมาชิกทั้งหมดจาก allMembers
         let members = JSON.parse(localStorage.getItem('allMembers')) || [];
         if (members.length === 0) {
             members = [
-                { username: currentUsername || 'admin', role: 'ADMIN', registerDate: '26/09/2026 12:00', balance: 15.97 }
+                { username: currentUsername || 'admin', role: 'ADMIN', registerDate: '26/09/2026 12:00', balance: 0.00 }
             ];
             localStorage.setItem('allMembers', JSON.stringify(members));
         }
@@ -109,7 +109,7 @@
         }
 
         function renderTable(data) {
-            // โหลดข้อมูลล่าสุดจาก localStorage ทุกครั้งที่เรนเดอร์ เพื่อให้ข้อมูลตรงกันเสมอ
+            // โหลดข้อมูลล่าสุดจาก localStorage เพื่อให้ข้อมูลเป็นปัจจุบันเสมอ
             members = JSON.parse(localStorage.getItem('allMembers')) || members;
             
             const tbody = document.getElementById('memberTableBody');
@@ -125,12 +125,15 @@
                 if (member.role === 'ADMIN') badgeColor = 'rgba(0,175,255,0.2); color:#00AFFF';
                 if (member.role === 'VIP') badgeColor = 'rgba(245,158,11,0.2); color:#f59e0b';
 
+                // ดึงยอดเครดิตล่าสุดมาแสดงผล (หากไม่มีให้แสดงเป็น 0.00)
+                let currentBalance = parseFloat(member.balance) || 0.00;
+
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${member.username}</td>
                         <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${member.role}</span></td>
                         <td style="color: #94a3b8; font-size: 12px;"><i class="fa-regular fa-calendar-days" style="margin-right: 4px;"></i> ${member.registerDate || 'ไม่ระบุ'}</td>
-                        <td style="color: #00AFFF; font-weight: bold;">฿${(member.balance || 0).toFixed(2)}</td>
+                        <td style="color: #00AFFF; font-weight: bold;">฿${currentBalance.toFixed(2)}</td>
                         <td>
                             <button class="btn btn-primary" onclick="addCredit('${member.username}')"><i class="fa-solid fa-plus"></i> เพิ่มเครดิต</button>
                         </td>
@@ -153,7 +156,7 @@
             renderTable(filtered);
         }
 
-        // ฟังก์ชันเพิ่มเครดิต
+        // ฟังก์ชันเพิ่มเครดิต (อัปเดตยอดเงินทันทีและบันทึกลงระบบกลาง)
         function addCredit(username) {
             const amountStr = prompt(`ระบุจำนวนเครดิตที่ต้องการเพิ่มให้ ${username}:`, "100");
             if (amountStr !== null) {
@@ -161,10 +164,10 @@
                 if (!isNaN(amount) && amount > 0) {
                     const target = members.find(m => m.username === username);
                     if (target) {
-                        target.balance = (target.balance || 0) + amount;
+                        target.balance = (parseFloat(target.balance) || 0) + amount;
                         saveMembersData();
                         renderTable(members);
-                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ!`);
+                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ! ยอดปัจจุบัน: ฿${target.balance.toFixed(2)}`);
                     }
                 } else {
                     alert('❌ กรุณากรอกตัวเลขจำนวนเงินให้ถูกต้อง');
@@ -216,8 +219,7 @@
             }
         }
 
-        // บันทึกและแสดงผลข้อมูลล่าสุด
-        saveMembersData();
+        // เรนเดอร์ข้อมูลสมาชิกทั้งหมดขึ้นตารางเมื่อเปิดหน้าเว็บ
         renderTable(members);
     </script>
 </body>
