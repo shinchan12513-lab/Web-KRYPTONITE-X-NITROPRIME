@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - Kryptonite X Nitroprime</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="fade-page auth-page-body">
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="shop.html" class="brand-logo">KRYPTONITE <span class="x-mark">X</span> NITROPRIME</a>
+                <p>ยินดีต้อนรับกลับ, กรุณาเข้าสู่ระบบ</p>
+            </div>
+
+            <form class="auth-form" id="loginForm">
+                <div class="input-group">
+                    <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน หรือ อีเมล</label>
+                    <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้งาน หรือ อีเมลของคุณ" value="sasdsasdas" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
+                    <input type="password" placeholder="กรอกรหัสผ่านของคุณ" required>
+                </div>
+
+                <div class="auth-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> จดจำฉันไว้
+                    </label>
+                    <a href="#" class="forgot-password">ลืมรหัสผ่าน?</a>
+                </div>
+
+                <button type="submit" class="btn-auth-submit">เข้าสู่ระบบ</button>
+            </form>
+
+            <div class="auth-footer-text">
+                <p>ยังไม่มีบัญชีผู้ใช้งานใช่ไหม? <a href="register.html">สมัครสมาชิก</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('usernameInput').value || 'sasdsasdas';
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', username);
+            window.location.href = 'shop.html';
+        });
+    </script>
+</body>
+</html>

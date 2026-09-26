@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project FiveM - Kryptonite X Nitroprime</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="fade-page">
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="shop.html" class="brand-logo">KRYPTONITE <span class="x-mark">X</span> NITROPRIME</a>
+            <nav class="nav-menu">
+                <a href="shop.html"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
+                <a href="shop.html" class="active"><i class="fa-solid fa-store"></i> ร้านค้า</a>
+                <a href="#"><i class="fa-solid fa-wallet"></i> เติมเงิน</a>
+                <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการสั่งซื้อ</a>
+                <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
+            </nav>
+        </div>
+        <!-- ส่วนนี้จะสลับเปลี่ยนอัตโนมัติเมื่อเข้าสู่ระบบ -->
+        <div class="nav-right" id="navRightSection">
+            <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
+            <a href="login.html" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
+            <a href="register.html" class="btn-register"><i class="fa-solid fa-user-plus"></i> สมัครสมาชิก</a>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-container full-width-layout">
+        
+        <!-- ส่วนหัวหมวดหมู่สินค้า (ตามสไตล์ในภาพตัวอย่าง) -->
+        <div class="category-header-bar">
+            <div class="category-title-wrapper">
+                <i class="fa-solid fa-tag"></i>
+                <h1>PROJECT FIVEM</h1>
+                <span class="product-count">2 รายการ</span>
+            </div>
+        </div>
+
+        <!-- รายการสินค้า (Grid แสดงสินค้า 2 ชิ้นตามแบบ) -->
+        <div class="products-grid">
+            <!-- สินค้าชิ้นที่ 1 -->
+            <div class="product-card">
+                <div class="product-img-box">
+                    <img src="banner2.png" alt="Product 1">
+                </div>
+                <div class="product-info">
+                    <h3>มาโค่ - คุมดีดี/กันมอง</h3>
+                    <div class="product-price">฿150</div>
+                </div>
+            </div>
+
+            <!-- สินค้าชิ้นที่ 2 -->
+            <div class="product-card">
+                <div class="product-img-box">
+                    <img src="banner2.png" alt="Product 2">
+                    <span class="badge-price-tag">299 BAHT</span>
+                </div>
+                <div class="product-info">
+                    <h3>ปลดแบนเกมวาโร V2</h3>
+                    <div class="product-price">฿290</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- แถบช่วยเหลือด้านล่าง -->
+        <div class="support-banner-box">
+            <div class="support-text">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>ระบบถามตัวสั่งซื้อได้ หากไม่มั่นใจเรื่องแพ็กเกจ-วิธีใช้งาน ติดต่อร้านค้าได้เลย</span>
+            </div>
+            <a href="#" class="support-link">ติดต่อร้านค้า <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer-bar">
+        <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
+    </footer>
+
+    <!-- สคริปต์ระบบแสดงโปรไฟล์และดรอปดาวน์ (ดีไซน์ตามเรฟ + อนิเมชันสมูท) -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const username = localStorage.getItem('username') || 'Dev';
+            
+            if (isLoggedIn === 'true') {
+                const navRight = document.getElementById('navRightSection');
+                navRight.innerHTML = `
+                    <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
+                    <div style="position: relative; display: inline-block;">
+                        <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 30px;">
+                            <span style="font-size: 14px; font-weight: 700; color: #fff;">${username}</span>
+                            <span style="font-size: 13px; color: #00AFFF; font-weight: 700;">฿15.97</span>
+                            <div style="width: 32px; height: 32px; background: #1a1a1a; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                        </div>
+
+                        <!-- Dropdown Menu แบบสมูท -->
+                        <div id="profileDropdown" style="opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease; position: absolute; right: 0; top: 50px; width: 280px; background: #131316; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
+                            
+                            <!-- ส่วนหัวโปรไฟล์ -->
+                            <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+                                <div style="width: 44px; height: 44px; background: #1e1b2e; border: 1px solid #a855f7; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #a855f7;">
+                                    <i class="fa-solid fa-user" style="font-size: 18px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size: 15px; font-weight: 700; color: #fff;">${username}</div>
+                                    <div style="font-size: 12px; color: #94a3b8;">บัญชีสมาชิก</div>
+                                </div>
+                            </div>
+
+                            <!-- กล่องยอดเงิน -->
+                            <div style="background: #1a1a1e; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 12px 14px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">ยอดเงินคงเหลือ</div>
+                                    <div style="font-size: 18px; font-weight: 700; color: #fff;">฿10.00</div>
+                                </div>
+                                <div style="width: 32px; height: 32px; background: #222228; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px;">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </div>
+                            </div>
+
+                            <!-- รายการเมนู -->
+                            <div style="display: flex; flex-direction: column; gap: 2px; font-size: 13px;">
+                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1c1c22'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-envelope-open-text" style="color:#94a3b8; width:16px;"></i> เติมเงิน</span><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px; color:#64748b;"></i></a>
+                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1c1c22'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-bag-shopping" style="color:#a855f7; width:16px;"></i> คำสั่งซื้อ</span><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px; color:#64748b;"></i></a>
+                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1c1c22'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-credit-card" style="color:#94a3b8; width:16px;"></i> ประวัติเติมเงิน</span><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px; color:#64748b;"></i></a>
+                                <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background='#1c1c22'" onmouseout="this.style.background='transparent'"><span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-user" style="color:#94a3b8; width:16px;"></i> โปรไฟล์</span><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px; color:#64748b;"></i></a>
+                            </div>
+
+                            <!-- ออกจากระบบ -->
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
+                                <a href="#" id="logoutBtn" style="color: #f87171; text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px;" onmouseover="this.style.background='rgba(248,113,113,0.1)'" onmouseout="this.style.background='transparent'"><i class="fa-solid fa-arrow-right-from-bracket" style="width:16px;"></i> ออกจากระบบ</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const toggleBtn = document.getElementById('profileToggleBtn');
+                const dropdown = document.getElementById('profileDropdown');
+                
+                // ควบคุมการแสดงผลแบบสมูทด้วย class / opacity
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = dropdown.style.opacity === '1';
+                    if (isOpen) {
+                        dropdown.style.opacity = '0';
+                        dropdown.style.visibility = 'hidden';
+                        dropdown.style.transform = 'translateY(-8px)';
+                    } else {
+                        dropdown.style.opacity = '1';
+                        dropdown.style.visibility = 'visible';
+                        dropdown.style.transform = 'translateY(0)';
+                    }
+                });
+
+                window.addEventListener('click', () => {
+                    dropdown.style.opacity = '0';
+                    dropdown.style.visibility = 'hidden';
+                    dropdown.style.transform = 'translateY(-8px)';
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    location.reload();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

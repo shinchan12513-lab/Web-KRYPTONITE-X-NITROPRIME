@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก - Kryptonite X Nitroprime</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="fade-page auth-page-body">
+
+    <div class="auth-container">
+        <!-- กล่องฟอร์ม Register -->
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="shop.html" class="brand-logo">KRYPTONITE <span class="x-mark">X</span> NITROPRIME</a>
+                <p>สร้างบัญชีใหม่เพื่อเริ่มต้นใช้งาน</p>
+            </div>
+
+            <form class="auth-form" action="login.html" method="GET">
+                <div class="input-group">
+                    <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน (Username)</label>
+                    <input type="text" placeholder="กำหนดชื่อผู้ใช้งาน" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-envelope"></i> อีเมล</label>
+                    <input type="email" placeholder="กรอกอีเมลของคุณ" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
+                    <input type="password" placeholder="กำหนดรหัสผ่าน" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-lock"></i> ยืนยันรหัสผ่าน</label>
+                    <input type="password" placeholder="ยืนยันรหัสผ่านอีกครั้ง" required>
+                </div>
+
+                <button type="submit" class="btn-auth-submit">สมัครสมาชิก</button>
+            </form>
+
+            <div class="auth-footer-text">
+                <p>มีบัญชีอยู่แล้วใช่ไหม? <a href="login.html">เข้าสู่ระบบ</a></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
