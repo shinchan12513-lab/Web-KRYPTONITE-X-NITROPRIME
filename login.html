@@ -19,7 +19,7 @@
 
             <form class="auth-form" id="loginForm">
                 <div class="input-group">
-                    <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน หรือ อีเมล</label>
+                    <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน</label>
                     <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้งานของคุณ" required>
                 </div>
 
@@ -47,37 +47,33 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const username = document.getElementById('usernameInput').value.trim();
+            const username = document.getElementById('usernameInput'].value.trim();
+            const password = document.getElementById('passwordInput').value;
 
+            // ดึงข้อมูลสมาชิกทั้งหมดจากฐานข้อมูลกลาง
             let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
-            let user = allMembers.find(m => m.username === username);
+            
+            // ค้นหายูสเซอร์ที่ตรงกันทั้งชื่อและรหัสผ่าน
+            let user = allMembers.find(m => m.username === username && m.password === password);
 
-            // ถ้าพิมพ์ล็อกอินครั้งแรกแล้วยังไม่มีในระบบ ให้เพิ่มให้อัตโนมัติเพื่อความสะดวก
+            // ถ้าไม่พบ (แสดงว่าอาจจะโดนลบไปแล้ว หรือกรอกรหัสผิด)
             if (!user) {
-                let now = new Date();
-                let formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-                
-                user = {
-                    username: username,
-                    role: username === 'admin' ? 'ADMIN' : 'MEMBER',
-                    registerDate: formattedDate,
-                    balance: 15.97
-                };
-                allMembers.push(user);
-                localStorage.setItem('allMembers', JSON.stringify(allMembers));
+                alert('❌ ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง หรือบัญชีนี้อาจถูกลบออกจากระบบแล้ว');
+                return;
             }
 
-            // บันทึกสถานะล็อกอินปัจจุบัน
+            // บันทึกสถานะล็อกอินปัจจุบันจากฐานข้อมูลจริง
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', user.username);
-            localStorage.setItem('userBalance', user.balance);
+            localStorage.setItem('userBalance', user.balance || 0);
             
-            if (user.role === 'ADMIN' || username === 'admin') {
+            if (user.role === 'ADMIN') {
                 localStorage.setItem('isAdmin', 'true');
             } else {
                 localStorage.removeItem('isAdmin');
             }
 
+            alert('✅ เข้าสู่ระบบสำเร็จ!');
             window.location.href = 'shop.html';
         });
     </script>
