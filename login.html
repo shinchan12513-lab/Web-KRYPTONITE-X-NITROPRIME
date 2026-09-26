@@ -48,30 +48,37 @@
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // [จุดที่แก้] แก้ไขวงเล็บเหลี่ยม ] เป็นวงเล็บโค้ง ) ให้ถูกต้อง
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value;
 
             // ดึงข้อมูลสมาชิกทั้งหมดจากฐานข้อมูลกลาง
             let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
             
-            // (เผื่อกรณีฐานข้อมูลว่างเปล่า) สร้างบัญชีแอดมินตัวอย่างให้อัตโนมัติ เพื่อให้กดเข้าทดสอบได้
-            if (allMembers.length === 0) {
+            // ตรวจสอบและบังคับสร้างบัญชี admin เสมอ (ป้องกันกรณียูสหายหรือฐานข้อมูลมีแค่วิสตอรีอื่น)
+            let adminIndex = allMembers.findIndex(m => m.username === 'admin');
+            if (adminIndex === -1) {
                 allMembers.push({
                     username: 'admin',
-                    password: '123', // รหัสผ่านตั้งต้นถ้ายังไม่เคยสมัคร
+                    password: '123', // รหัสผ่านตั้งต้นของแอดมิน
                     role: 'ADMIN',
                     balance: 100.00
                 });
-                localStorage.setItem('allMembers', JSON.stringify(allMembers));
+            } else {
+                // บังคับสิทธิ์ให้บัญชี admin เป็น ADMIN เสมอ
+                allMembers[adminIndex].role = 'ADMIN';
+                if (!allMembers[adminIndex].password) {
+                    allMembers[adminIndex].password = '123';
+                }
             }
+            // บันทึกฐานข้อมูลกลับเข้าไปใหม่ทันที
+            localStorage.setItem('allMembers', JSON.stringify(allMembers));
             
             // ค้นหายูสเซอร์ที่ตรงกันทั้งชื่อและรหัสผ่าน
             let user = allMembers.find(m => m.username === username && m.password === password);
 
-            // ถ้าไม่พบ (แสดงว่ากรอกชื่อหรือรหัสผ่านผิด หรือบัญชีถูกลบไปแล้ว)
+            // ถ้าไม่พบ
             if (!user) {
-                alert('❌ ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง หรือบัญชีนี้อาจถูกลบออกจากระบบแล้ว');
+                alert('❌ ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง (หากเข้าแอดมินให้ใช้ user: admin / pass: 123)');
                 return;
             }
 
