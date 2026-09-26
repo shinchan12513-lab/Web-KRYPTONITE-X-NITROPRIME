@@ -8,7 +8,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0B0B0B; color: #ffffff; padding: 20px; }
-        .container { max-width: 1000px; margin: 30px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .container { max-width: 1050px; margin: 30px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         h2 { color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: #00AFFF; }
         .admin-badge { display: inline-block; background: rgba(0, 175, 255, 0.15); color: #00AFFF; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid rgba(0, 175, 255, 0.3); margin-top: 5px; }
@@ -54,13 +54,14 @@
                     <tr>
                         <th>ชื่อยูสเซอร์ (Username)</th>
                         <th>สถานะ</th>
+                        <th>วันที่สมัครสมาชิก</th>
                         <th>ยอดเครดิตคงเหลือ</th>
                         <th>จัดการเครดิต</th>
                         <th>การจัดการอื่นๆ</th>
                     </tr>
                 </thead>
                 <tbody id="memberTableBody">
-                    <!-- ข้อมูลจะถูกดึงมาแสดงด้วย JavaScript ตรงนี้ -->
+                    <!-- ข้อมูลจะถูกดึงมาแสดงด้วย JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -68,7 +69,6 @@
         <a href="shop.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> กลับสู่หน้าหลักร้านค้า</a>
     </div>
 
-    <!-- สคริปต์ระบบแอดมินจัดการสมาชิก -->
     <script>
         // 1. ตรวจสอบสิทธิ์ความปลอดภัย
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -81,27 +81,38 @@
             document.getElementById('adminName').innerText = localStorage.getItem('username') || 'admin';
         }
 
-        // 2. จำลองข้อมูลสมาชิกในระบบ (สามารถดึงหรือเพิ่มจำลองไว้เทสได้)
+        // 2. โหลดข้อมูลสมาชิก (รองรับระบบเครดิตแบบกลาง ใช้ key ร่วมกันกับหน้าหลัก)
         let members = JSON.parse(localStorage.getItem('allMembers')) || [
-            { username: localStorage.getItem('username') || 'sasdsasdas', role: 'MEMBER', balance: 15.97 },
-            { username: 'testuser01', role: 'MEMBER', balance: 100.00 },
-            { username: 'pro_gamer99', role: 'VIP', balance: 500.50 }
+            { username: localStorage.getItem('username') || 'sasdsasdas', role: 'ADMIN', registerDate: '26/09/2026 12:00', balance: parseFloat(localStorage.getItem('userBalance')) || 15.97 },
+            { username: 'testuser01', role: 'MEMBER', registerDate: '25/09/2026 18:30', balance: 100.00 },
+            { username: 'pro_gamer99', role: 'VIP', registerDate: '24/09/2026 09:15', balance: 500.50 }
         ];
+
+        function saveMembersData() {
+            localStorage.setItem('allMembers', JSON.stringify(members));
+            // ถ้าเป็นบัญชีตัวเอง ให้ซิงค์ยอดเงินเข้า `userBalance` เพื่อให้อัปเดตทันทีที่หน้าหลัก
+            const currentLoginUser = localStorage.getItem('username');
+            const me = members.find(m => m.username === currentLoginUser);
+            if (me) {
+                localStorage.setItem('userBalance', me.balance);
+            }
+        }
 
         function renderTable(data) {
             const tbody = document.getElementById('memberTableBody');
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
                 return;
             }
 
-            data.forEach((member, index) => {
+            data.forEach((member) => {
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${member.username}</td>
                         <td><span style="font-size:11px; padding: 2px 6px; border-radius: 4px; background: ${member.role === 'ADMIN' ? 'rgba(0,175,255,0.2); color:#00AFFF' : 'rgba(255,255,255,0.05); color:#94a3b8'}">${member.role}</span></td>
+                        <td style="color: #94a3b8; font-size: 12px;"><i class="fa-regular fa-calendar-days" style="margin-right: 4px;"></i> ${member.registerDate || 'ไม่ระบุ'}</td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${member.balance.toFixed(2)}</td>
                         <td>
                             <button class="btn btn-primary" onclick="addCredit('${member.username}')"><i class="fa-solid fa-plus"></i> เพิ่มเครดิต</button>
@@ -115,14 +126,14 @@
             });
         }
 
-        // ฟังก์ชันค้นหาสมาชิกแบบเรียลไทม์
+        // ฟังก์ชันค้นหาสมาชิก
         function filterTable() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const filtered = members.filter(m => m.username.toLowerCase().includes(keyword));
             renderTable(filtered);
         }
 
-        // ฟังก์ชันเพิ่มเครดิตให้ยูสเซอร์
+        // ฟังก์ชันเพิ่มเครดิต (ซิงค์ยอดเงินทันที)
         function addCredit(username) {
             const amountStr = prompt(`ระบุจำนวนเครดิตที่ต้องการเพิ่มให้ ${username}:`, "100");
             if (amountStr !== null) {
@@ -131,9 +142,9 @@
                     const target = members.find(m => m.username === username);
                     if (target) {
                         target.balance += amount;
-                        localStorage.setItem('allMembers', JSON.stringify(members));
+                        saveMembersData();
                         renderTable(members);
-                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ! (เพิ่ม ${amount} บาท)`);
+                        alert(`✅ เพิ่มเครดิตให้ ${username} สำเร็จ! (ยอดเงินอัปเดตทันที)`);
                     }
                 } else {
                     alert('❌ กรุณากรอกตัวเลขจำนวนเงินให้ถูกต้อง');
@@ -156,13 +167,14 @@
             }
             if (confirm(`⚠️ คำเตือน: คุณต้องการลบบัญชี ${username} ออกจากระบบใช่หรือไม่?`)) {
                 members = members.filter(m => m.username !== username);
-                localStorage.setItem('allMembers', JSON.stringify(members));
+                saveMembersData();
                 renderTable(members);
                 alert(`🗑️ ลบบัญชี ${username} สำเร็จ`);
             }
         }
 
-        // โหลดข้อมูลแสดงผลครั้งแรก
+        // บันทึกค่าเริ่มต้นและเรนเดอร์ตาราง
+        saveMembersData();
         renderTable(members);
     </script>
 </body>
