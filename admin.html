@@ -27,7 +27,6 @@
         .btn { padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 5px; }
         .btn-primary { background: #00AFFF; color: #0B0B0B; }
         .btn-primary:hover { background: #0088cc; }
-        .btn-warning { background: #f59e0b; color: #0B0B0B; }
         .btn-danger { background: #ef4444; color: #fff; }
         .btn-role { background: #8b5cf6; color: #fff; }
         .btn-role:hover { background: #7c3aed; }
@@ -75,7 +74,7 @@
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
                 return;
             }
 
@@ -89,17 +88,14 @@
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${member.username}</td>
-                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${member.role}</span></td>
+                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${member.role || 'MEMBER'}</span></td>
                         <td style="color: #94a3b8; font-size: 12px;"><i class="fa-regular fa-calendar-days" style="margin-right: 4px;"></i> ${member.registerDate || 'ไม่ระบุ'}</td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${currentBalance.toFixed(2)}</td>
                         <td>
                             <button class="btn btn-primary" onclick="window.updateCredit('${member.id}', '${member.username}', ${currentBalance})"><i class="fa-solid fa-plus"></i> เพิ่มเครดิต</button>
                         </td>
                         <td>
-                            <button class="btn btn-role" onclick="window.updateRole('${member.id}', '${member.username}')"><i class="fa-solid fa-user-gear"></i> เปลี่ยนสถานะ</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-warning" onclick="alert('✅ รีเซ็ต HWID เรียบร้อย')"><i class="fa-solid fa-key"></i> รีเซ็ต HWID</button>
+                            <button class="btn btn-role" onclick="window.updateRole('${member.id}', '${member.username}', '${member.role || 'MEMBER'}')"><i class="fa-solid fa-user-gear"></i> เปลี่ยนสถานะ</button>
                             <button class="btn btn-danger" onclick="window.removeUser('${member.id}', '${member.username}')"><i class="fa-solid fa-trash"></i> ลบ</button>
                         </td>
                     </tr>
@@ -134,9 +130,9 @@
             }
         }
 
-        // ฟังก์ชันเปลี่ยนสิทธิ์ใน Firebase
-        window.updateRole = async function(docId, username) {
-            const newRole = prompt(`เปลี่ยนสถานะของ ${username}\nกรุณาพิมพ์ชื่อสถานะที่ต้องการ (MEMBER, VIP, ADMIN):`, "VIP");
+        // ฟังก์ชันเปลี่ยนสิทธิ์ใน Firebase (แก้ไขให้บันทึกลงฐานข้อมูลจริง)
+        window.updateRole = async function(docId, username, currentRole) {
+            const newRole = prompt(`เปลี่ยนสถานะของ ${username}\nกรุณาพิมพ์ชื่อสถานะที่ต้องการ (MEMBER, VIP, ADMIN):`, currentRole);
             if (newRole !== null) {
                 const upperRole = newRole.trim().toUpperCase();
                 if (['MEMBER', 'VIP', 'ADMIN'].includes(upperRole)) {
@@ -145,10 +141,10 @@
                         alert(`✅ เปลี่ยนสถานะของ ${username} เป็น ${upperRole} สำเร็จ!`);
                     } catch (err) {
                         console.error(err);
-                        alert('❌ เกิดข้อผิดพลาด');
+                        alert('❌ เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
                     }
                 } else {
-                    alert('❌ สถานะไม่ถูกต้อง!');
+                    alert('❌ สถานะไม่ถูกต้อง! (ต้องเป็น MEMBER, VIP หรือ ADMIN เท่านั้น)');
                 }
             }
         }
@@ -190,8 +186,7 @@
                         <th>วันที่สมัครสมาชิก</th>
                         <th>ยอดเครดิตคงเหลือ</th>
                         <th>จัดการเครดิต</th>
-                        <th>จัดการสิทธิ์</th>
-                        <th>การจัดการอื่นๆ</th>
+                        <th>การจัดการ (เปลี่ยนสิทธิ์ / ลบ)</th>
                     </tr>
                 </thead>
                 <tbody id="memberTableBody">
