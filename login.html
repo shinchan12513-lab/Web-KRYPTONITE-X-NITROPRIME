@@ -20,12 +20,12 @@
             <form class="auth-form" id="loginForm">
                 <div class="input-group">
                     <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน หรือ อีเมล</label>
-                    <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้งาน หรือ อีเมลของคุณ" value="sasdsasdas" required>
+                    <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้งานของคุณ" required>
                 </div>
 
                 <div class="input-group">
                     <label><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
-                    <input type="password" placeholder="กรอกรหัสผ่านของคุณ" required>
+                    <input type="password" id="passwordInput" placeholder="กรอกรหัสผ่านของคุณ" required>
                 </div>
 
                 <div class="auth-options">
@@ -44,24 +44,40 @@
         </div>
     </div>
 
-    <!-- ส่วนสคริปต์ที่เพิ่มระบบตรวจสอบสิทธิ์แอดมิน -->
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const username = document.getElementById('usernameInput').value.trim() || 'sasdsasdas';
-            
-            // บันทึกสถานะการเข้าสู่ระบบ
+            const username = document.getElementById('usernameInput').value.trim();
+
+            let allMembers = JSON.parse(localStorage.getItem('allMembers')) || [];
+            let user = allMembers.find(m => m.username === username);
+
+            // ถ้าพิมพ์ล็อกอินครั้งแรกแล้วยังไม่มีในระบบ ให้เพิ่มให้อัตโนมัติเพื่อความสะดวก
+            if (!user) {
+                let now = new Date();
+                let formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                user = {
+                    username: username,
+                    role: username === 'admin' ? 'ADMIN' : 'MEMBER',
+                    registerDate: formattedDate,
+                    balance: 15.97
+                };
+                allMembers.push(user);
+                localStorage.setItem('allMembers', JSON.stringify(allMembers));
+            }
+
+            // บันทึกสถานะล็อกอินปัจจุบัน
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', username);
+            localStorage.setItem('username', user.username);
+            localStorage.setItem('userBalance', user.balance);
             
-            // ตรวจสอบว่าเป็นไอดีแอดมินหรือไม่
-            if (username === 'admin') {
+            if (user.role === 'ADMIN' || username === 'admin') {
                 localStorage.setItem('isAdmin', 'true');
             } else {
                 localStorage.removeItem('isAdmin');
             }
-            
-            // เปลี่ยนหน้ากลับไปหน้าหลักร้านค้า
+
             window.location.href = 'shop.html';
         });
     </script>
