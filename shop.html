@@ -9,8 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Cloudflare Turnstile Official Script -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
-        /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับความกระชับไม่ให้ล้นหน้าจอ) */
+        /* สไตล์ Modal และฟอร์มพรีเมียม (กระชับพิเศษเพื่อไม่ให้เกิด Scrollbar) */
         .auth-modal-overlay {
             display: flex;
             opacity: 0;
@@ -33,11 +35,11 @@
             background: #09090b;
             border: 1px solid rgba(255, 255, 255, 0.08);
             width: 100%;
-            max-width: 420px;
-            max-height: 98vh;
-            overflow-y: auto;
-            border-radius: 22px;
-            padding: 22px 26px;
+            max-width: 400px;
+            max-height: 100vh;
+            overflow-y: visible;
+            border-radius: 20px;
+            padding: 16px 22px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
             position: relative;
             color: #fff;
@@ -45,25 +47,17 @@
             transform: scale(0.92) translateY(10px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
-        .auth-modal-box::-webkit-scrollbar {
-            width: 5px;
-        }
-        .auth-modal-box::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-        }
 
         .auth-modal-overlay.active .auth-modal-box {
             transform: scale(1) translateY(0);
         }
         .auth-close-btn {
             position: absolute;
-            top: 20px; right: 20px;
+            top: 14px; right: 16px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #94a3b8;
-            width: 30px; height: 30px;
+            width: 28px; height: 28px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
@@ -74,26 +68,26 @@
             color: #fff; 
         }
         .auth-brand {
-            display: flex; align-items: center; gap: 8px;
-            font-weight: 600; font-size: 14px; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 6px;
+            font-weight: 600; font-size: 13px; margin-bottom: 12px;
             letter-spacing: 0.5px;
             color: #e2e8f0;
         }
         
-        /* แท็บสลับหน้าแบบสมูท */
+        /* แท็บสลับหน้าแบบกระชับ */
         .auth-tabs {
             display: flex; 
             background: #121215;
-            border-radius: 12px; 
+            border-radius: 10px; 
             padding: 3px; 
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             position: relative;
         }
         .auth-tab {
-            flex: 1; text-align: center; padding: 10px;
-            font-size: 13px; font-weight: 600; color: #64748b;
-            cursor: pointer; border-radius: 10px; 
+            flex: 1; text-align: center; padding: 8px;
+            font-size: 12px; font-weight: 600; color: #64748b;
+            cursor: pointer; border-radius: 8px; 
             transition: color 0.3s ease;
             position: relative; z-index: 2;
         }
@@ -105,8 +99,8 @@
             top: 3px; bottom: 3px; left: 3px;
             width: calc(50% - 3px);
             background: #000000;
-            border-radius: 9px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border-radius: 7px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 1;
@@ -125,7 +119,7 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(10px);
-            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
             pointer-events: none;
         }
         .auth-form-panel.active {
@@ -133,21 +127,21 @@
             visibility: visible;
             transform: translateY(0);
             pointer-events: auto;
-            position: relative; /* ให้ดันความสูงกล่องตามจริงเมื่อใช้งาน */
+            position: relative;
         }
 
-        .auth-form-group { margin-bottom: 12px; }
-        .auth-form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: 500; }
+        .auth-form-group { margin-bottom: 8px; }
+        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; font-weight: 500; }
         
         .auth-input-wrap {
             position: relative; display: flex; align-items: center;
         }
         .auth-input-wrap > i:first-child {
-            position: absolute; left: 14px; color: #64748b; font-size: 13px; transition: color 0.2s;
+            position: absolute; left: 12px; color: #64748b; font-size: 12px; transition: color 0.2s;
         }
         .auth-input-wrap input {
             width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px; padding: 10px 14px 10px 40px; color: #fff; font-size: 13px;
+            border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px;
             outline: none; transition: all 0.25s ease; font-family: 'Prompt', sans-serif;
         }
         .auth-input-wrap input::placeholder {
@@ -156,105 +150,42 @@
         .auth-input-wrap input:focus { 
             border-color: #ff3385; 
             background: #16161a;
-            box-shadow: 0 0 12px rgba(255, 51, 133, 0.15); 
+            box-shadow: 0 0 10px rgba(255, 51, 133, 0.15); 
         }
         .auth-input-wrap input:focus ~ i { color: #ff3385; }
         
         .password-toggle {
-            position: absolute; right: 14px; color: #64748b; font-size: 13px; cursor: pointer; transition: color 0.2s;
+            position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; transition: color 0.2s;
         }
         .password-toggle:hover { color: #fff; }
 
-        /* Cloudflare Verify Box ให้กะทัดรัดขึ้น */
-        .cloudflare-box {
-            background: #121215;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 10px 14px;
+        /* จัดระเบียบกล่อง Turnstile ของแท้ให้เข้ากับดีไซน์มืด */
+        .turnstile-container {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-        .cloudflare-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-        .cloudflare-checkbox {
-            width: 20px;
-            height: 20px;
-            background: #09090b;
-            border: 2px solid #3f3f46;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-        }
-        .cloudflare-box.verified .cloudflare-checkbox {
-            background: #10b981;
-            border-color: #10b981;
-        }
-        .cloudflare-checkbox i {
-            color: #fff;
-            font-size: 11px;
-            display: none;
-        }
-        .cloudflare-box.verified .cloudflare-checkbox i {
-            display: block;
-        }
-        .cloudflare-text {
-            font-size: 13px;
-            color: #e4e4e7;
-            font-weight: 500;
-        }
-        .cloudflare-brand {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 1px;
-        }
-        .cloudflare-logo {
-            font-size: 11px;
-            font-weight: 700;
-            color: #f97316;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .cloudflare-links {
-            font-size: 9px;
-            color: #71717a;
-        }
-        .cloudflare-links a {
-            color: #71717a;
-            text-decoration: underline;
-        }
-        .cloudflare-links a:hover {
-            color: #a1a1aa;
+            margin-bottom: 8px;
+            transform: scale(0.92);
+            transform-origin: center;
         }
 
         /* ปุ่มยืนยัน */
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #ff80bf 0%, #ff1a75 100%);
-            border: none; color: #fff; padding: 12px; border-radius: 12px;
-            font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 2px;
-            box-shadow: 0 4px 15px rgba(255, 26, 117, 0.3); transition: all 0.25s ease;
+            border: none; color: #fff; padding: 10px; border-radius: 10px;
+            font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 2px;
+            box-shadow: 0 4px 12px rgba(255, 26, 117, 0.3); transition: all 0.25s ease;
             font-family: 'Prompt', sans-serif;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .auth-submit-btn:hover { 
             opacity: 0.95; 
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(255, 26, 117, 0.45);
+            box-shadow: 0 6px 16px rgba(255, 26, 117, 0.45);
         }
         .auth-submit-btn:active { transform: translateY(0); }
 
         .auth-switch-text {
-            text-align: center; font-size: 12px; color: #64748b; margin-top: 14px;
+            text-align: center; font-size: 11px; color: #64748b; margin-top: 10px;
         }
         .auth-switch-text span {
             color: #ff3385; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
@@ -343,7 +274,7 @@
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
             
             <div class="auth-brand">
-                <i class="fa-solid fa-gem" style="color: #ff3385; font-size: 15px;"></i> kryptonitexnitroprime
+                <i class="fa-solid fa-gem" style="color: #ff3385; font-size: 14px;"></i> kryptonitexnitroprime
             </div>
 
             <div class="auth-tabs" id="authTabsContainer">
@@ -371,14 +302,14 @@
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
-                        <button type="submit" class="auth-submit-btn" style="margin-top: 14px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="submit" class="auth-submit-btn" style="margin-top: 10px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">
                         ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
                     </div>
                 </div>
 
-                <!-- ฟอร์มสมัครสมาชิก (ปรับแต่งระยะห่างให้พอดีหน้าจอด้านใน ไม่ต้องเลื่อน Scrollbar) -->
+                <!-- ฟอร์มสมัครสมาชิก พร้อม Cloudflare Turnstile ของแท้ -->
                 <div id="registerPanel" class="auth-form-panel">
                     <form onsubmit="handleRegisterSubmit(event)">
                         <div class="auth-form-group">
@@ -412,18 +343,10 @@
                             </div>
                         </div>
                         
-                        <!-- Cloudflare Verify Box -->
-                        <div class="cloudflare-box" id="cloudflareBox" onclick="toggleCloudflareVerify()">
-                            <div class="cloudflare-left">
-                                <div class="cloudflare-checkbox" id="cfCheckbox">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                                <span class="cloudflare-text">Verify you are human</span>
-                            </div>
-                            <div class="cloudflare-brand">
-                                <div class="cloudflare-logo"><i class="fa-solid fa-cloud"></i> CLOUDFLARE</div>
-                                <div class="cloudflare-links"><a href="#" onclick="event.stopPropagation()">Privacy</a> • <a href="#" onclick="event.stopPropagation()">Help</a></div>
-                            </div>
+                        <!-- Cloudflare Turnstile ของแท้ -->
+                        <div class="turnstile-container">
+                            <!-- ใช้ Site Key ทดสอบ (เปลี่ยนเป็นของคุณเองได้ที่ Cloudflare Dashboard) -->
+                            <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"></div>
                         </div>
 
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
@@ -458,17 +381,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        let isHumanVerified = false;
-        window.toggleCloudflareVerify = function() {
-            const cfBox = document.getElementById('cloudflareBox');
-            isHumanVerified = !isHumanVerified;
-            if (isHumanVerified) {
-                cfBox.classList.add('verified');
-            } else {
-                cfBox.classList.remove('verified');
-            }
-        }
 
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
@@ -561,7 +473,9 @@
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
 
-            if (!isHumanVerified) {
+            // ตรวจสอบสถานะ Cloudflare Turnstile ของจริง
+            const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
+            if (!turnstileResponse || !turnstileResponse.value) {
                 alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
                 return;
             }
