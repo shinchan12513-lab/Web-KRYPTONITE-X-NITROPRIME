@@ -137,7 +137,7 @@
             display: flex; align-items: center; gap: 8px;
             font-weight: 700; font-size: 15px; margin-bottom: 15px;
             letter-spacing: 0.5px; color: #00AFFF;
-            cursor: pointer; /* ทำให้รู้ว่าคลิกได้ */
+            cursor: pointer;
         }
         .auth-form-group { margin-bottom: 15px; text-align: left; }
         .auth-form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; font-weight: 500; }
@@ -237,7 +237,6 @@
     <div id="topupModalOverlay" class="auth-modal-overlay">
         <div class="auth-modal-box">
             <div class="auth-close-btn" id="closeTopupModal"><i class="fa-solid fa-xmark"></i></div>
-            <!-- ทำให้หัวข้อคลิกได้และมีเอฟเฟกต์ตอบสนอง -->
             <div class="auth-brand" onclick="openTopupModal()"><i class="fa-solid fa-wallet" style="color: #00AFFF;"></i> เติมเงินอัตโนมัติ (PromptPay)</div>
 
             <!-- สเต็ปที่ 1: กรอกจำนวนเงิน -->
@@ -276,7 +275,7 @@
         </div>
     </div>
 
-    <!-- Script สำหรับอนิเมชั่นเปลี่ยนหน้าและระบบ QR PromptPay + ตรวจสอบ Login -->
+    <!-- Script สำหรับอนิเมชั่นเปลี่ยนหน้าและระบบ QR PromptPay -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const link = document.querySelector('.transition-link');
@@ -296,7 +295,7 @@
             }
         });
 
-        // --- ระบบเช็คสถานะการเข้าสู่ระบบ & Dynamic QR PromptPay ---
+        // --- ระบบ Dynamic QR PromptPay ---
         const PROMPTPAY_NUMBER = "0933998364";
         const topupModalOverlay = document.getElementById('topupModalOverlay');
         const closeTopupBtn = document.getElementById('closeTopupModal');
@@ -309,15 +308,12 @@
         const qrcodeContainer = document.getElementById('qrcodeContainer');
         let qrCodeInstance = null;
 
-        // จำลองสถานะล็อกอิน (เปลี่ยนเป็นตรวจสอบ session / localStorage จริงของเว็บคุณได้ เช่น localStorage.getItem('isLoggedIn') === 'true')
-        let isLoggedIn = false; 
+        // ตั้งค่าให้เปิดใช้งานได้ทันที (เปลี่ยนเป็นตรวจสอบเงื่อนไขจริงภายหลังได้)
+        let isLoggedIn = true; 
 
         window.openTopupModal = function() {
-            // เช็คว่าเข้าสู่ระบบหรือยัง
             if (!isLoggedIn) {
                 alert('❌ กรุณาเข้าสู่ระบบก่อนทำรายการเติมเงินครับ!');
-                // ตัวอย่าง: ถ้ายังไม่ล็อกอิน ให้เด้งไปหน้า login.html (สามารถเปลี่ยนลิงก์ได้ตามต้องการ)
-                // window.location.href = 'login.html';
                 return;
             }
 
