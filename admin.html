@@ -3,28 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Kryptonite X Nitroprime</title>
+    <title>Admin Dashboard - Vortex Official</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0B0B0B; color: #ffffff; padding: 20px; }
-        .container { max-width: 1200px; margin: 30px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        h2 { color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .container { max-width: 1300px; margin: 20px auto; background: #121212; border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        
+        h2 { color: #fff; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: #00AFFF; }
+        h3 { color: #00AFFF; margin-top: 25px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
+        
         .admin-badge { display: inline-block; background: rgba(0, 175, 255, 0.15); color: #00AFFF; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid rgba(0, 175, 255, 0.3); margin-top: 5px; }
         hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0; }
         
-        /* Search & Table Styles */
-        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-box input { flex: 1; padding: 10px 15px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
-        .search-box input:focus { border-color: #00AFFF; }
+        /* Tabs Navigation */
+        .tab-nav { display: flex; gap: 10px; margin-top: 20px; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: 10px; flex-wrap: wrap; }
+        .tab-btn { background: #1a1a1a; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .tab-btn.active, .tab-btn:hover { background: #00AFFF; color: #0B0B0B; border-color: #00AFFF; }
         
+        .tab-content { display: none; margin-top: 20px; }
+        .tab-content.active { display: block; }
+
+        /* Form & Inputs */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 10px 15px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: #00AFFF; }
+        
+        /* Tables */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #181818; border-radius: 8px; overflow: hidden; }
         th, td { padding: 12px 15px; text-align: left; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         th { background: #1f1f1f; color: #00AFFF; font-weight: 600; }
         tr:hover { background: rgba(255,255,255,0.02); }
-        
-        .btn { padding: 6px 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+
+        /* Buttons */
+        .btn { padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 5px; }
         .btn-primary { background: #00AFFF; color: #0B0B0B; }
         .btn-primary:hover { background: #0088cc; }
         .btn-warning { background: #f59e0b; color: #0B0B0B; }
@@ -38,10 +51,10 @@
         .back-link:hover { color: #00AFFF; }
     </style>
 
-    <!-- เชื่อมต่อ Firebase SDK และดึงข้อมูล Real-time -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
@@ -57,154 +70,315 @@
         const db = getFirestore(app);
 
         let membersList = [];
+        let currentAdminName = localStorage.getItem('username') || 'Admin';
 
         document.addEventListener('DOMContentLoaded', () => {
-            const currentUsername = localStorage.getItem('username') || 'admin';
-            document.getElementById('adminName').innerText = currentUsername;
+            document.getElementById('adminName').innerText = currentAdminName;
 
-            // ดึงข้อมูลสมาชิกแบบ Real-time จาก Firebase
+            // โหลดข้อมูล Real-time จาก Firebase
             onSnapshot(collection(db, "members"), (snapshot) => {
                 membersList = [];
-                snapshot.forEach((docSnap) => {
-                    membersList.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                renderTable(membersList);
+                snapshot.forEach(docSnap => membersList.push({ id: docSnap.id, ...docSnap.data() }));
+                renderMembers(membersList);
+            });
+
+            onSnapshot(collection(db, "products"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderProducts(list);
+            });
+
+            onSnapshot(collection(db, "transactions"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderTransactions(list);
+            });
+
+            onSnapshot(collection(db, "announcements"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderAnnouncements(list);
+            });
+
+            onSnapshot(collection(db, "admin_logs"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderLogs(list);
             });
         });
 
-        function renderTable(data) {
+        // ฟังก์ชันบันทึก Log การทำงานแอดมิน
+        async function logAction(actionText) {
+            try {
+                await addDoc(collection(db, "admin_logs"), {
+                    admin: currentAdminName,
+                    action: actionText,
+                    timestamp: new Date().toLocaleString('th-TH')
+                });
+            } catch (e) { console.error("Log error:", e); }
+        }
+
+        // --- 1. จัดการสมาชิก ---
+        function renderMembers(data) {
             const tbody = document.getElementById('memberTableBody');
-            tbody.innerHTML = '';
-
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>`;
-                return;
-            }
-
-            data.forEach((member) => {
-                let badgeColor = 'rgba(255,255,255,0.05); color:#94a3b8';
-                if (member.role === 'ADMIN') badgeColor = 'rgba(0,175,255,0.2); color:#00AFFF';
-                if (member.role === 'VIP') badgeColor = 'rgba(245,158,11,0.2); color:#f59e0b';
-
-                let currentBalance = parseFloat(member.balance) || 0.00;
-
+            tbody.innerHTML = data.length === 0 ? `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>` : '';
+            data.forEach((m) => {
+                let badgeColor = m.role === 'ADMIN' ? 'rgba(0,175,255,0.2); color:#00AFFF' : (m.role === 'VIP' ? 'rgba(245,158,11,0.2); color:#f59e0b' : 'rgba(255,255,255,0.05); color:#94a3b8');
+                let balance = parseFloat(m.balance) || 0;
                 tbody.innerHTML += `
                     <tr>
-                        <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${member.username}</td>
-                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${member.role || 'MEMBER'}</span></td>
-                        <td style="color: #94a3b8; font-size: 12px;"><i class="fa-regular fa-calendar-days" style="margin-right: 4px;"></i> ${member.registerDate || 'ไม่ระบุ'}</td>
-                        <td style="color: #00AFFF; font-weight: bold;">฿${currentBalance.toFixed(2)}</td>
+                        <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${m.username}</td>
+                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${m.role || 'MEMBER'}</span></td>
+                        <td style="color: #94a3b8;">${m.registerDate || 'ไม่ระบุ'}</td>
+                        <td style="color: #00AFFF; font-weight: bold;">฿${balance.toFixed(2)}</td>
                         <td>
-                            <button class="btn btn-primary" onclick="window.updateCredit('${member.id}', '${member.username}', ${currentBalance}, 'add')"><i class="fa-solid fa-plus"></i> เพิ่ม</button>
-                            <button class="btn btn-warning" onclick="window.updateCredit('${member.id}', '${member.username}', ${currentBalance}, 'sub')"><i class="fa-solid fa-minus"></i> หัก</button>
+                            <button class="btn btn-primary" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'add')"><i class="fa-solid fa-plus"></i> เพิ่ม</button>
+                            <button class="btn btn-warning" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'sub')"><i class="fa-solid fa-minus"></i> หัก</button>
                         </td>
                         <td>
-                            <button class="btn btn-role" onclick="window.updateRole('${member.id}', '${member.username}', '${member.role || 'MEMBER'}')"><i class="fa-solid fa-user-gear"></i> สิทธิ์</button>
-                            <button class="btn btn-danger" onclick="window.removeUser('${member.id}', '${member.username}')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                            <button class="btn btn-role" onclick="window.updateRole('${m.id}', '${m.username}', '${m.role || 'MEMBER'}')"><i class="fa-solid fa-user-gear"></i> สิทธิ์</button>
+                            <button class="btn btn-danger" onclick="window.removeUser('${m.id}', '${m.username}')"><i class="fa-solid fa-trash"></i> ลบ</button>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             });
         }
 
-        // ฟังก์ชันค้นหา
-        window.filterTable = function() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = membersList.filter(m => m.username.toLowerCase().includes(keyword));
-            renderTable(filtered);
+        window.filterTable = () => {
+            const kw = document.getElementById('searchInput').value.toLowerCase();
+            renderMembers(membersList.filter(m => m.username.toLowerCase().includes(kw)));
         }
 
-        // ฟังก์ชันจัดการเพิ่ม/ลดเครดิตใน Firebase
-        window.updateCredit = async function(docId, username, oldBalance, mode) {
-            const actionText = mode === 'add' ? 'เพิ่มเครดิตให้' : 'หักเครดิตออกจาก';
-            const amountStr = prompt(`ระบุจำนวนเครดิตที่ต้องการ${actionText} ${username}:`, "100");
+        window.updateCredit = async (id, uname, oldBal, mode) => {
+            let amt = parseFloat(prompt(`ระบุจำนวนเครดิตที่ต้องการ${mode === 'add' ? 'เพิ่มให้' : 'หักออกจาก'} ${uname}:`, "100"));
+            if (!isNaN(amt) && amt > 0) {
+                let newBal = mode === 'add' ? oldBal + amt : oldBal - amt;
+                if (newBal < min = 0 && newBal < 0) { alert('❌ ยอดเงินติดลบไม่ได้'); return; }
+                await updateDoc(doc(db, "members", id), { balance: newBal });
+                logAction(`${mode === 'add' ? 'เพิ่ม' : 'หัก'}เครดิต ${amt} บาท ให้ยูสเซอร์ ${uname}`);
+                alert(`✅ สำเร็จ! คงเหลือ ฿${newBal.toFixed(2)}`);
+            }
+        }
+
+        window.updateRole = async (id, uname, curRole) => {
+            let r = prompt(`เปลี่ยนสถานะ ${uname} (MEMBER, VIP, ADMIN):`, curRole);
+            if (r && ['MEMBER', 'VIP', 'ADMIN'].includes(r.trim().toUpperCase())) {
+                let upper = r.trim().toUpperCase();
+                await updateDoc(doc(db, "members", id), { role: upper });
+                logAction(`เปลี่ยนสิทธิ์ ${uname} เป็น ${upper}`);
+                alert(`✅ เปลี่ยนสถานะสำเร็จ`);
+            }
+        }
+
+        window.removeUser = async (id, uname) => {
+            if (confirm(`⚠️ ยืนยันลบบัญชี ${uname}?`)) {
+                await deleteDoc(doc(db, "members", id));
+                logAction(`ลบบัญชีผู้ใช้: ${uname}`);
+                alert(`🗑️ ลบสำเร็จ`);
+            }
+        }
+
+        // --- 2. จัดการสินค้าและสต็อก ---
+        window.addProduct = async () => {
+            let name = document.getElementById('prodName').value;
+            let price = parseFloat(document.getElementById('prodPrice').value);
+            let stock = document.getElementById('prodStock').value; // คั่นด้วยขึ้นบรรทัดใหม่
+            if (!name || isNaN(price)) { alert('กรุณากรอกข้อมูลสินค้าให้ครบถ้วน'); return; }
             
-            if (amountStr !== null) {
-                const amount = parseFloat(amountStr);
-                if (!isNaN(amount) && amount > 0) {
-                    let newBalance = mode === 'add' ? oldBalance + amount : oldBalance - amount;
-                    
-                    if (newBalance < 0) {
-                        alert('❌ ไม่สามารถหักเครดิตให้ยอดเงินติดลบได้');
-                        return;
-                    }
+            let stockArray = stock ? stock.split('\n').map(s => s.trim()).filter(s => s !== '') : [];
+            await addDoc(collection(db, "products"), { name, price, stock: stockArray });
+            logAction(`เพิ่มสินค้าใหม่: ${name}`);
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodStock').value = '';
+            alert('✅ เพิ่มสินค้าเรียบร้อย');
+        }
 
-                    try {
-                        await updateDoc(doc(db, "members", docId), { balance: newBalance });
-                        alert(`✅ อัปเดตเครดิต ${username} สำเร็จ! (คงเหลือ ฿${newBalance.toFixed(2)})`);
-                    } catch (err) {
-                        console.error(err);
-                        alert('❌ เกิดข้อผิดพลาดในการอัปเดตเครดิต');
-                    }
-                } else {
-                    alert('❌ กรุณากรอกตัวเลขจำนวนเงินให้ถูกต้อง');
-                }
+        function renderProducts(list) {
+            const tbody = document.getElementById('prodTableBody');
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">ไม่มีสินค้าในระบบ</td></tr>` : '';
+            list.forEach(p => {
+                let stockCount = p.stock ? p.stock.length : 0;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${p.name}</b></td>
+                        <td style="color: #00AFFF;">฿${p.price.toFixed(2)}</td>
+                        <td><span style="background: rgba(0,175,255,0.1); color: #00AFFF; padding: 2px 8px; border-radius: 4px;">${stockCount} ชิ้น</span></td>
+                        <td><button class="btn btn-danger" onclick="window.deleteProduct('${p.id}', '${p.name}')"><i class="fa-solid fa-trash"></i> ลบ</button></td>
+                    </tr>`;
+            });
+        }
+
+        window.deleteProduct = async (id, name) => {
+            if (confirm(`ยืนยันลบสินค้า ${name}?`)) {
+                await deleteDoc(doc(db, "products", id));
+                logAction(`ลบสินค้า: ${name}`);
             }
         }
 
-        // ฟังก์ชันเปลี่ยนสิทธิ์ใน Firebase
-        window.updateRole = async function(docId, username, currentRole) {
-            const newRole = prompt(`เปลี่ยนสถานะของ ${username}\nกรุณาพิมพ์ชื่อสถานะที่ต้องการ (MEMBER, VIP, ADMIN):`, currentRole);
-            if (newRole !== null) {
-                const upperRole = newRole.trim().toUpperCase();
-                if (['MEMBER', 'VIP', 'ADMIN'].includes(upperRole)) {
-                    try {
-                        await updateDoc(doc(db, "members", docId), { role: upperRole });
-                        alert(`✅ เปลี่ยนสถานะของ ${username} เป็น ${upperRole} สำเร็จ!`);
-                    } catch (err) {
-                        console.error(err);
-                        alert('❌ เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
-                    }
-                } else {
-                    alert('❌ สถานะไม่ถูกต้อง! (ต้องเป็น MEMBER, VIP หรือ ADMIN เท่านั้น)');
-                }
-            }
+        // --- 3. ประวัติการทำรายการ ---
+        function renderTransactions(list) {
+            const tbody = document.getElementById('trxTableBody');
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">ยังไม่มีประวัติการทำรายการ</td></tr>` : '';
+            list.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(t => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${t.timestamp || '-'}</td>
+                        <td><b>${t.username || 'ไม่ระบุ'}</b></td>
+                        <td>${t.detail || '-'}</td>
+                        <td style="color: #00AFFF; font-weight: bold;">฿${parseFloat(t.amount || 0).toFixed(2)}</td>
+                    </tr>`;
+            });
         }
 
-        // ฟังก์ชันลบผู้ใช้ใน Firebase
-        window.removeUser = async function(docId, username) {
-            if (confirm(`⚠️ คำเตือน: คุณต้องการลบบัญชี ${username} ออกจากระบบใช่หรือไม่?`)) {
-                try {
-                    await deleteDoc(doc(db, "members", docId));
-                    alert(`🗑️ ลบบัญชี ${username} สำเร็จ`);
-                } catch (err) {
-                    console.error(err);
-                    alert('❌ เกิดข้อผิดพลาดในการลบข้อมูล');
-                }
-            }
+        // --- 4. ระบบประกาศหน้าเว็บ ---
+        window.saveAnnouncement = async () => {
+            let content = document.getElementById('announcementText').value;
+            if (!content) return;
+            await addDoc(collection(db, "announcements"), { content, timestamp: new Date().toLocaleString('th-TH') });
+            logAction(`อัปเดตประกาศหน้าเว็บ`);
+            document.getElementById('announcementText').value = '';
+            alert('📢 ประกาศถูกเผยแพร่แล้ว');
+        }
+
+        function renderAnnouncements(list) {
+            const div = document.getElementById('announcementList');
+            div.innerHTML = list.length === 0 ? '<p style="color:#94a3b8; font-size:13px;">ยังไม่มีประกาศ</p>' : '';
+            list.slice(-3).reverse().forEach(a => {
+                div.innerHTML += `<div style="background: #1a1a1a; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; border-left: 3px solid #00AFFF;">${a.content} <span style="font-size:11px; color:#94a3b8; display:block; margin-top:4px;">${a.timestamp}</span></div>`;
+            });
+        }
+
+        // --- 5. บันทึกการทำงานของแอดมิน (Audit Log) ---
+        function renderLogs(list) {
+            const tbody = document.getElementById('logTableBody');
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
+            list.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(l => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="color: #94a3b8; font-size: 12px;">${l.timestamp}</td>
+                        <td style="color: #00AFFF; font-weight: bold;">${l.admin}</td>
+                        <td>${l.action}</td>
+                    </tr>`;
+            });
+        }
+
+        // Switch Tabs Script
+        window.switchTab = (tabId, btnElement) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
         }
     </script>
 </head>
 <body>
 
     <div class="container">
-        <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ</h2>
+        <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ - Vortex Official</h2>
         <p>ยินดีต้อนรับคุณ <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span> (ผู้ดูแลระบบสูงสุด)</p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการสมาชิกและสิทธิ์ (Real-time Firebase)</div>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการหลังบ้านครบวงจร (Real-time Firebase)</div>
         
-        <hr>
-
-        <h3><i class="fa-solid fa-users"></i> ค้นหาและจัดการสมาชิก</h3>
-        <div class="search-box" style="margin-top: 15px;">
-            <input type="text" id="searchInput" placeholder="พิมพ์ชื่อยูสเซอร์ลูกค้าเพื่อค้นหา..." onkeyup="filterTable()">
+        <!-- เมนูแท็บสลับหน้าจอ -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
+            <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
+            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ</button>
+            <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ระบบประกาศ</button>
+            <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
 
-        <div style="overflow-x: auto;">
-            <table id="memberTable">
-                <thead>
-                    <tr>
-                        <th>ชื่อยูสเซอร์ (Username)</th>
-                        <th>สถานะสิทธิ์</th>
-                        <th>วันที่สมัครสมาชิก</th>
-                        <th>ยอดเครดิตคงเหลือ</th>
-                        <th>จัดการเครดิต (เพิ่ม / หัก)</th>
-                        <th>การจัดการ (สิทธิ์ / ลบ)</th>
-                    </tr>
-                </thead>
-                <tbody id="memberTableBody">
-                    <!-- ข้อมูลจะถูกดึงมาแสดงด้วย Firebase Real-time -->
-                </tbody>
-            </table>
+        <!-- 1. TAB: จัดการสมาชิก -->
+        <div id="tab-members" class="tab-content active">
+            <h3><i class="fa-solid fa-users"></i> รายชื่อสมาชิกและเครดิต</h3>
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อยูสเซอร์ลูกค้าเพื่อค้นหา..." onkeyup="filterTable()">
+            </div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>สถานะสิทธิ์</th>
+                            <th>วันที่สมัคร</th>
+                            <th>ยอดเครดิต</th>
+                            <th>จัดการเครดิต</th>
+                            <th>การจัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 2. TAB: จัดการสินค้าและสต็อก -->
+        <div id="tab-products" class="tab-content">
+            <h3><i class="fa-solid fa-box-archive"></i> เพิ่มสินค้าใหม่</h3>
+            <div class="form-grid">
+                <input type="text" id="prodName" placeholder="ชื่อสินค้า/บริการ">
+                <input type="number" id="prodPrice" placeholder="ราคา (บาท)">
+            </div>
+            <textarea id="prodStock" rows="3" placeholder="ใส่รหัสสินค้า/ลิงก์ (บรรทัดละ 1 ชิ้น สำหรับระบบตัดสต็อกอัตโนมัติ)"></textarea>
+            <button class="btn btn-primary" style="margin-top: 10px;" onclick="window.addProduct()"><i class="fa-solid fa-plus"></i> เพิ่มสินค้าเข้าสู่ระบบ</button>
+
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-list"></i> รายการสินค้าทั้งหมด</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อสินค้า</th>
+                            <th>ราคา</th>
+                            <th>สต็อกคงเหลือ</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prodTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. TAB: ประวัติการทำรายการ -->
+        <div id="tab-transactions" class="tab-content">
+            <h3><i class="fa-solid fa-receipt"></i> ประวัติการซื้อสินค้า / เติมเงิน</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วันเวลา</th>
+                            <th>ยูสเซอร์</th>
+                            <th>รายการ</th>
+                            <th>จำนวนเงิน</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trxTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. TAB: ระบบประกาศหน้าเว็บ -->
+        <div id="tab-announcement" class="tab-content">
+            <h3><i class="fa-solid fa-bullhorn"></i> สร้างประกาศหน้าเว็บไซต์</h3>
+            <textarea id="announcementText" rows="3" placeholder="พิมพ์ข้อความประกาศโปรโมชั่น หรือแจ้งเตือนลูกค้าที่หน้าเว็บ..."></textarea>
+            <button class="btn btn-primary" style="margin-top: 10px;" onclick="window.saveAnnouncement()"><i class="fa-solid fa-paper-plane"></i> เผยแพร่ประกาศ</button>
+            
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-clock-rotate-left"></i> ประกาศล่าสุด</h3>
+            <div id="announcementList"></div>
+        </div>
+
+        <!-- 5. TAB: บันทึกการทำงานของแอดมิน -->
+        <div id="tab-logs" class="tab-content">
+            <h3><i class="fa-solid fa-clipboard-list"></i> บันทึกประวัติการทำงานของแอดมิน (Audit Log)</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วันเวลา</th>
+                            <th>ผู้ดูแลระบบ</th>
+                            <th>การกระทำ / รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <a href="shop.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> กลับสู่หน้าหลักร้านค้า</a>
