@@ -173,7 +173,7 @@ body:has(.welcome-container) footer {
     gap: 12px;
 }
 
-/* ปรับแต่งโลโก้รูปภาพให้เป็นทรงกลมขนาดเล็กพอดีกับแถบเมนู (เทียบเท่าสไตล์ตัวอย่างรูปที่ 2) */
+/* จัดแต่งกรอบรูปโลโก้ทรงกลมขนาดเล็ก */
 .brand-logo {
     display: flex;
     align-items: center;
@@ -185,6 +185,7 @@ body:has(.welcome-container) footer {
     overflow: hidden;
     border: 1px solid rgba(0, 175, 255, 0.4);
     background: #000;
+    flex-shrink: 0;
 }
 
 .brand-logo img {
