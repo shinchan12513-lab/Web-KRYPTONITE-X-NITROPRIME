@@ -72,7 +72,10 @@
 
         let membersList = [];
         let currentAdminName = localStorage.getItem('username') || 'AdminOwner';
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1553709935911637082/j_aSH-2ysIqiAb7doIPw3AE3y11jY3w1j57oBWy3ND_MD7-FhFTZQ3Jg6EcTbgRCSjRF";
+        
+        // Discord Webhook URLs
+        const TOPUP_WEBHOOK_URL = "https://discord.com/api/webhooks/1553709935911637082/j_aSH-2ysIqiAb7doIPw3AE3y11jY3w1j57oBWy3ND_MD7-FhFTZQ3Jg6EcTbgRCSjRF";
+        const PURCHASE_WEBHOOK_URL = "https://discord.com/api/webhooks/1553710597655240846/38thWmUlDiUCF3KHmWash_jkxXl-qZSZOdu9T1W3My_hlhQBVyiTNX5GYXGQ-aaGwuSn";
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('adminName').innerText = currentAdminName;
@@ -331,11 +334,11 @@
         window.deleteCoupon = async (id, code) => {
             if (confirm(`ยืนยันลบคูปอง ${code}?`)) {
                 await deleteDoc(doc(db, "coupons", id));
-                logAction(`lบคูปองส่วนลด: ${code}`);
+                logAction(`ลบคูปองส่วนลด: ${code}`);
             }
         }
 
-        // --- 5. จำลองจำแนก/ทดสอบแจ้งเตือนเติมเงินเข้า Discord Webhook เท่ๆ ---
+        // --- 5. จำลองแจ้งเตือนการเติมเงินเข้า Discord ---
         window.testSimulateTopup = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่เติมเงิน:", "CyberGamer99");
             let fullname = prompt("ระบุชื่อ-นามสกุลจริงผู้โอนเงิน:", "สมชาย ใจดี");
@@ -345,7 +348,6 @@
 
             let timestamp = new Date().toLocaleString('th-TH');
 
-            // บันทึกลงฐานข้อมูล Transactions
             await addDoc(collection(db, "transactions"), {
                 username: username,
                 fullname: fullname,
@@ -354,13 +356,12 @@
                 timestamp: timestamp
             });
 
-            // ส่ง Discord Webhook รูปแบบ Embed สุดเท่
             const discordPayload = {
                 username: "Vortex Official Bot",
                 avatar_url: "https://i.imgur.com/4M34hi2.png",
                 embeds: [{
                     title: "💳 แจ้งเตือนการเติมเงินสำเร็จ (Top-up Alert)",
-                    color: 39423, // Electric Blue #00AFFF ในรูปแบบ Decimal
+                    color: 39423,
                     fields: [
                         { name: "👤 ยูสเซอร์เนม", value: `\`${username}\``, inline: true },
                         { name: "📝 ชื่อ-นามสกุล ผู้โอน", value: `**${fullname}**`, inline: true },
@@ -373,15 +374,64 @@
             };
 
             try {
-                await fetch(DISCORD_WEBHOOK_URL, {
+                await fetch(TOPUP_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(discordPayload)
                 });
-                alert('✅ จำลองการเติมเงินและส่งแจ้งเตือนไปที่ Discord สำเร็จ!');
-                logAction(`จำลองเติมเงินให้ ${username} (${amount} บาท) และส่ง Discord Alert`);
+                alert('✅ ส่งแจ้งเตือนการเติมเงินเข้า Discord สำเร็จ!');
+                logAction(`จำลองเติมเงินให้ ${username} (${amount} บาท)`);
             } catch (err) {
                 console.error("Discord Webhook Error:", err);
+                alert('❌ เกิดข้อผิดพลาดในการส่ง Discord Webhook');
+            }
+        }
+
+        // --- 6. จำลองแจ้งเตือนการซื้อสินค้าเข้า Discord ---
+        window.testSimulatePurchase = async () => {
+            let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่ซื้อสินค้า:", "ProGamer_TH");
+            let productName = prompt("ระบุชื่อสินค้าอย่างละเอียด:", "Vortex VIP Lifetime Package + Script Unlock");
+            let price = parseFloat(prompt("ระบุราคาสินค้า (บาท):", "350"));
+
+            if (!username || !productName || isNaN(price)) return;
+
+            let timestamp = new Date().toLocaleString('th-TH');
+
+            await addDoc(collection(db, "transactions"), {
+                username: username,
+                fullname: "ซื้อสินค้าผ่านระบบออโต้",
+                amount: price,
+                detail: `ซื้อสินค้า: ${productName}`,
+                timestamp: timestamp
+            });
+
+            const discordPayload = {
+                username: "Vortex Official Store Bot",
+                avatar_url: "https://i.imgur.com/4M34hi2.png",
+                embeds: [{
+                    title: "🛒 มีคำสั่งซื้อสินค้าใหม่สำเร็จ! (New Order)",
+                    color: 39423,
+                    fields: [
+                        { name: "👤 ยูสเซอร์ลูกค้า", value: `\`${username}\``, inline: true },
+                        { name: "📦 สินค้าที่ซื้อ", value: `**${productName}**`, inline: false },
+                        { name: "💵 ราคา", value: `\`฿${price.toFixed(2)}\``, inline: true },
+                        { name: "🕒 เวลาทำรายการ", value: `\`${timestamp}\``, inline: true }
+                    ],
+                    footer: { text: "Vortex Official Automatic Store System" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                await fetch(PURCHASE_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(discordPayload)
+                });
+                alert('✅ ส่งแจ้งเตือนการซื้อสินค้าเข้า Discord สำเร็จ!');
+                logAction(`จำลองคำสั่งซื้อสินค้า (${productName}) โดย ${username}`);
+            } catch (err) {
+                console.error("Discord Purchase Webhook Error:", err);
                 alert('❌ เกิดข้อผิดพลาดในการส่ง Discord Webhook');
             }
         }
@@ -401,7 +451,7 @@
             });
         }
 
-        // --- 6. ระบบประกาศหน้าเว็บ ---
+        // --- 7. ระบบประกาศหน้าเว็บ ---
         window.saveAnnouncement = async () => {
             let content = document.getElementById('announcementText').value.trim();
             if (!content) return;
@@ -419,7 +469,7 @@
             });
         }
 
-        // --- 7. บันทึกแอดมิน ---
+        // --- 8. บันทึกแอดมิน ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -446,7 +496,7 @@
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ - Vortex Official</h2>
         <p>ผู้ดูแลระบบปัจจุบัน: <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span></p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบเชื่อมต่อ Firebase & Discord Webhook พร้อมใช้งานจริง 100%</div>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> เชื่อมต่อระบบ Discord Webhook ทั้ง 2 ช่องทางเรียบร้อย</div>
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
@@ -454,7 +504,7 @@
             <button class="tab-btn" onclick="switchTab('tab-ipbans', this)"><i class="fa-solid fa-ban"></i> จัดการแบน IP / อุปกรณ์</button>
             <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
             <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
-            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & เติมเงิน</button>
+            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
             <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
             <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
@@ -561,11 +611,14 @@
             </div>
         </div>
 
-        <!-- 5. TAB: ประวัติทำรายการ & เติมเงิน -->
+        <!-- 5. TAB: ประวัติทำรายการ & แจ้งเตือน Discord -->
         <div id="tab-transactions" class="tab-content">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <h3><i class="fa-solid fa-receipt"></i> ประวัติการทำรายการ & แจ้งเตือน Discord Webhook</h3>
-                <button class="btn btn-primary" onclick="window.testSimulateTopup()"><i class="fa-solid fa-paper-plane"></i> ทดสอบจำลองการเติมเงินเข้า Discord</button>
+                <h3><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & ทดสอบ Discord Webhook</h3>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-warning" onclick="window.testSimulateTopup()"><i class="fa-solid fa-wallet"></i> ทดสอบแจ้งเตือนเติมเงิน</button>
+                    <button class="btn btn-primary" onclick="window.testSimulatePurchase()"><i class="fa-solid fa-cart-shopping"></i> ทดสอบแจ้งเตือนซื้อสินค้า</button>
+                </div>
             </div>
             <div style="overflow-x: auto; margin-top: 10px;">
                 <table>
@@ -573,7 +626,7 @@
                         <tr>
                             <th>วันเวลา</th>
                             <th>ยูสเซอร์เนม</th>
-                            <th>ชื่อ-นามสกุล ผู้โอน</th>
+                            <th>ชื่อผู้โอน / รายละเอียด</th>
                             <th>รายละเอียดรายการ</th>
                             <th>จำนวนเงิน</th>
                         </tr>
