@@ -152,27 +152,39 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* แบนเนอร์หลักขนาดใหญ่เต็มพื้นที่ (นำข้อความออก แสดงรูปแบนเนอร์เต็มๆ) */
+        /* แบนเนอร์หลักสไตล์เดิม (เอารูปสีทองออก เหลือแค่ข้อความและเลเยอร์หรู) */
         .main-hero-banner {
-            background: #0d0d12;
+            background: linear-gradient(135deg, #0e0e16 0%, #09090e 100%);
             border: 1px solid rgba(0, 175, 255, 0.3);
             border-radius: 16px;
-            padding: 0;
+            padding: 45px 40px;
+            position: relative;
             overflow: hidden;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0, 175, 255, 0.05);
             margin-bottom: 30px;
-            width: 100%;
             max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
         }
-        .main-hero-banner img {
-            width: 100%;
-            height: auto;
-            max-height: 420px;
-            object-fit: cover;
-            display: block;
-            border-radius: 15px;
+        .main-hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 80% 50%, rgba(0, 175, 255, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-left-content h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 175, 255, 0.4);
+        }
+        .hero-left-content p {
+            font-size: 13px;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
         }
 
         /* กล่องสถิติ 4 ช่อง */
@@ -508,9 +520,13 @@
             </div>
         </div>
 
-        <!-- แบนเนอร์หลักขนาดใหญ่เต็มพื้นที่ (แสดงรูปภาพแบนเนอร์เต็มๆ ตามที่คุณขอ) -->
+        <!-- แบนเนอร์หลักสไตล์เดิม (เอารูปสีทองออก คงเหลือข้อความและเลเยอร์หรู) -->
         <div class="main-hero-banner">
-            <img src="banner2.png" alt="Main Hero Banner">
+            <div class="hero-left-content">
+                <span style="font-size: 11px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
+                <h1>KRYPTONITE X NITROPRIME</h1>
+                <p>EVERYTHING GAMERS NEED, ALL IN ONE SHOP — บริการพรีเมียม ปลอดภัย รวดเร็ว 100%</p>
+            </div>
         </div>
 
         <!-- กล่องสถิติ 4 ช่อง -->
