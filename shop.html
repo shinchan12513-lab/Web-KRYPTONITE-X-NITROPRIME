@@ -351,7 +351,7 @@
     <!-- ================= SCRIPT ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, where, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
@@ -365,6 +365,9 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // ตรวจสอบสถานะแอดมินเบื้องต้นสำหรับแสดงปุ่มลบ
+        const isAdminUser = localStorage.getItem('isAdmin') === 'true' || localStorage.getItem('username') === 'admin';
 
         // 1. โหลดประกาศจาก Firebase แบบ Real-time
         onSnapshot(collection(db, "announcements"), (snapshot) => {
@@ -382,12 +385,14 @@
             }
         });
 
-        // 2. โหลดแบรนด์เนอร์ที่ตั้งค่าตำแหน่งแล้วจาก Firebase มาแสดงบนหน้าเว็บแบบ Real-time
+        // 2. โหลดแบรนด์เนอร์ที่ตั้งค่าตำแหน่งแล้ว พร้อมปุ่มลบสำหรับแอดมิน
         onSnapshot(collection(db, "banners"), (snapshot) => {
             document.querySelectorAll('.dynamic-positioned-banner').forEach(el => el.remove());
 
             snapshot.forEach(docSnap => {
+                let docId = docSnap.id;
                 let b = docSnap.data();
+                
                 let bannerDiv = document.createElement('div');
                 bannerDiv.className = 'dynamic-positioned-banner';
                 bannerDiv.style.position = 'absolute';
@@ -398,19 +403,48 @@
                 bannerDiv.style.zIndex = '999';
                 bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
                 
-                bannerDiv.innerHTML = `<img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:12px; box-shadow:0 10px 25px rgba(0,175,255,0.2);" alt="Banner">`;
+                let deleteBtnHtml = isAdminUser ? `
+                    <button class="delete-banner-btn" data-id="${docId}" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: transform 0.2s;" title="ลบแบรนด์เนอร์นี้">
+                        <i class="fa-solid fa-trash-can" style="font-size: 14px;"></i>
+                    </button>
+                ` : '';
+
+                bannerDiv.innerHTML = `
+                    <img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:12px; box-shadow:0 10px 25px rgba(0,175,255,0.2);" alt="Banner">
+                    ${deleteBtnHtml}
+                `;
 
                 if (b.clickable && b.linkUrl) {
-                    bannerDiv.addEventListener('click', () => {
+                    bannerDiv.addEventListener('click', (e) => {
+                        if (e.target.closest('.delete-banner-btn')) return;
                         window.location.href = b.linkUrl;
                     });
+                }
+
+                // ผูก Event ปุ่มลบ
+                if (isAdminUser) {
+                    const delBtn = bannerDiv.querySelector('.delete-banner-btn');
+                    if (delBtn) {
+                        delBtn.addEventListener('click', async (e) => {
+                            e.stopPropagation();
+                            if (confirm('คุณต้องการลบแบรนด์เนอร์นี้ใช่หรือไม่?')) {
+                                try {
+                                    await deleteDoc(doc(db, "banners", docId));
+                                    alert('✅ ลบแบรนด์เนอร์สำเร็จ!');
+                                } catch (err) {
+                                    console.error("Delete Error:", err);
+                                    alert('❌ ไม่สามารถลบแบรนด์เนอร์ได้: ' + err.message);
+                                }
+                            }
+                        });
+                    }
                 }
 
                 document.body.appendChild(bannerDiv);
             });
         });
 
-        // 3. ตรวจสอบโหมด Visual Positioner (?mode=place_banner) เมื่อแอดมินกดมาจากหน้าแอดมิน
+        // 3. ตรวจสอบโหมด Visual Positioner (?mode=place_banner)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('mode') === 'place_banner') {
             const rawData = localStorage.getItem('temp_banner_data');
@@ -488,7 +522,6 @@
                     window.location.href = 'admin.html';
                 });
 
-                // ปรับปรุงการดักคลิกซ้าย ป้องกัน undefined และบันทึกข้อมูลอย่างปลอดภัย
                 const clickHandler = async function(e) {
                     if (e.target.closest('#bannerControlPanel')) return;
                     
@@ -501,7 +534,7 @@
                     try {
                         await addDoc(collection(db, "banners"), {
                             imageUrl: bannerData.imageUrl || '',
-                            orientation: bannerData.orientation || 'horizontal', // ป้องกันค่า undefined
+                            orientation: bannerData.orientation || 'horizontal',
                             clickable: !!bannerData.clickable,
                             linkUrl: bannerData.linkUrl || '',
                             posX: posX,
