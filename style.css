@@ -149,7 +149,7 @@ body:has(.welcome-container) footer {
 }
 
 
-/* ================= SHOP PAGE (shop.html) - แถบเมนูด้านบนแบบกรอบลอยเดี่ยว (ปรับสัดส่วนเท่ากัน) ================= */
+/* ================= SHOP PAGE (shop.html) - แถบเมนูด้านบนแบบกรอบลอยเดี่ยว ================= */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -173,20 +173,19 @@ body:has(.welcome-container) footer {
     gap: 20px;
 }
 
+/* ปรับแต่งสำหรับใส่รูปโลโก้แทนข้อความเดิม */
 .brand-logo {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    text-decoration: none;
-    letter-spacing: 1px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 6px 12px;
+    text-decoration: none;
+    height: 36px;
+    padding: 0 4px;
 }
 
-.brand-logo .x-mark { 
-    color: #00AFFF; 
+.brand-logo img {
+    height: 28px; /* ปรับความสูงของรูปโลโก้ตามต้องการ */
+    width: auto;
+    object-fit: contain;
 }
 
 .nav-menu {
@@ -195,7 +194,6 @@ body:has(.welcome-container) footer {
     align-items: center;
 }
 
-/* กำหนดความสูงและขนาดให้เมนูทุกตัวเท่ากันเป๊ะ */
 .nav-menu a, .nav-menu button {
     color: #94a3b8;
     background: transparent;
@@ -231,7 +229,6 @@ body:has(.welcome-container) footer {
     gap: 8px;
 }
 
-/* กำหนดความสูงและขนาดปุ่มฝั่งขวาให้เท่ากับเมนูด้านซ้าย */
 .btn-contact, .nav-right a, .nav-right button {
     height: 36px;
     padding: 0 14px;
