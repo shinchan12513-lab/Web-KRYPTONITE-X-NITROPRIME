@@ -14,18 +14,18 @@
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
-        /* Navbar Capsule Layout (ตรงกลางแบบเต็มกรอบแคปซูล) */
+        /* Navbar Capsule Layout (ปรับให้ชิดกันพอดีและอยู่ตรงกลาง) */
         .navbar {
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #121215 !important;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border: 1px solid rgba(0, 175, 255, 0.3);
             border-radius: 50px;
             margin: 25px auto;
-            width: 100%;
-            max-width: 1150px;
+            width: fit-content;
+            max-width: 95vw;
             position: sticky;
             top: 20px;
             z-index: 1000;
@@ -34,14 +34,12 @@
         .nav-inner {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            gap: 15px;
+            gap: 12px;
         }
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
         .nav-menu a {
             color: #94a3b8;
@@ -56,6 +54,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
         .nav-menu a:hover, .nav-menu a.active {
             color: #00AFFF;
@@ -69,6 +68,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            white-space: nowrap;
         }
         .nav-right-actions .btn-login-capsule {
             color: #ffffff;
@@ -92,9 +92,9 @@
         }
         .nav-divider {
             width: 1px;
-            height: 20px;
+            height: 18px;
             background: rgba(255, 255, 255, 0.15);
-            margin: 0 4px;
+            margin: 0 2px;
         }
 
         /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับเป็นสีฟ้า #00AFFF) */
@@ -266,10 +266,9 @@
 </head>
 <body class="fade-page">
 
-    <!-- ================= NAVBAR (แคปซูลตรงกลาง) ================= -->
+    <!-- ================= NAVBAR (แคปซูลตรงกลาง กระชับชิดกัน) ================= -->
     <header class="navbar">
         <div class="nav-inner">
-            <!-- เมนูด้านซ้ายและกลาง -->
             <nav class="nav-menu">
                 <a href="shop.html" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
                 <a href="#"><i class="fa-solid fa-store"></i> ร้านค้า</a>
@@ -278,9 +277,8 @@
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
 
-            <!-- ส่วนขวาภายในแคปซูล -->
             <div class="nav-right-actions" id="navRightSection">
-                <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8;">
+                <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: #94a3b8; padding: 0 4px;">
                     <i class="fa-solid fa-globe" style="color: #00AFFF;"></i> TH
                 </div>
                 <div class="nav-divider"></div>
@@ -887,7 +885,7 @@
                     });
 
                     const userBalance = (parseFloat(userData.balance) || 0).toFixed(2);
-                    const isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin'] === 'true';
+                    const isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin') === 'true';
 
                     renderNavbar(username, userBalance, isAdmin);
 
