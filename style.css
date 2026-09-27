@@ -1,3 +1,4 @@
+/* ================= GLOBAL STYLES ================= */
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +18,7 @@ body {
     align-items: center;
 }
 
-/* ================= จัดกรอบหลักของเว็บให้อยู่กึ่งกลาง ================= */
+/* ================= CONTAINER & LAYOUT ================= */
 .main-container, .footer-bar, main, header, footer {
     width: 100%;
     max-width: 1280px;
@@ -50,7 +51,7 @@ body {
     pointer-events: none;
 }
 
-/* ================= WELCOME PAGE (index.html) ================= */
+/* ================= WELCOME PAGE ================= */
 body:has(.welcome-container) {
     height: 100vh;
     align-items: center;
@@ -148,8 +149,7 @@ body:has(.welcome-container) footer {
     color: rgba(100, 116, 139, 0.5);
 }
 
-
-/* ================= SHOP PAGE (shop.html) - แถบเมนูด้านบน ================= */
+/* ================= NAVBAR ================= */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -173,25 +173,26 @@ body:has(.welcome-container) footer {
     gap: 12px;
 }
 
-/* จัดแต่งกรอบรูปโลโก้ทรงกลมขนาดเล็ก */
 .brand-logo {
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     height: 32px;
-    width: 32px;
-    border-radius: 50%;
-    overflow: hidden;
+    width: auto;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 0 8px;
+    border-radius: 8px;
     border: 1px solid rgba(0, 175, 255, 0.4);
     background: #000;
     flex-shrink: 0;
 }
 
-.brand-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.brand-logo .x-mark {
+    color: #00AFFF;
+    padding: 0 2px;
 }
 
 .nav-menu {
@@ -284,7 +285,7 @@ body:has(.welcome-container) footer {
     flex: 1;
 }
 
-/* ================= ประกาศแจ้งข่าวสาร ================= */
+/* ================= NEWS TICKER ================= */
 .news-section {
     background-color: #121212;
     border: 1px solid rgba(0, 175, 255, 0.2);
@@ -333,7 +334,7 @@ body:has(.welcome-container) footer {
     100% { transform: translateX(-100%); }
 }
 
-/* ================= หมวดหมู่สินค้า ================= */
+/* ================= CATEGORIES & BANNERS ================= */
 .categories-section {
     display: flex;
     flex-direction: column;
@@ -482,146 +483,7 @@ body:has(.welcome-container) footer {
 
 .banner-footer-label a:hover { color: #00AFFF; }
 
-
-/* ================= PRODUCT LISTING PAGE ================= */
-.category-header-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.category-title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #121212;
-    border: 1px solid rgba(0, 175, 255, 0.2);
-    padding: 8px 16px;
-    border-radius: 8px;
-}
-
-.category-title-wrapper i {
-    color: #00AFFF;
-    font-size: 16px;
-}
-
-.category-title-wrapper h1 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
-}
-
-.product-count {
-    font-size: 11px;
-    background: rgba(0, 175, 255, 0.15);
-    color: #00AFFF;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-left: 5px;
-}
-
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 240px));
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.product-card {
-    background: #121212;
-    border: 1px solid rgba(0, 175, 255, 0.2);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.product-card:hover {
-    border-color: rgba(0, 175, 255, 0.6);
-    transform: translateY(-3px);
-}
-
-.product-img-box {
-    width: 100%;
-    height: 150px;
-    position: relative;
-    overflow: hidden;
-    background: #000;
-}
-
-.product-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.badge-price-tag {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-}
-
-.product-info {
-    padding: 14px;
-}
-
-.product-info h3 {
-    font-size: 13px;
-    font-weight: 500;
-    color: #cbd5e1;
-    margin-bottom: 8px;
-}
-
-.product-price {
-    font-size: 15px;
-    font-weight: 700;
-    color: #00AFFF;
-}
-
-.support-banner-box {
-    background: #121212;
-    border: 1px solid rgba(0, 175, 255, 0.15);
-    border-radius: 10px;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-}
-
-.support-text {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    color: #94a3b8;
-}
-
-.support-text i {
-    color: #00AFFF;
-    font-size: 16px;
-}
-
-.support-link {
-    font-size: 12px;
-    color: #94a3b8;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-    transition: color 0.2s;
-}
-
-.support-link:hover {
-    color: #00AFFF;
-}
-
+/* ================= FOOTER ================= */
 .footer-bar {
     text-align: center;
     padding: 15px;
@@ -644,222 +506,4 @@ body:has(.welcome-container) footer {
     .banners-grid-row {
         grid-template-columns: 1fr;
     }
-}
-
-/* ================= AUTH PAGES (Login & Register) ================= */
-.auth-page-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #0B0B0B;
-    padding: 20px;
-}
-
-.auth-container {
-    width: 100%;
-    max-width: 420px;
-}
-
-.auth-card {
-    background: #121212;
-    border: 1px solid rgba(0, 175, 255, 0.25);
-    border-radius: 14px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 175, 255, 0.05);
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.auth-header .brand-logo {
-    font-size: 18px;
-    display: inline-block;
-    margin-bottom: 8px;
-}
-
-.auth-header p {
-    font-size: 12px;
-    color: #94a3b8;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.input-group label {
-    font-size: 12px;
-    color: #cbd5e1;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.input-group label i {
-    color: #00AFFF;
-}
-
-.input-group input {
-    background: #0b0b0b;
-    border: 1px solid rgba(0, 175, 255, 0.2);
-    border-radius: 8px;
-    padding: 10px 14px;
-    color: #ffffff;
-    font-size: 13px;
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.input-group input:focus {
-    border-color: #00AFFF;
-    box-shadow: 0 0 10px rgba(0, 175, 255, 0.25);
-}
-
-.auth-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: #94a3b8;
-    margin-top: 2px;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-}
-
-.forgot-password {
-    color: #00AFFF;
-    text-decoration: none;
-    transition: opacity 0.2s;
-}
-
-.forgot-password:hover {
-    opacity: 0.8;
-}
-
-.btn-auth-submit {
-    background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%) !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 8px;
-    padding: 11px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3) !important;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-}
-
-.btn-auth-submit:hover {
-    box-shadow: 0 6px 20px rgba(0, 175, 255, 0.5) !important;
-    transform: translateY(-2px);
-}
-
-.auth-footer-text {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 12px;
-    color: #94a3b8;
-}
-
-.auth-footer-text a {
-    color: #00AFFF !important;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.auth-footer-text a:hover {
-    text-decoration: underline;
-}
-
-/* ================= ปรับแต่งโทนสีโปรไฟล์ เมนู และปุ่มทั้งหมดให้เป็นสีฟ้า 100% ================= */
-.nav-right .user-profile-btn,
-.nav-right [class*="profile"],
-.nav-right [class*="user"],
-.user-balance-box {
-    border-color: rgba(0, 175, 255, 0.3) !important;
-    background-color: rgba(0, 175, 255, 0.08) !important;
-    color: #00AFFF !important;
-}
-
-.nav-right .user-profile-btn span, 
-.nav-right .user-profile-btn i,
-.nav-right [class*="profile"] span,
-.nav-right [class*="profile"] i,
-.nav-right span[style*="color"],
-.nav-right font {
-    color: #00AFFF !important;
-}
-
-.nav-right .avatar-box,
-.nav-right .profile-avatar,
-.user-avatar-img,
-.nav-right svg {
-    border-color: #00AFFF !important;
-    color: #00AFFF !important;
-}
-
-.profile-dropdown-menu,
-.user-dropdown,
-.dropdown-menu {
-    background: #121212 !important;
-    border: 1px solid rgba(0, 175, 255, 0.3) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 175, 255, 0.05) !important;
-}
-
-.profile-dropdown-menu .badge,
-.user-dropdown .badge,
-.dropdown-menu .badge,
-[class*="badge"] {
-    background: rgba(0, 175, 255, 0.15) !important;
-    color: #00AFFF !important;
-    border: 1px solid rgba(0, 175, 255, 0.3) !important;
-}
-
-.profile-dropdown-menu .btn-topup,
-.user-dropdown .btn-topup,
-.btn-topup {
-    background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3) !important;
-    border: none !important;
-}
-
-.profile-dropdown-menu a,
-.user-dropdown a,
-.dropdown-menu a {
-    color: #cbd5e1 !important;
-}
-
-.profile-dropdown-menu a:hover,
-.user-dropdown a:hover,
-.dropdown-menu a:hover {
-    color: #00AFFF !important;
-    background-color: rgba(0, 175, 255, 0.1) !important;
-}
-
-.profile-dropdown-menu i,
-.user-dropdown i,
-.dropdown-menu i {
-    color: #00AFFF !important;
-}
-
-.auth-card svg,
-.auth-card [class*="logo"] {
-    color: #00AFFF !important;
 }
