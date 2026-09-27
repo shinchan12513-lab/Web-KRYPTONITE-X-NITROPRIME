@@ -237,7 +237,7 @@
             }
         }
 
-        // --- 3. ระบบคูปองส่วนลด (กำหนด % และอายุเป็นวัน) ---
+        // --- 3. ระบบคูปองส่วนลด ---
         window.addCoupon = async () => {
             let code = document.getElementById('couponCode').value.trim().toUpperCase();
             let discount = parseInt(document.getElementById('couponDiscount').value);
@@ -248,7 +248,6 @@
                 return;
             }
 
-            // คำนวณวันหมดอายุจากวันปัจจุบัน
             let expireDate = new Date();
             expireDate.setDate(expireDate.getDate() + expireDays);
 
