@@ -16,10 +16,13 @@
         
         body {
             background-color: #060608;
+            color: #ffffff;
             background-image: 
                 radial-gradient(circle at 15% 15%, rgba(0, 175, 255, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(0, 100, 255, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 50% 30%, rgba(0, 175, 255, 0.04) 0%, transparent 60%);
+            margin: 0;
+            padding: 0;
         }
 
         /* Navbar Rectangle Layout (ทรงสี่เหลี่ยมขอบมน อยู่ตรงกลาง) */
@@ -318,7 +321,7 @@
             }
         }
 
-        /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับเป็นสีฟ้า #00AFFF) */
+        /* สไตล์ Modal และฟอร์มพรีเมียม */
         .auth-modal-overlay {
             display: flex;
             opacity: 0;
@@ -342,8 +345,6 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             width: 100%;
             max-width: 400px;
-            max-height: 100vh;
-            overflow-y: visible;
             border-radius: 20px;
             padding: 16px 22px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
@@ -352,7 +353,6 @@
             transform: scale(0.92) translateY(10px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         .auth-modal-overlay.active .auth-modal-box {
             transform: scale(1) translateY(0);
         }
@@ -378,7 +378,6 @@
             letter-spacing: 1px;
             color: #00AFFF;
         }
-        
         .auth-tabs {
             display: flex; 
             background: #121215;
@@ -395,9 +394,7 @@
             transition: color 0.3s ease;
             position: relative; z-index: 2;
         }
-        .auth-tab.active {
-            color: #ffffff;
-        }
+        .auth-tab.active { color: #ffffff; }
         .auth-tab-indicator {
             position: absolute;
             top: 3px; bottom: 3px; left: 3px;
@@ -412,56 +409,24 @@
         .auth-tabs.register-mode .auth-tab-indicator {
             transform: translateX(100%);
         }
-
-        .auth-forms-container {
-            position: relative;
-            overflow: visible;
-        }
-        .auth-form-panel {
-            display: none;
-        }
-        .auth-form-panel.active {
-            display: block;
-        }
-
+        .auth-form-panel { display: none; }
+        .auth-form-panel.active { display: block; }
         .auth-form-group { margin-bottom: 8px; }
         .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; font-weight: 500; }
-        
-        .auth-input-wrap {
-            position: relative; display: flex; align-items: center;
-        }
-        .auth-input-wrap > i:first-child {
-            position: absolute; left: 12px; color: #64748b; font-size: 12px; transition: color 0.2s;
-        }
+        .auth-input-wrap { position: relative; display: flex; align-items: center; }
+        .auth-input-wrap > i:first-child { position: absolute; left: 12px; color: #64748b; font-size: 12px; }
         .auth-input-wrap input {
             width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px;
             outline: none; transition: all 0.25s ease;
-        }
-        .auth-input-wrap input::placeholder {
-            color: #475569;
         }
         .auth-input-wrap input:focus { 
             border-color: #00AFFF; 
             background: #16161a;
             box-shadow: 0 0 10px rgba(0, 175, 255, 0.15); 
         }
-        .auth-input-wrap input:focus ~ i { color: #00AFFF; }
-        
-        .password-toggle {
-            position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; transition: color 0.2s;
-        }
-        .password-toggle:hover { color: #fff; }
-
-        .turnstile-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 8px;
-            transform: scale(0.92);
-            transform-origin: center;
-            min-height: 65px;
-        }
-
+        .password-toggle { position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; }
+        .turnstile-container { display: flex; justify-content: center; margin-bottom: 8px; transform: scale(0.92); min-height: 65px; }
         .auth-submit-btn {
             width: 100%; background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%);
             border: none; color: #fff; padding: 10px; border-radius: 10px;
@@ -469,29 +434,24 @@
             box-shadow: 0 4px 12px rgba(0, 175, 255, 0.3); transition: all 0.25s ease;
             display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .auth-submit-btn:hover { 
-            opacity: 0.95; 
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(0, 175, 255, 0.45);
-        }
-        .auth-submit-btn:active { transform: translateY(0); }
-
-        .auth-switch-text {
-            text-align: center; font-size: 11px; color: #64748b; margin-top: 10px;
-        }
-        .auth-switch-text span {
-            color: #00AFFF; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
-        }
-        .auth-switch-text span:hover { opacity: 0.8; text-decoration: underline; }
+        .auth-switch-text { text-align: center; font-size: 11px; color: #64748b; margin-top: 10px; }
+        .auth-switch-text span { color: #00AFFF; cursor: pointer; font-weight: 600; }
 
         .main-container {
             max-width: 1540px;
             margin: 0 auto;
             padding: 0 20px;
         }
+        
+        .footer-bar {
+            text-align: center;
+            padding: 20px 0;
+            color: #64748b;
+            font-size: 12px;
+        }
     </style>
 </head>
-<body class="fade-page">
+<body>
 
     <!-- ================= NAVBAR ================= -->
     <header class="navbar">
@@ -504,7 +464,6 @@
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
 
-            <!-- ปุ่มแว่นขยายและช่องค้นหาสไลด์ (ค้นหาสินค้า) -->
             <div class="search-container">
                 <div class="search-toggle-btn" id="searchToggleBtn" title="ค้นหาสินค้า">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -529,7 +488,6 @@
     <!-- ================= MAIN CONTENT ================= -->
     <main class="main-container full-width-layout">
         
-        <!-- ช่องประกาศเดี่ยว ขยายความกว้างเต็ม 1500px เท่าแบนเนอร์หลัก -->
         <div class="announcement-single-capsule">
             <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
             <div class="announcement-ticker">
@@ -537,7 +495,6 @@
             </div>
         </div>
 
-        <!-- แบนเนอร์หลัก -->
         <div class="main-hero-banner">
             <div class="hero-left-content">
                 <span style="font-size: 12px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
@@ -547,7 +504,6 @@
             <div class="hero-right-space"></div>
         </div>
 
-        <!-- หมวดหมู่สินค้าแนะนำ -->
         <div class="section-title-bar">
             <i class="fa-solid fa-fire"></i> สินค้าแนะนำ
         </div>
@@ -605,7 +561,6 @@
             </div>
 
             <div class="auth-forms-container">
-                <!-- ฟอร์มเข้าสู่ระบบ -->
                 <div id="loginPanel" class="auth-form-panel">
                     <form onsubmit="handleLoginSubmit(event)">
                         <div class="auth-form-group">
@@ -633,7 +588,6 @@
                     </div>
                 </div>
 
-                <!-- ฟอร์มสมัครสมาชิก -->
                 <div id="registerPanel" class="auth-form-panel">
                     <form onsubmit="handleRegisterSubmit(event)">
                         <div class="auth-form-group">
@@ -702,7 +656,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ระบบสไลด์ช่องค้นหาเมื่อกดแว่นขยาย
         const searchToggleBtn = document.getElementById('searchToggleBtn');
         const searchInputWrapper = document.getElementById('searchInputWrapper');
         const searchInputField = document.getElementById('searchInputField');
@@ -730,7 +683,6 @@
             snapshot.forEach(docSnap => {
                 list.push(docSnap.data());
             });
-            
             const annText = document.getElementById('announcementText');
             if (list.length > 0) {
                 let latest = list[list.length - 1];
@@ -757,19 +709,10 @@
                 bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
 
                 let shape = b.shape || 'rectangle';
-                let borderRadiusStyle = '12px';
-                if (shape === 'circle') {
-                    borderRadiusStyle = '50%';
-                } else if (shape === 'rounded') {
-                    borderRadiusStyle = '25px';
-                } else if (shape === 'pill') {
-                    borderRadiusStyle = '999px';
-                } else if (shape === 'rectangle') {
-                    borderRadiusStyle = '4px';
-                }
+                let borderRadiusStyle = shape === 'circle' ? '50%' : shape === 'rounded' ? '25px' : shape === 'pill' ? '999px' : '4px';
                 
                 let deleteBtnHtml = isAdminUser ? `
-                    <button class="delete-banner-btn" data-id="${docId}" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: transform 0.2s;" title="ลบแบรนด์เนอร์นี้">
+                    <button class="delete-banner-btn" data-id="${docId}" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000;" title="ลบแบรนด์เนอร์นี้">
                         <i class="fa-solid fa-trash-can" style="font-size: 14px;"></i>
                     </button>
                 ` : '';
@@ -796,7 +739,6 @@
                                     await deleteDoc(doc(db, "banners", docId));
                                     alert('✅ ลบแบรนด์เนอร์สำเร็จ!');
                                 } catch (err) {
-                                    console.error("Delete Error:", err);
                                     alert('❌ ไม่สามารถลบแบรนด์เนอร์ได้: ' + err.message);
                                 }
                             }
@@ -807,142 +749,6 @@
                 document.body.appendChild(bannerDiv);
             });
         });
-
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('mode') === 'place_banner') {
-            const rawData = localStorage.getItem('temp_banner_data');
-            if (rawData) {
-                const bannerData = JSON.parse(rawData);
-
-                const controlBar = document.createElement('div');
-                controlBar.id = 'bannerControlPanel';
-                controlBar.innerHTML = `
-                    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; flex-direction: column; gap: 8px; width: 480px; max-width: 95vw;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> เลือกตำแหน่งและรูปทรงแบรนด์เนอร์</div>
-                                <div style="font-size: 11px; color: #94a3b8;">ขยับเมาส์เลือกตำแหน่ง | คลิกซ้ายเพื่อบันทึก</div>
-                            </div>
-                            <button id="cancelPositionBtn" style="background: #ef4444; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">ยกเลิก</button>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
-                                <span>รูปทรงแบรนด์เนอร์:</span>
-                                <select id="selectShape" style="width: 65%; background: #121215; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 6px; font-family: 'Prompt', sans-serif; cursor: pointer;">
-                                    <option value="rectangle">🔲 สี่เหลี่ยมผืนผ้า (มุมมนเล็ก)</option>
-                                    <option value="rounded">🔲 สี่เหลี่ยมมุมโค้งมน</option>
-                                    <option value="circle">⭕ วงกลม / วงรี (Circle/Oval)</option>
-                                    <option value="pill">💊 ทรงแคปซูล (Pill)</option>
-                                </select>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
-                                <span>ความกว้าง (<span id="valWidth">300</span> px):</span>
-                                <input type="range" id="rangeWidth" min="80" max="1200" value="300" style="width: 65%; cursor: pointer;">
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
-                                <span>ความสูง (<span id="valHeight">300</span> px):</span>
-                                <input type="range" id="rangeHeight" min="80" max="800" value="300" style="width: 65%; cursor: pointer;">
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(controlBar);
-
-                const ghostBanner = document.createElement('div');
-                ghostBanner.style.position = 'absolute';
-                ghostBanner.style.width = '300px';
-                ghostBanner.style.height = '300px';
-                ghostBanner.style.zIndex = '99999';
-                ghostBanner.style.pointerEvents = 'none';
-                ghostBanner.style.border = '2px dashed #00AFFF';
-                ghostBanner.style.borderRadius = '50%';
-                ghostBanner.style.overflow = 'hidden';
-                ghostBanner.style.boxShadow = '0 0 20px rgba(0,175,255,0.6)';
-                ghostBanner.innerHTML = `<img src="${bannerData.imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="Ghost">`;
-                document.body.appendChild(ghostBanner);
-
-                let currentWidth = 300;
-                let currentHeight = 300;
-                let currentShape = 'circle';
-
-                const rangeW = document.getElementById('rangeWidth');
-                const rangeH = document.getElementById('rangeHeight');
-                const valW = document.getElementById('valWidth');
-                const valH = document.getElementById('valHeight');
-                const selectShape = document.getElementById('selectShape');
-                selectShape.value = 'circle';
-
-                selectShape.addEventListener('change', (e) => {
-                    currentShape = e.target.value;
-                    if (currentShape === 'circle') {
-                        ghostBanner.style.borderRadius = '50%';
-                    } else if (currentShape === 'rounded') {
-                        ghostBanner.style.borderRadius = '25px';
-                    } else if (currentShape === 'pill') {
-                        ghostBanner.style.borderRadius = '999px';
-                    } else {
-                        ghostBanner.style.borderRadius = '4px';
-                    }
-                });
-
-                rangeW.addEventListener('input', (e) => {
-                    currentWidth = parseInt(e.target.value);
-                    ghostBanner.style.width = currentWidth + 'px';
-                    valW.innerText = currentWidth;
-                });
-                
-                rangeH.addEventListener('input', (e) => {
-                    currentHeight = parseInt(e.target.value);
-                    ghostBanner.style.height = currentHeight + 'px';
-                    valH.innerText = currentHeight;
-                });
-
-                window.addEventListener('mousemove', (e) => {
-                    ghostBanner.style.left = (e.pageX + 15) + 'px';
-                    ghostBanner.style.top = (e.pageY + 15) + 'px';
-                });
-
-                document.getElementById('cancelPositionBtn').addEventListener('click', () => {
-                    localStorage.removeItem('temp_banner_data');
-                    window.location.href = 'admin.html';
-                });
-
-                const clickHandler = async function(e) {
-                    if (e.target.closest('#bannerControlPanel')) return;
-                    
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    let posX = e.pageX;
-                    let posY = e.pageY;
-
-                    try {
-                        await addDoc(collection(db, "banners"), {
-                            imageUrl: bannerData.imageUrl || '',
-                            orientation: bannerData.orientation || 'horizontal',
-                            clickable: !!bannerData.clickable,
-                            linkUrl: bannerData.linkUrl || '',
-                            shape: currentShape,
-                            posX: posX,
-                            posY: posY,
-                            width: currentWidth,
-                            height: currentHeight,
-                            timestamp: new Date().toLocaleString('th-TH')
-                        });
-
-                        alert('✅ บันทึกตำแหน่งและรูปทรงแบรนด์เนอร์เรียบร้อย!');
-                        localStorage.removeItem('temp_banner_data');
-                        window.removeEventListener('click', clickHandler, true);
-                        window.location.href = 'admin.html';
-                    } catch (err) {
-                        console.error("Firebase Error Details:", err);
-                        alert('❌ เกิดข้อผิดพลาด: ' + (err.message || 'ไม่สามารถบันทึกข้อมูลได้'));
-                    }
-                };
-
-                window.addEventListener('click', clickHandler, { capture: true, once: true });
-            }
-        }
 
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
@@ -957,22 +763,11 @@
             if (window.turnstile) {
                 const loginBox = document.getElementById('loginTurnstileBox');
                 if (loginBox && loginBox.childElementCount === 0) {
-                    loginWidgetId = window.turnstile.render(loginBox, {
-                        sitekey: siteKey,
-                        theme: 'dark'
-                    });
-                } else if (window.turnstile && loginWidgetId !== null) {
-                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
+                    loginWidgetId = window.turnstile.render(loginBox, { sitekey: siteKey, theme: 'dark' });
                 }
-
                 const regBox = document.getElementById('regTurnstileBox');
                 if (regBox && regBox.childElementCount === 0) {
-                    regWidgetId = window.turnstile.render(regBox, {
-                        sitekey: siteKey,
-                        theme: 'dark'
-                    });
-                } else if (window.turnstile && regWidgetId !== null) {
-                    try { window.turnstile.reset(regWidgetId); } catch(e){}
+                    regWidgetId = window.turnstile.render(regBox, { sitekey: siteKey, theme: 'dark' });
                 }
             }
         }
@@ -990,9 +785,7 @@
         if (openLoginBtn) openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
         if (openRegisterBtn) openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
         if (closeBtn) closeBtn.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
         window.switchAuthTab = function(tab) {
             const loginPanel = document.getElementById('loginPanel');
@@ -1007,18 +800,12 @@
                 registerPanel.classList.remove('active');
                 loginTabBtn.classList.add('active');
                 regTabBtn.classList.remove('active');
-                if (window.turnstile && loginWidgetId !== null) {
-                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
-                }
             } else {
                 tabsContainer.classList.add('register-mode');
                 registerPanel.classList.add('active');
                 loginPanel.classList.remove('active');
                 regTabBtn.classList.add('active');
                 loginTabBtn.classList.remove('active');
-                if (window.turnstile && regWidgetId !== null) {
-                    try { window.turnstile.reset(regWidgetId); } catch(e){}
-                }
             }
         }
 
@@ -1037,14 +824,6 @@
 
         window.handleLoginSubmit = async function(e) {
             e.preventDefault();
-
-            const loginPanel = document.getElementById('loginPanel');
-            const turnstileResponse = loginPanel.querySelector('[name="cf-turnstile-response"]');
-            if (!turnstileResponse || !turnstileResponse.value) {
-                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
-                return;
-            }
-
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
 
@@ -1060,7 +839,6 @@
             try {
                 const q = query(collection(db, "members"), where("username", "==", username), where("password", "==", password));
                 const querySnapshot = await getDocs(q);
-
                 if (!querySnapshot.empty) {
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('username', username);
@@ -1068,24 +846,14 @@
                     location.reload();
                 } else {
                     alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-                    if (window.turnstile && loginWidgetId !== null) window.turnstile.reset(loginWidgetId);
                 }
             } catch (err) {
-                console.error(err);
                 alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
             }
         }
 
         window.handleRegisterSubmit = async function(e) {
             e.preventDefault();
-
-            const registerPanel = document.getElementById('registerPanel');
-            const turnstileResponse = registerPanel.querySelector('[name="cf-turnstile-response"]');
-            if (!turnstileResponse || !turnstileResponse.value) {
-                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
-                return;
-            }
-
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
@@ -1096,35 +864,26 @@
                 return;
             }
 
-            if (password.length < 6) {
-                alert('❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป');
-                return;
-            }
-
             try {
                 const checkQ = query(collection(db, "members"), where("username", "==", username));
                 const checkSnap = await getDocs(checkQ);
-
                 if (!checkSnap.empty) {
                     alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว');
-                    if (window.turnstile && regWidgetId !== null) window.turnstile.reset(regWidgetId);
                     return;
                 }
 
-                const registerDate = new Date().toLocaleDateString('th-TH');
                 await addDoc(collection(db, "members"), {
                     username: username,
                     email: email || '-',
                     password: password,
                     balance: 0.00,
                     role: 'MEMBER',
-                    registerDate: registerDate
+                    registerDate: new Date().toLocaleDateString('th-TH')
                 });
 
                 alert('🎉 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
                 switchAuthTab('login');
             } catch (err) {
-                console.error(err);
                 alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก');
             }
         }
@@ -1138,26 +897,15 @@
                     renderNavbar('admin', 0, true);
                     return;
                 }
-
                 try {
                     const q = query(collection(db, "members"), where("username", "==", username));
                     const querySnapshot = await getDocs(q);
-
-                    if (querySnapshot.empty) {
-                        localStorage.clear();
-                        return;
+                    if (!querySnapshot.empty) {
+                        let userData = querySnapshot.docs[0].data();
+                        let userBalance = (parseFloat(userData.balance) || 0).toFixed(2);
+                        let isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin') === 'true';
+                        renderNavbar(username, userBalance, isAdmin);
                     }
-
-                    let userData = null;
-                    querySnapshot.forEach((docSnap) => {
-                        userData = docSnap.data();
-                    });
-
-                    const userBalance = (parseFloat(userData.balance) || 0).toFixed(2);
-                    const isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin') === 'true';
-
-                    renderNavbar(username, userBalance, isAdmin);
-
                 } catch (error) {
                     console.error("Error checking user:", error);
                 }
@@ -1200,10 +948,7 @@
                                     <i class="fa-solid fa-chevron-right" style="font-size:10px; color:#00AFFF;"></i>
                                 </a>
                             ` : ''}
-
                             <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> กรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
                         </div>
 
                         <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
