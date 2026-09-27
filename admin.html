@@ -325,7 +325,7 @@
                     <tr>
                         <td><img src="${b.imageUrl}" style="max-height: 40px; border-radius: 4px;" alt="Banner"></td>
                         <td>กว้าง ${b.width \vert{}\vert{} 1200} x สูง ${b.height || 600} px</td>
-                        <td>พิกัด(X: ${Math.round(b.posX  0)}, Y:${Math.round(b.posY || 0)})</td>
+                        <td>พิกัด (X: ${Math.round(b.posX  0)}, Y:${Math.round(b.posY || 0)})</td>
                         <td>${b.clickable ? '<span style="color:#22c55e; font-weight:bold;">กดได้</span>' : '<span style="color:#94a3b8;">โชว์เฉยๆ</span>'}</td>
                         <td style="color: #94a3b8; font-size: 11px;">${b.timestamp}</td>
                         <td><button class="btn btn-danger" onclick="window.deleteBanner('${b.id}')"><i class="fa-solid fa-trash"></i> ลบออกจากเว็บ</button></td>
