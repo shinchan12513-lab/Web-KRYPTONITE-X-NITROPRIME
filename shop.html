@@ -418,6 +418,7 @@
                 const bannerData = JSON.parse(rawData);
 
                 const controlBar = document.createElement('div');
+                controlBar.id = 'bannerControlPanel';
                 controlBar.innerHTML = `
                     <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; flex-direction: column; gap: 8px; width: 480px; max-width: 95vw;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -436,7 +437,7 @@
                                 <span>ความสูง (<span id="valHeight">300</span> px):</span>
                                 <input type="range" id="rangeHeight" min="80" max="800" value="300" style="width: 70%; cursor: pointer;">
                             </div>
-                            <div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 2px;">
+                            <div style="font-size: 11px; color: #64748b; text-align: center; margin-top: 2px;">
                                 ขนาดมาตรฐาน: 1200 x 600 พิกเซล (หรือสัดส่วน 2:1)
                             </div>
                         </div>
@@ -487,8 +488,9 @@
                     window.location.href = 'admin.html';
                 });
 
-                window.addEventListener('click', async (e) => {
-                    if (e.target.closest('#cancelPositionBtn') || e.target.closest('#rangeWidth') || e.target.closest('#rangeHeight')) return;
+                // แก้ไขการดักจับคลิกซ้ายให้อ้างอิง document เพื่อไม่ให้ไปโดนปุ่มควบคุมด้านบน
+                document.addEventListener('click', async function placeClickHandler(e) {
+                    if (e.target.closest('#bannerControlPanel')) return;
 
                     let posX = e.pageX;
                     let posY = e.pageY;
