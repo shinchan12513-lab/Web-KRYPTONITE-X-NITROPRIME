@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KRYPTONITE X NITROPRIME - หน้าหลัก</title>
+    <title>kryptonitexnitroprime - หน้าหลัก</title>
+    <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Cloudflare Turnstile Official Script -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <style>
-        * { box-sizing: border-box; font-family: 'Prompt', sans-serif; margin: 0; padding: 0; }
+        * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
         body {
             background-color: #060608;
-            color: #fff;
             background-image: 
                 radial-gradient(circle at 15% 15%, rgba(0, 175, 255, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(0, 100, 255, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 50% 30%, rgba(0, 175, 255, 0.04) 0%, transparent 60%);
         }
 
-        /* Navbar Rectangle Layout */
+        /* Navbar Rectangle Layout (ทรงสี่เหลี่ยมขอบมน อยู่ตรงกลาง) */
         .navbar {
             display: flex;
             justify-content: center;
@@ -46,9 +48,11 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            transition: all 0.3s ease;
         }
         .nav-menu a {
             color: #94a3b8;
+            background: transparent;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
@@ -70,7 +74,7 @@
             font-size: 15px;
         }
 
-        /* Search Container */
+        /* ปุ่มค้นหาและช่องค้นหาสไลด์ */
         .search-container {
             display: flex;
             align-items: center;
@@ -103,6 +107,7 @@
             background: #121215;
             border: 1px solid rgba(0, 175, 255, 0.4);
             border-radius: 10px;
+            padding: 0;
         }
         .search-input-wrapper.active {
             width: 240px;
@@ -122,6 +127,7 @@
             font-size: 13px;
             width: 100%;
             height: 38px;
+            font-family: 'Prompt', sans-serif;
         }
         .search-input-wrapper input::placeholder {
             color: #64748b;
@@ -160,14 +166,7 @@
             margin: 0 4px;
         }
 
-        /* Main Container */
-        .main-container {
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 0 20px 40px 20px;
-        }
-
-        /* Announcement Banner */
+        /* ช่องประกาศเดี่ยว ปรับความกว้างให้ยาวเท่ากับแบนเนอร์หลักที่ 1500px */
         .announcement-single-capsule {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
@@ -177,8 +176,12 @@
             align-items: center;
             gap: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
             margin-bottom: 25px;
             width: 100%;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .announcement-badge {
             background: rgba(0, 175, 255, 0.15);
@@ -193,38 +196,63 @@
             gap: 6px;
             white-space: nowrap;
         }
+        .announcement-ticker {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+        }
         .announcement-text {
+            display: inline-block;
             font-size: 12px;
             color: #94a3b8;
+            animation: tickerScroll 25s linear infinite;
+        }
+        @keyframes tickerScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
-        /* Main Hero Banner */
+        /* แบนเนอร์หลัก ความกว้าง 1500px */
         .main-hero-banner {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
             border-radius: 18px;
-            padding: 45px 40px;
-            margin-bottom: 35px;
+            padding: 65px 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 175, 255, 0.06);
+            margin-bottom: 35px;
+            width: 100%;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .hero-left-content h1 {
-            font-size: 32px;
+            font-size: 38px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 8px;
+            letter-spacing: 1.2px;
+            margin-bottom: 12px;
             text-shadow: 0 0 25px rgba(0, 175, 255, 0.5);
+            white-space: nowrap;
         }
         .hero-left-content p {
             font-size: 14px;
             color: #94a3b8;
+            letter-spacing: 0.6px;
         }
 
-        /* Stats Grid */
+        /* กล่องสถิติ 4 ช่อง */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-bottom: 35px;
+            width: 100%;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .stat-card {
             background: #0d0d12;
@@ -234,6 +262,12 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .stat-card:hover {
+            border-color: rgba(0, 175, 255, 0.5);
+            transform: translateY(-2px);
         }
         .stat-icon {
             width: 45px; height: 45px;
@@ -244,110 +278,308 @@
             color: #00AFFF;
             font-size: 18px;
         }
-        .stat-info .stat-value { font-size: 18px; font-weight: 700; color: #fff; }
-        .stat-info .stat-label { font-size: 11px; color: #94a3b8; }
+        .stat-info .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .stat-info .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
 
-        /* Products Grid */
+        /* ส่วนสินค้าแนะนำ */
         .section-title-bar {
-            display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 15px; font-weight: 600; color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            width: 100%;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .section-title-bar i { color: #00AFFF; }
+
         .products-grid-preview {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-bottom: 40px;
+            width: 100%;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .product-preview-card {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.2);
             border-radius: 12px;
             overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
             position: relative;
         }
-        .product-preview-img { width: 100%; height: 140px; background: #1a1a20; }
-        .product-preview-body { padding: 12px; }
-        .product-preview-body h4 { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
-        .product-preview-price { font-size: 14px; font-weight: 700; color: #00AFFF; }
+        .product-preview-card:hover {
+            border-color: rgba(0, 175, 255, 0.6);
+            transform: translateY(-3px);
+        }
+        .product-preview-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background: #000;
+        }
+        .product-preview-body {
+            padding: 12px;
+        }
+        .product-preview-body h4 {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        .product-preview-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00AFFF;
+        }
         .product-tag-badge {
-            position: absolute; top: 8px; left: 8px;
+            position: absolute;
+            top: 8px; left: 8px;
             background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
-            color: #fff; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
-
-        /* Modal */
-        .auth-modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 99999;
-            justify-content: center; align-items: center;
-        }
-        .auth-modal-overlay.active { display: flex; }
-        .auth-modal-box {
-            background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 100%; max-width: 400px; border-radius: 20px; padding: 20px 22px; position: relative;
-        }
-        .auth-close-btn {
-            position: absolute; top: 14px; right: 16px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; width: 28px; height: 28px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
-        }
-        .auth-brand { font-weight: 700; font-size: 14px; margin-bottom: 12px; color: #00AFFF; }
-        .auth-tabs { display: flex; background: #121215; border-radius: 10px; padding: 3px; margin-bottom: 15px; }
-        .auth-tab { flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; color: #64748b; cursor: pointer; border-radius: 8px; }
-        .auth-tab.active { background: #000; color: #fff; }
-        .auth-form-panel { display: none; }
-        .auth-form-panel.active { display: block; }
-        .auth-form-group { margin-bottom: 10px; }
-        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
-        .auth-input-wrap { position: relative; display: flex; align-items: center; }
-        .auth-input-wrap i:first-child { position: absolute; left: 12px; color: #64748b; font-size: 12px; }
-        .auth-input-wrap input {
-            width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px; outline: none;
-        }
-        .auth-submit-btn {
-            width: 100%; background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%);
-            border: none; color: #fff; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px;
-        }
-        footer { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
 
         @media (max-width: 900px) {
-            .stats-grid, .products-grid-preview { grid-template-columns: 1fr; }
+            .stats-grid, .products-grid-preview, .main-hero-banner {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับเป็นสีฟ้า #00AFFF) */
+        .auth-modal-overlay {
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+        }
+        .auth-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .auth-modal-box {
+            background: #09090b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            max-width: 400px;
+            max-height: 100vh;
+            overflow-y: visible;
+            border-radius: 20px;
+            padding: 16px 22px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+            position: relative;
+            color: #fff;
+            transform: scale(0.92) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .auth-modal-overlay.active .auth-modal-box {
+            transform: scale(1) translateY(0);
+        }
+        .auth-close-btn {
+            position: absolute;
+            top: 14px; right: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .auth-close-btn:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: #fff; 
+        }
+        .auth-brand {
+            display: flex; align-items: center; gap: 6px;
+            font-weight: 700; font-size: 14px; margin-bottom: 12px;
+            letter-spacing: 1px;
+            color: #00AFFF;
+        }
+        
+        .auth-tabs {
+            display: flex; 
+            background: #121215;
+            border-radius: 10px; 
+            padding: 3px; 
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative;
+        }
+        .auth-tab {
+            flex: 1; text-align: center; padding: 8px;
+            font-size: 12px; font-weight: 600; color: #64748b;
+            cursor: pointer; border-radius: 8px; 
+            transition: color 0.3s ease;
+            position: relative; z-index: 2;
+        }
+        .auth-tab.active {
+            color: #ffffff;
+        }
+        .auth-tab-indicator {
+            position: absolute;
+            top: 3px; bottom: 3px; left: 3px;
+            width: calc(50% - 3px);
+            background: #000000;
+            border-radius: 7px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+        .auth-tabs.register-mode .auth-tab-indicator {
+            transform: translateX(100%);
+        }
+
+        .auth-forms-container {
+            position: relative;
+            overflow: visible;
+        }
+        .auth-form-panel {
+            display: none;
+        }
+        .auth-form-panel.active {
+            display: block;
+        }
+
+        .auth-form-group { margin-bottom: 8px; }
+        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; font-weight: 500; }
+        
+        .auth-input-wrap {
+            position: relative; display: flex; align-items: center;
+        }
+        .auth-input-wrap > i:first-child {
+            position: absolute; left: 12px; color: #64748b; font-size: 12px; transition: color 0.2s;
+        }
+        .auth-input-wrap input {
+            width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px;
+            outline: none; transition: all 0.25s ease;
+        }
+        .auth-input-wrap input::placeholder {
+            color: #475569;
+        }
+        .auth-input-wrap input:focus { 
+            border-color: #00AFFF; 
+            background: #16161a;
+            box-shadow: 0 0 10px rgba(0, 175, 255, 0.15); 
+        }
+        .auth-input-wrap input:focus ~ i { color: #00AFFF; }
+        
+        .password-toggle {
+            position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; transition: color 0.2s;
+        }
+        .password-toggle:hover { color: #fff; }
+
+        .turnstile-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+            transform: scale(0.92);
+            transform-origin: center;
+            min-height: 65px;
+        }
+
+        .auth-submit-btn {
+            width: 100%; background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%);
+            border: none; color: #fff; padding: 10px; border-radius: 10px;
+            font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 2px;
+            box-shadow: 0 4px 12px rgba(0, 175, 255, 0.3); transition: all 0.25s ease;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .auth-submit-btn:hover { 
+            opacity: 0.95; 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 175, 255, 0.45);
+        }
+        .auth-submit-btn:active { transform: translateY(0); }
+
+        .auth-switch-text {
+            text-align: center; font-size: 11px; color: #64748b; margin-top: 10px;
+        }
+        .auth-switch-text span {
+            color: #00AFFF; cursor: pointer; font-weight: 600; transition: opacity 0.2s;
+        }
+        .auth-switch-text span:hover { opacity: 0.8; text-decoration: underline; }
+
+        .main-container {
+            max-width: 1540px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
     </style>
 </head>
-<body>
+<body class="fade-page">
 
-    <!-- NAVBAR (แสดงผลทันที ไม่ต้องกดเข้าเว็บ) -->
+    <!-- ================= NAVBAR ================= -->
     <header class="navbar">
         <div class="nav-inner">
             <nav class="nav-menu">
-                <a href="#" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
-                <a href="#"><i class="fa-solid fa-store"></i> ร้านค้า</a>
+                <a href="shop.html" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
+                <a href="fivem-project.html"><i class="fa-solid fa-store"></i> ร้านค้า</a>
                 <a href="#"><i class="fa-solid fa-wallet"></i> เติมเงิน</a>
-                <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติ</a>
+                <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการสั่งซื้อ</a>
+                <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
+
+            <!-- ปุ่มแว่นขยายและช่องค้นหาสไลด์ (ค้นหาสินค้า) -->
             <div class="search-container">
-                <div class="search-toggle-btn" id="searchToggleBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <div class="search-toggle-btn" id="searchToggleBtn" title="ค้นหาสินค้า">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
                 <div class="search-input-wrapper" id="searchInputWrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="searchInputField" placeholder="ค้นหาสินค้า">
                 </div>
             </div>
-            <div class="nav-right-actions">
-                <a href="#" id="openRegisterModal" style="color: #cbd5e1; text-decoration: none; font-size: 13px;">สมัครสมาชิก</a>
+
+            <div class="nav-right-actions" id="navRightSection">
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #94a3b8; padding: 0 4px;">
+                    <i class="fa-solid fa-globe" style="color: #00AFFF;"></i> TH
+                </div>
                 <div class="nav-divider"></div>
+                <a href="#" id="openRegisterModal" style="color: #cbd5e1; text-decoration: none; font-size: 13px; font-weight: 500; padding: 0 6px;">สมัครสมาชิก</a>
                 <a href="#" id="openLoginModal" class="btn-login-capsule"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT (เปิดมาเจอหน้านี้เลย) -->
-    <main class="main-container">
-        <!-- ประกาศ -->
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-container full-width-layout">
+        
+        <!-- ช่องประกาศเดี่ยว ขยายความกว้างเต็ม 1500px เท่าแบนเนอร์หลัก -->
         <div class="announcement-single-capsule">
             <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
-            <div class="announcement-text">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1 — เปิดให้บริการตลอด 24 ชม.</div>
+            <div class="announcement-ticker">
+                <span class="announcement-text" id="announcementText">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1 — โปรโมชั่นเติมเงินรับโบนัสพิเศษฟรีตลอด 24 ชั่วโมง!</span>
+            </div>
         </div>
 
         <!-- แบนเนอร์หลัก -->
@@ -355,36 +587,52 @@
             <div class="hero-left-content">
                 <span style="font-size: 12px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
                 <h1>KRYPTONITE X NITROPRIME</h1>
-                <p>บริการเพิ่มประสิทธิภาพ Fivem ปลอดภัย รวดเร็ว ทันใจ มั่นใจได้ 100%</p>
+                <p>EVERYTHING GAMERS NEED, ALL IN ONE SHOP — บริการพรีเมียม ปลอดภัย รวดเร็ว 100%</p>
             </div>
+            <div class="hero-right-space"></div>
         </div>
 
-        <!-- สถิติ -->
+        <!-- กล่องสถิติ 4 ช่อง -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-                <div class="stat-info"><div class="stat-value">95 คน</div><div class="stat-label">ผู้ใช้งานออนไลน์</div></div>
+                <div class="stat-info">
+                    <div class="stat-value">95 คน</div>
+                    <div class="stat-label">ผู้ใช้งานออนไลน์</div>
+                </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fa-solid fa-box-archive"></i></div>
-                <div class="stat-info"><div class="stat-value">17 รายการ</div><div class="stat-label">สินค้าทั้งหมด</div></div>
+                <div class="stat-info">
+                    <div class="stat-value">17 รายการ</div>
+                    <div class="stat-label">สินค้าทั้งหมด</div>
+                </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fa-solid fa-cubes"></i></div>
-                <div class="stat-info"><div class="stat-value">112 ชิ้น</div><div class="stat-label">คลังสินค้า</div></div>
+                <div class="stat-info">
+                    <div class="stat-value">112 ชิ้น</div>
+                    <div class="stat-label">คลังสินค้า</div>
+                </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fa-solid fa-bag-shopping"></i></div>
-                <div class="stat-info"><div class="stat-value">25 ชิ้น</div><div class="stat-label">ขายแล้ววันนี้</div></div>
+                <div class="stat-info">
+                    <div class="stat-value">25 ชิ้น</div>
+                    <div class="stat-label">ขายแล้ววันนี้</div>
+                </div>
             </div>
         </div>
 
-        <!-- สินค้าแนะนำ -->
-        <div class="section-title-bar"><i class="fa-solid fa-fire"></i> สินค้าแนะนำ</div>
+        <!-- หมวดหมู่สินค้าแนะนำ -->
+        <div class="section-title-bar">
+            <i class="fa-solid fa-fire"></i> สินค้าแนะนำ
+        </div>
+
         <div class="products-grid-preview">
             <div class="product-preview-card">
                 <span class="product-tag-badge">แนะนำ</span>
-                <div class="product-preview-img"></div>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
                 <div class="product-preview-body">
                     <h4>มาโค่ - คุมดีดี/กันมอง</h4>
                     <div class="product-preview-price">฿150</div>
@@ -392,7 +640,7 @@
             </div>
             <div class="product-preview-card">
                 <span class="product-tag-badge">ยอดฮิต</span>
-                <div class="product-preview-img"></div>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
                 <div class="product-preview-body">
                     <h4>ปลดแบนเกมวาโร V2</h4>
                     <div class="product-preview-price">฿290</div>
@@ -400,7 +648,7 @@
             </div>
             <div class="product-preview-card">
                 <span class="product-tag-badge">ใหม่</span>
-                <div class="product-preview-img"></div>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
                 <div class="product-preview-body">
                     <h4>Vortex VIP Lifetime</h4>
                     <div class="product-preview-price">฿350</div>
@@ -408,69 +656,657 @@
             </div>
             <div class="product-preview-card">
                 <span class="product-tag-badge">พิเศษ</span>
-                <div class="product-preview-img"></div>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
                 <div class="product-preview-body">
                     <h4>FiveM Booster Pro</h4>
                     <div class="product-preview-price">฿500</div>
                 </div>
             </div>
         </div>
+
     </main>
 
-    <!-- AUTH MODAL (เข้าสู่ระบบ / สมัครสมาชิก) -->
+    <!-- ================= AUTH MODAL POPUP ================= -->
     <div id="authModalOverlay" class="auth-modal-overlay">
         <div class="auth-modal-box">
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
-            <div class="auth-brand">KRYPTONITE X NITROPRIME</div>
-            <div class="auth-tabs">
-                <div id="tabLoginBtn" class="auth-tab active" onclick="switchTab('login')">เข้าสู่ระบบ</div>
-                <div id="tabRegisterBtn" class="auth-tab" onclick="switchTab('register')">สมัครสมาชิก</div>
+            
+            <div class="auth-brand">
+                FIVEM PREMIUM
             </div>
-            <div id="loginPanel" class="auth-form-panel active">
-                <form>
-                    <div class="auth-form-group"><label>ชื่อผู้ใช้</label><div class="auth-input-wrap"><i class="fa-solid fa-user"></i><input type="text" placeholder="ชื่อผู้ใช้" required></div></div>
-                    <div class="auth-form-group"><label>รหัสผ่าน</label><div class="auth-input-wrap"><i class="fa-solid fa-lock"></i><input type="password" placeholder="รหัสผ่าน" required></div></div>
-                    <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ</button>
-                </form>
+
+            <div class="auth-tabs" id="authTabsContainer">
+                <div class="auth-tab-indicator"></div>
+                <div id="tabLoginBtn" class="auth-tab" onclick="switchAuthTab('login')">เข้าสู่ระบบ</div>
+                <div id="tabRegisterBtn" class="auth-tab" onclick="switchAuthTab('register')">สมัครสมาชิก</div>
             </div>
-            <div id="registerPanel" class="auth-form-panel">
-                <form>
-                    <div class="auth-form-group"><label>ชื่อผู้ใช้</label><div class="auth-input-wrap"><i class="fa-solid fa-user"></i><input type="text" placeholder="ชื่อผู้ใช้" required></div></div>
-                    <div class="auth-form-group"><label>รหัสผ่าน</label><div class="auth-input-wrap"><i class="fa-solid fa-lock"></i><input type="password" placeholder="รหัสผ่าน" required></div></div>
-                    <button type="submit" class="auth-submit-btn">สมัครสมาชิก</button>
-                </form>
+
+            <div class="auth-forms-container">
+                <!-- ฟอร์มเข้าสู่ระบบ -->
+                <div id="loginPanel" class="auth-form-panel">
+                    <form onsubmit="handleLoginSubmit(event)">
+                        <div class="auth-form-group">
+                            <label>ชื่อผู้ใช้</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้" required>
+                            </div>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>รหัสผ่าน</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="turnstile-container" id="loginTurnstileBox"></div>
+
+                        <button type="submit" class="auth-submit-btn" style="margin-top: 5px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                    <div class="auth-switch-text">
+                        ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span>
+                    </div>
+                </div>
+
+                <!-- ฟอร์มสมัครสมาชิก -->
+                <div id="registerPanel" class="auth-form-panel">
+                    <form onsubmit="handleRegisterSubmit(event)">
+                        <div class="auth-form-group">
+                            <label>ชื่อผู้ใช้</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+                            </div>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>อีเมล (ถ้ามี)</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                            </div>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>รหัสผ่าน</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
+                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
+                            </div>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>ยืนยันรหัสผ่าน</label>
+                            <div class="auth-input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="turnstile-container" id="regTurnstileBox"></div>
+
+                        <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                    <div class="auth-switch-text">
+                        มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer-bar">
+        <p>&copy; 2026 kryptonitexnitroprime — All rights reserved.</p>
     </footer>
 
-    <script>
-        // Search toggle
+    <!-- ================= SCRIPT ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
+            authDomain: "kryptonite-nitroprime.firebaseapp.com",
+            projectId: "kryptonite-nitroprime",
+            storageBucket: "kryptonite-nitroprime.firebasestorage.app",
+            messagingSenderId: "802119898761",
+            appId: "1:802119898761:web:6ac8099014fab7ea41d858",
+            measurementId: "G-MMTCVN81ZS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ระบบสไลด์ช่องค้นหาเมื่อกดแว่นขยาย
         const searchToggleBtn = document.getElementById('searchToggleBtn');
         const searchInputWrapper = document.getElementById('searchInputWrapper');
-        searchToggleBtn.addEventListener('click', () => { searchInputWrapper.classList.toggle('active'); });
+        const searchInputField = document.getElementById('searchInputField');
 
-        // Modal control
-        const modalOverlay = document.getElementById('authModalOverlay');
-        document.getElementById('openLoginModal').addEventListener('click', (e) => { e.preventDefault(); modalOverlay.classList.add('active'); switchTab('login'); });
-        document.getElementById('openRegisterModal').addEventListener('click', (e) => { e.preventDefault(); modalOverlay.classList.add('active'); switchTab('register'); });
-        document.getElementById('closeAuthModal').addEventListener('click', () => { modalOverlay.classList.remove('active'); });
-
-        window.switchTab = function(tab) {
-            if(tab === 'login') {
-                document.getElementById('loginPanel').classList.add('active');
-                document.getElementById('registerPanel').classList.remove('active');
-                document.getElementById('tabLoginBtn').classList.add('active');
-                document.getElementById('tabRegisterBtn').classList.remove('active');
+        searchToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchInputWrapper.classList.toggle('active');
+            if (searchInputWrapper.classList.contains('active')) {
+                searchInputField.focus();
             } else {
-                document.getElementById('registerPanel').classList.add('active');
-                document.getElementById('loginPanel').classList.remove('active');
-                document.getElementById('tabRegisterBtn').classList.add('active');
-                document.getElementById('tabLoginBtn').classList.remove('active');
+                searchInputField.value = '';
             }
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!searchInputWrapper.contains(e.target) && !searchToggleBtn.contains(e.target)) {
+                searchInputWrapper.classList.remove('active');
+            }
+        });
+
+        const isAdminUser = localStorage.getItem('isAdmin') === 'true' || localStorage.getItem('username') === 'admin';
+
+        onSnapshot(collection(db, "announcements"), (snapshot) => {
+            let list = [];
+            snapshot.forEach(docSnap => {
+                list.push(docSnap.data());
+            });
+            
+            const annText = document.getElementById('announcementText');
+            if (list.length > 0) {
+                let latest = list[list.length - 1];
+                let msg = latest.content || latest.text || latest.message || 'ยินดีต้อนรับสู่ kryptonitexnitroprime';
+                if (annText) annText.innerText = msg;
+            }
+        });
+
+        onSnapshot(collection(db, "banners"), (snapshot) => {
+            document.querySelectorAll('.dynamic-positioned-banner').forEach(el => el.remove());
+
+            snapshot.forEach(docSnap => {
+                let docId = docSnap.id;
+                let b = docSnap.data();
+                
+                let bannerDiv = document.createElement('div');
+                bannerDiv.className = 'dynamic-positioned-banner';
+                bannerDiv.style.position = 'absolute';
+                bannerDiv.style.left = (b.posX || 0) + 'px';
+                bannerDiv.style.top = (b.posY || 0) + 'px';
+                bannerDiv.style.width = (b.width || 600) + 'px';
+                bannerDiv.style.height = (b.height || 300) + 'px';
+                bannerDiv.style.zIndex = '999';
+                bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
+
+                let shape = b.shape || 'rectangle';
+                let borderRadiusStyle = '12px';
+                if (shape === 'circle') {
+                    borderRadiusStyle = '50%';
+                } else if (shape === 'rounded') {
+                    borderRadiusStyle = '25px';
+                } else if (shape === 'pill') {
+                    borderRadiusStyle = '999px';
+                } else if (shape === 'rectangle') {
+                    borderRadiusStyle = '4px';
+                }
+                
+                let deleteBtnHtml = isAdminUser ? `
+                    <button class="delete-banner-btn" data-id="${docId}" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: transform 0.2s;" title="ลบแบรนด์เนอร์นี้">
+                        <i class="fa-solid fa-trash-can" style="font-size: 14px;"></i>
+                    </button>
+                ` : '';
+
+                bannerDiv.innerHTML = `
+                    <img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:${borderRadiusStyle}; box-shadow:0 10px 25px rgba(0,175,255,0.2);" alt="Banner">
+                    ${deleteBtnHtml}
+                `;
+
+                if (b.clickable && b.linkUrl) {
+                    bannerDiv.addEventListener('click', (e) => {
+                        if (e.target.closest('.delete-banner-btn')) return;
+                        window.location.href = b.linkUrl;
+                    });
+                }
+
+                if (isAdminUser) {
+                    const delBtn = bannerDiv.querySelector('.delete-banner-btn');
+                    if (delBtn) {
+                        delBtn.addEventListener('click', async (e) => {
+                            e.stopPropagation();
+                            if (confirm('คุณต้องการลบแบรนด์เนอร์นี้ใช่หรือไม่?')) {
+                                try {
+                                    await deleteDoc(doc(db, "banners", docId));
+                                    alert('✅ ลบแบรนด์เนอร์สำเร็จ!');
+                                } catch (err) {
+                                    console.error("Delete Error:", err);
+                                    alert('❌ ไม่สามารถลบแบรนด์เนอร์ได้: ' + err.message);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                document.body.appendChild(bannerDiv);
+            });
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'place_banner') {
+            const rawData = localStorage.getItem('temp_banner_data');
+            if (rawData) {
+                const bannerData = JSON.parse(rawData);
+
+                const controlBar = document.createElement('div');
+                controlBar.id = 'bannerControlPanel';
+                controlBar.innerHTML = `
+                    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; flex-direction: column; gap: 8px; width: 480px; max-width: 95vw;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> เลือกตำแหน่งและรูปทรงแบรนด์เนอร์</div>
+                                <div style="font-size: 11px; color: #94a3b8;">ขยับเมาส์เลือกตำแหน่ง | คลิกซ้ายเพื่อบันทึก</div>
+                            </div>
+                            <button id="cancelPositionBtn" style="background: #ef4444; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">ยกเลิก</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                                <span>รูปทรงแบรนด์เนอร์:</span>
+                                <select id="selectShape" style="width: 65%; background: #121215; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 6px; font-family: 'Prompt', sans-serif; cursor: pointer;">
+                                    <option value="rectangle">🔲 สี่เหลี่ยมผืนผ้า (มุมมนเล็ก)</option>
+                                    <option value="rounded">🔲 สี่เหลี่ยมมุมโค้งมน</option>
+                                    <option value="circle">⭕ วงกลม / วงรี (Circle/Oval)</option>
+                                    <option value="pill">💊 ทรงแคปซูล (Pill)</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                                <span>ความกว้าง (<span id="valWidth">300</span> px):</span>
+                                <input type="range" id="rangeWidth" min="80" max="1200" value="300" style="width: 65%; cursor: pointer;">
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                                <span>ความสูง (<span id="valHeight">300</span> px):</span>
+                                <input type="range" id="rangeHeight" min="80" max="800" value="300" style="width: 65%; cursor: pointer;">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(controlBar);
+
+                const ghostBanner = document.createElement('div');
+                ghostBanner.style.position = 'absolute';
+                ghostBanner.style.width = '300px';
+                ghostBanner.style.height = '300px';
+                ghostBanner.style.zIndex = '99999';
+                ghostBanner.style.pointerEvents = 'none';
+                ghostBanner.style.border = '2px dashed #00AFFF';
+                ghostBanner.style.borderRadius = '50%';
+                ghostBanner.style.overflow = 'hidden';
+                ghostBanner.style.boxShadow = '0 0 20px rgba(0,175,255,0.6)';
+                ghostBanner.innerHTML = `<img src="${bannerData.imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="Ghost">`;
+                document.body.appendChild(ghostBanner);
+
+                let currentWidth = 300;
+                let currentHeight = 300;
+                let currentShape = 'circle';
+
+                const rangeW = document.getElementById('rangeWidth');
+                const rangeH = document.getElementById('rangeHeight');
+                const valW = document.getElementById('valWidth');
+                const valH = document.getElementById('valHeight');
+                const selectShape = document.getElementById('selectShape');
+                selectShape.value = 'circle';
+
+                selectShape.addEventListener('change', (e) => {
+                    currentShape = e.target.value;
+                    if (currentShape === 'circle') {
+                        ghostBanner.style.borderRadius = '50%';
+                    } else if (currentShape === 'rounded') {
+                        ghostBanner.style.borderRadius = '25px';
+                    } else if (currentShape === 'pill') {
+                        ghostBanner.style.borderRadius = '999px';
+                    } else {
+                        ghostBanner.style.borderRadius = '4px';
+                    }
+                });
+
+                rangeW.addEventListener('input', (e) => {
+                    currentWidth = parseInt(e.target.value);
+                    ghostBanner.style.width = currentWidth + 'px';
+                    valW.innerText = currentWidth;
+                });
+                
+                rangeH.addEventListener('input', (e) => {
+                    currentHeight = parseInt(e.target.value);
+                    ghostBanner.style.height = currentHeight + 'px';
+                    valH.innerText = currentHeight;
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    ghostBanner.style.left = (e.pageX + 15) + 'px';
+                    ghostBanner.style.top = (e.pageY + 15) + 'px';
+                });
+
+                document.getElementById('cancelPositionBtn').addEventListener('click', () => {
+                    localStorage.removeItem('temp_banner_data');
+                    window.location.href = 'admin.html';
+                });
+
+                const clickHandler = async function(e) {
+                    if (e.target.closest('#bannerControlPanel')) return;
+                    
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    let posX = e.pageX;
+                    let posY = e.pageY;
+
+                    try {
+                        await addDoc(collection(db, "banners"), {
+                            imageUrl: bannerData.imageUrl || '',
+                            orientation: bannerData.orientation || 'horizontal',
+                            clickable: !!bannerData.clickable,
+                            linkUrl: bannerData.linkUrl || '',
+                            shape: currentShape,
+                            posX: posX,
+                            posY: posY,
+                            width: currentWidth,
+                            height: currentHeight,
+                            timestamp: new Date().toLocaleString('th-TH')
+                        });
+
+                        alert('✅ บันทึกตำแหน่งและรูปทรงแบรนด์เนอร์เรียบร้อย!');
+                        localStorage.removeItem('temp_banner_data');
+                        window.removeEventListener('click', clickHandler, true);
+                        window.location.href = 'admin.html';
+                    } catch (err) {
+                        console.error("Firebase Error Details:", err);
+                        alert('❌ เกิดข้อผิดพลาด: ' + (err.message || 'ไม่สามารถบันทึกข้อมูลได้'));
+                    }
+                };
+
+                window.addEventListener('click', clickHandler, { capture: true, once: true });
+            }
+        }
+
+        const modalOverlay = document.getElementById('authModalOverlay');
+        const openLoginBtn = document.getElementById('openLoginModal');
+        const openRegisterBtn = document.getElementById('openRegisterModal');
+        const closeBtn = document.getElementById('closeAuthModal');
+
+        let loginWidgetId = null;
+        let regWidgetId = null;
+        const siteKey = "0x4AAAAAAFFDJZV0J7eWABVq";
+
+        function renderTurnstiles() {
+            if (window.turnstile) {
+                const loginBox = document.getElementById('loginTurnstileBox');
+                if (loginBox && loginBox.childElementCount === 0) {
+                    loginWidgetId = window.turnstile.render(loginBox, {
+                        sitekey: siteKey,
+                        theme: 'dark'
+                    });
+                } else if (window.turnstile && loginWidgetId !== null) {
+                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
+                }
+
+                const regBox = document.getElementById('regTurnstileBox');
+                if (regBox && regBox.childElementCount === 0) {
+                    regWidgetId = window.turnstile.render(regBox, {
+                        sitekey: siteKey,
+                        theme: 'dark'
+                    });
+                } else if (window.turnstile && regWidgetId !== null) {
+                    try { window.turnstile.reset(regWidgetId); } catch(e){}
+                }
+            }
+        }
+
+        function openModal(tabName) {
+            modalOverlay.classList.add('active');
+            switchAuthTab(tabName);
+            setTimeout(renderTurnstiles, 100);
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        if (openLoginBtn) openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
+        if (openRegisterBtn) openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        window.switchAuthTab = function(tab) {
+            const loginPanel = document.getElementById('loginPanel');
+            const registerPanel = document.getElementById('registerPanel');
+            const loginTabBtn = document.getElementById('tabLoginBtn');
+            const regTabBtn = document.getElementById('tabRegisterBtn');
+            const tabsContainer = document.getElementById('authTabsContainer');
+
+            if (tab === 'login') {
+                tabsContainer.classList.remove('register-mode');
+                loginPanel.classList.add('active');
+                registerPanel.classList.remove('active');
+                loginTabBtn.classList.add('active');
+                regTabBtn.classList.remove('active');
+                if (window.turnstile && loginWidgetId !== null) {
+                    try { window.turnstile.reset(loginWidgetId); } catch(e){}
+                }
+            } else {
+                tabsContainer.classList.add('register-mode');
+                registerPanel.classList.add('active');
+                loginPanel.classList.remove('active');
+                regTabBtn.classList.add('active');
+                loginTabBtn.classList.remove('active');
+                if (window.turnstile && regWidgetId !== null) {
+                    try { window.turnstile.reset(regWidgetId); } catch(e){}
+                }
+            }
+        }
+
+        window.togglePassword = function(fieldId, iconEl) {
+            const field = document.getElementById(fieldId);
+            if (field.type === 'password') {
+                field.type = 'text';
+                iconEl.classList.remove('fa-eye');
+                iconEl.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                iconEl.classList.remove('fa-eye-slash');
+                iconEl.classList.add('fa-eye');
+            }
+        }
+
+        window.handleLoginSubmit = async function(e) {
+            e.preventDefault();
+
+            const loginPanel = document.getElementById('loginPanel');
+            const turnstileResponse = loginPanel.querySelector('[name="cf-turnstile-response"]');
+            if (!turnstileResponse || !turnstileResponse.value) {
+                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
+                return;
+            }
+
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (username === 'admin' && password === '123') {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', 'admin');
+                localStorage.setItem('isAdmin', 'true');
+                alert('✅ เข้าสู่ระบบสำเร็จ (Admin)');
+                location.reload();
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "members"), where("username", "==", username), where("password", "==", password));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', username);
+                    alert('✅ เข้าสู่ระบบสำเร็จ!');
+                    location.reload();
+                } else {
+                    alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                    if (window.turnstile && loginWidgetId !== null) window.turnstile.reset(loginWidgetId);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
+            }
+        }
+
+        window.handleRegisterSubmit = async function(e) {
+            e.preventDefault();
+
+            const registerPanel = document.getElementById('registerPanel');
+            const turnstileResponse = registerPanel.querySelector('[name="cf-turnstile-response"]');
+            if (!turnstileResponse || !turnstileResponse.value) {
+                alert('❌ กรุณายืนยันว่าคุณไม่ใช่บอท (Verify you are human)');
+                return;
+            }
+
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('❌ รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป');
+                return;
+            }
+
+            try {
+                const checkQ = query(collection(db, "members"), where("username", "==", username));
+                const checkSnap = await getDocs(checkQ);
+
+                if (!checkSnap.empty) {
+                    alert('❌ ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว');
+                    if (window.turnstile && regWidgetId !== null) window.turnstile.reset(regWidgetId);
+                    return;
+                }
+
+                const registerDate = new Date().toLocaleDateString('th-TH');
+                await addDoc(collection(db, "members"), {
+                    username: username,
+                    email: email || '-',
+                    password: password,
+                    balance: 0.00,
+                    role: 'MEMBER',
+                    registerDate: registerDate
+                });
+
+                alert('🎉 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+                switchAuthTab('login');
+            } catch (err) {
+                console.error(err);
+                alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const username = localStorage.getItem('username');
+
+            if (isLoggedIn && username) {
+                if (username === 'admin') {
+                    renderNavbar('admin', 0, true);
+                    return;
+                }
+
+                try {
+                    const q = query(collection(db, "members"), where("username", "==", username));
+                    const querySnapshot = await getDocs(q);
+
+                    if (querySnapshot.empty) {
+                        localStorage.clear();
+                        return;
+                    }
+
+                    let userData = null;
+                    querySnapshot.forEach((docSnap) => {
+                        userData = docSnap.data();
+                    });
+
+                    const userBalance = (parseFloat(userData.balance) || 0).toFixed(2);
+                    const isAdmin = userData.role === 'ADMIN' || localStorage.getItem('isAdmin') === 'true';
+
+                    renderNavbar(username, userBalance, isAdmin);
+
+                } catch (error) {
+                    console.error("Error checking user:", error);
+                }
+            }
+        });
+
+        function renderNavbar(username, userBalance, isAdmin) {
+            const navRight = document.getElementById('navRightSection');
+            navRight.innerHTML = `
+                <div style="position: relative; display: inline-block;">
+                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #1a1a20; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 10px;">
+                        <div style="width: 28px; height: 28px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
+                            <i class="fa-solid fa-user" style="font-size: 12px;"></i>
+                        </div>
+                        <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
+                        <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
+                    </div>
+
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 280px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <div style="width: 38px; height: 38px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700; font-size: 13px;">${username.substring(0, 2).toUpperCase()}</div>
+                            <div>
+                                <div style="font-size: 13px; font-weight: 600;">${username}</div>
+                                <div style="font-size: 10px; color: #00AFFF; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #121215; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 8px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 10px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
+                            </div>
+                            <button style="background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%); border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;">เติมเงิน</button>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px;">
+                            ${isAdmin ? `
+                                <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 2px;">
+                                    <span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน</span>
+                                    <i class="fa-solid fa-chevron-right" style="font-size:10px; color:#00AFFF;"></i>
+                                </a>
+                            ` : ''}
+
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> กรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
+                        </div>
+
+                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 6px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const toggleBtn = document.getElementById('profileToggleBtn');
+            const dropdown = document.getElementById('profileDropdown');
+            
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            window.addEventListener('click', () => {
+                dropdown.style.display = 'none';
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.clear();
+                location.reload();
+            });
         }
     </script>
 </body>
