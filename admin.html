@@ -48,6 +48,12 @@
         .btn-ban { background: #64748b; color: #fff; }
         .btn-ban:hover { background: #475569; }
         
+        /* Mockup Preview Area for Drag & Drop */
+        .mockup-container { position: relative; width: 100%; height: 450px; background: #161616; border: 2px dashed rgba(0,175,255,0.4); border-radius: 10px; overflow: hidden; margin-top: 15px; cursor: crosshair; }
+        .mockup-header { background: #222; padding: 10px 15px; font-size: 12px; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .draggable-banner { position: absolute; cursor: grab; border: 2px solid #00AFFF; box-shadow: 0 4px 15px rgba(0,175,255,0.4); border-radius: 6px; overflow: hidden; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+        .draggable-banner:active { cursor: grabbing; }
+
         .back-link { display: inline-block; margin-top: 25px; color: #94a3b8; text-decoration: none; font-size: 13px; }
         .back-link:hover { color: #00AFFF; }
     </style>
@@ -72,12 +78,15 @@
 
         let membersList = [];
         let currentAdminName = localStorage.getItem('username') || 'AdminOwner';
-        
+        let bannerPosX = 20; // พิกัดเริ่มต้น X
+        let bannerPosY = 20; // พิกัดเริ่มต้น Y
+
         const TOPUP_WEBHOOK_URL = "https://discord.com/api/webhooks/1553709935911637082/j_aSH-2ysIqiAb7doIPw3AE3y11jY3w1j57oBWy3ND_MD7-FhFTZQ3Jg6EcTbgRCSjRF";
         const PURCHASE_WEBHOOK_URL = "https://discord.com/api/webhooks/1553710597655240846/38thWmUlDiUCF3KHmWash_jkxXl-qZSZOdu9T1W3My_hlhQBVyiTNX5GYXGQ-aaGwuSn";
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('adminName').innerText = currentAdminName;
+            initDragAndDrop();
 
             onSnapshot(collection(db, "members"), (snapshot) => {
                 membersList = [];
@@ -130,6 +139,64 @@
                     timestamp: new Date().toLocaleString('th-TH')
                 });
             } catch (e) { console.error("Log error:", e); }
+        }
+
+        // --- ระบบลากวางแบรนด์เนอร์ (Drag & Drop) ---
+        function initDragAndDrop() {
+            const el = document.getElementById('previewBannerBox');
+            const container = document.getElementById('mockupContainer');
+            let isDragging = false;
+            let startX, startY;
+
+            el.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - el.offsetLeft;
+                startY = e.clientY - el.offsetTop;
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                let newX = e.clientX - startX;
+                let newY = e.clientY - startY;
+
+                // จำกัดไม่ให้หลุดกรอบจำลอง
+                let maxX = container.clientWidth - el.clientWidth;
+                let maxY = container.clientHeight - el.clientHeight;
+
+                newX = Math.max(0, Math.min(newX, maxX));
+                newY = Math.max(0, Math.min(newY, maxY));
+
+                el.style.left = newX + 'px';
+                el.style.top = newY + 'px';
+
+                bannerPosX = Math.round((newX / container.clientWidth) * 100); // เก็บเป็นเปอร์เซ็นต์ตำแหน่ง
+                bannerPosY = Math.round((newY / container.clientHeight) * 100);
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        }
+
+        window.updatePreviewBanner = () => {
+            let url = document.getElementById('bannerImgUrl').value.trim();
+            let orient = document.getElementById('bannerOrientation').value;
+            let el = document.getElementById('previewBannerBox');
+            
+            if (url) {
+                el.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+                el.innerHTML = `<span style="font-size:11px; color:#00AFFF; padding:5px; text-align:center;">แบรนด์เนอร์ของคุณ (ลากวางได้)</span>`;
+            }
+
+            if (orient === 'vertical') {
+                el.style.width = '120px';
+                el.style.height = '250px';
+            } else {
+                el.style.width = '280px';
+                el.style.height = '100px';
+            }
         }
 
         // --- 1. จัดการสมาชิก ---
@@ -295,11 +362,10 @@
             }
         }
 
-        // --- 4. จัดการแบรนด์เนอร์ (Banner Management) ---
+        // --- 4. จัดการแบรนด์เนอร์แบบลากวาง ---
         window.addBanner = async () => {
             let imageUrl = document.getElementById('bannerImgUrl').value.trim();
-            let width = document.getElementById('bannerWidth').value.trim() || '100%';
-            let height = document.getElementById('bannerHeight').value.trim() || 'auto';
+            let orientation = document.getElementById('bannerOrientation').value;
             let clickable = document.getElementById('bannerClickable').value === 'yes';
             let linkUrl = document.getElementById('bannerLinkUrl').value.trim();
 
@@ -310,19 +376,18 @@
 
             await addDoc(collection(db, "banners"), {
                 imageUrl,
-                width,
-                height,
+                orientation,
+                posX: bannerPosX,
+                posY: bannerPosY,
                 clickable,
                 linkUrl: clickable ? linkUrl : '',
                 timestamp: new Date().toLocaleString('th-TH')
             });
 
-            logAction(`เพิ่มแบรนด์เนอร์ใหม่`);
+            logAction(`เพิ่มแบรนด์เนอร์ใหม่ (ตำแหน่ง X:${bannerPosX}\%, Y:${bannerPosY}%)`);
             document.getElementById('bannerImgUrl').value = '';
-            document.getElementById('bannerWidth').value = '';
-            document.getElementById('bannerHeight').value = '';
             document.getElementById('bannerLinkUrl').value = '';
-            alert('✅ เพิ่มแบรนด์เนอร์สำเร็จ');
+            alert('✅ บันทึกและวางตำแหน่งแบรนด์เนอร์เรียบร้อย!');
         }
 
         function renderBanners(list) {
@@ -332,9 +397,9 @@
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${b.imageUrl}" style="max-height: 40px; border-radius: 4px;" alt="Banner"></td>
-                        <td style="color: #00AFFF;">${b.width} ×${b.height}</td>
-                        <td>${b.clickable ? '<span style="color:#22c55e; font-weight:bold;">กดได้</span>' : '<span style="color:#94a3b8;">โชว์อย่างเดียว</span>'}</td>
-                        <td style="color: #cbd5e1; font-size: 11px; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${b.linkUrl || '-'}</td>
+                        <td><span style="color: #00AFFF;">${b.orientation === 'vertical' ? 'แนวตั้ง' : 'แนวนอน'}</span></td>
+                        <td>พิกัด (X: ${b.posX}\%, Y:${b.posY}%)</td>
+                        <td>${b.clickable ? '<span style="color:#22c55e; font-weight:bold;">กดได้</span>' : '<span style="color:#94a3b8;">โชว์เฉยๆ</span>'}</td>
                         <td style="color: #94a3b8; font-size: 11px;">${b.timestamp}</td>
                         <td><button class="btn btn-danger" onclick="window.deleteBanner('${b.id}')"><i class="fa-solid fa-trash"></i> ลบ</button></td>
                     </tr>`;
@@ -348,7 +413,7 @@
             }
         }
 
-        // --- 5. จำลองแจ้งเตือนการเติมเงินเข้า Discord ---
+        // --- 5 & 6. จำลอง Discord แจ้งเตือน ---
         window.testSimulateTopup = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่เติมเงิน:", "CyberGamer99");
             let fullname = prompt("ระบุชื่อ-นามสกุลจริงผู้โอนเงิน:", "สมชาย ใจดี");
@@ -377,11 +442,9 @@
             try {
                 await fetch(TOPUP_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(discordPayload) });
                 alert('✅ ส่งแจ้งเตือนการเติมเงินเข้า Discord สำเร็จ!');
-                logAction(`จำลองเติมเงินให้ ${username}`);
             } catch (err) { alert('❌ เกิดข้อผิดพลาด'); }
         }
 
-        // --- 6. จำลองแจ้งเตือนการซื้อสินค้าเข้า Discord ---
         window.testSimulatePurchase = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่ซื้อสินค้า:", "ProGamer_TH");
             let productName = prompt("ระบุชื่อสินค้า:", "Vortex VIP Lifetime Package");
@@ -410,7 +473,6 @@
             try {
                 await fetch(PURCHASE_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(discordPayload) });
                 alert('✅ ส่งแจ้งเตือนการซื้อสินค้าเข้า Discord สำเร็จ!');
-                logAction(`จำลองคำสั่งซื้อ ${productName}`);
             } catch (err) { alert('❌ เกิดข้อผิดพลาด'); }
         }
 
@@ -429,7 +491,6 @@
             });
         }
 
-        // --- 7. ระบบประกาศหน้าเว็บ ---
         window.saveAnnouncement = async () => {
             let content = document.getElementById('announcementText').value.trim();
             if (!content) return;
@@ -447,7 +508,6 @@
             });
         }
 
-        // --- 8. บันทึกแอดมิน ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -474,7 +534,7 @@
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ - Vortex Official</h2>
         <p>ผู้ดูแลระบบปัจจุบัน: <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span></p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการร้านค้าและแบรนด์เนอร์พร้อมใช้งาน</div>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดวางแบรนด์เนอร์แบบลากวาง (Drag & Drop) พร้อมใช้งาน</div>
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
@@ -536,34 +596,48 @@
             </div>
         </div>
 
-        <!-- 3. TAB: จัดการแบรนด์เนอร์ -->
+        <!-- 3. TAB: จัดการแบรนด์เนอร์แบบลากวาง -->
         <div id="tab-banners" class="tab-content">
-            <h3><i class="fa-solid fa-image"></i> เพิ่มและกำหนดขนาดแบรนด์เนอร์หน้าเว็บ</h3>
+            <h3><i class="fa-solid fa-image"></i> จัดการแบรนด์เนอร์ และเลือกตำแหน่งลากวางบนหน้าเว็บ</h3>
             <div class="form-grid">
-                <input type="text" id="bannerImgUrl" placeholder="ลิงก์รูปภาพแบรนด์เนอร์ (URL)">
-                <input type="text" id="bannerWidth" placeholder="ความกว้าง เช่น 100% หรือ 800px">
-                <input type="text" id="bannerHeight" placeholder="ความสูง เช่น 250px หรือ auto">
-            </div>
-            <div class="form-grid">
+                <input type="text" id="bannerImgUrl" placeholder="ลิงก์รูปภาพแบรนด์เนอร์ (URL)" oninput="updatePreviewBanner()">
+                <select id="bannerOrientation" onchange="updatePreviewBanner()">
+                    <option value="horizontal">แนวนอน (Horizontal Banner)</option>
+                    <option value="vertical">แนวตั้ง (Vertical Banner)</option>
+                </select>
                 <select id="bannerClickable" onchange="document.getElementById('linkContainer').style.display = this.value === 'yes' ? 'block' : 'none'">
-                    <option value="no">โชว์อย่างเดียว (คลิกไม่ได้)</option>
+                    <option value="no">โชว์เฉยๆ (คลิกไม่ได้)</option>
                     <option value="yes">สามารถคลิกเพื่อลิงก์ไปหน้าอื่นได้</option>
                 </select>
             </div>
             <div id="linkContainer" style="display: none; margin-bottom: 15px;">
-                <input type="text" id="bannerLinkUrl" placeholder="ลิงก์ปลายทางเมื่อคลิก (เช่น https://... หรือหน้าโปรโมชั่น)">
+                <input type="text" id="bannerLinkUrl" placeholder="ลิงก์ปลายทางเมื่อคลิก (เช่น หน้าขายสินค้าอีกหน้า หรือ URL)">
             </div>
-            <button class="btn btn-primary" onclick="window.addBanner()"><i class="fa-solid fa-plus"></i> บันทึกแบรนด์เนอร์</button>
 
-            <h3 style="margin-top: 30px;"><i class="fa-solid fa-images"></i> รายการแบรนด์เนอร์ทั้งหมด</h3>
+            <p style="font-size: 13px; color: #94a3b8; margin-bottom: 5px;">💡 **วิธีใช้:** คลิกเมาส์ค้างไว้ที่กรอบแบรนด์เนอร์จำลองด้านล่าง แล้วลากไปวางในตำแหน่งที่คุณต้องการบนหน้าเว็บ</p>
+            
+            <!-- หน้าจำลองให้แอดมินลากวางแบรนด์เนอร์ -->
+            <div class="mockup-container" id="mockupContainer">
+                <div class="mockup-header">
+                    <span>🖥️ ตัวอย่างหน้าเว็บร้านค้า (Mockup View)</span>
+                    <span style="font-size: 11px; color: #00AFFF;">ลากกรอบสีฟ้าไปวางตำแหน่งที่ต้องการ</span>
+                </div>
+                <div id="previewBannerBox" class="draggable-banner" style="width: 280px; height: 100px; left: 20px; top: 50px;">
+                    <span style="font-size: 11px; color: #00AFFF; padding: 5px; text-align: center;">แบรนด์เนอร์ของคุณ</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 15px;" onclick="window.addBanner()"><i class="fa-solid fa-plus"></i> บันทึกและติดตั้งแบรนด์เนอร์</button>
+
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-images"></i> รายการแบรนด์เนอร์ทั้งหมดในระบบ</h3>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
                             <th>รูปตัวอย่าง</th>
-                            <th>ขนาด (กว้าง × สูง)</th>
-                            <th>สถานะการคลิก</th>
-                            <th>ลิงก์ปลายทาง</th>
+                            <th>แนว</th>
+                            <th>ตำแหน่ง (พิกัด X, Y)</th>
+                            <th>สถานะคลิก</th>
                             <th>วันที่สร้าง</th>
                             <th>จัดการ</th>
                         </tr>
