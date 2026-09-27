@@ -7,81 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- โหลด Firebase SDK และตรวจสอบข้อมูลล็อกอินจาก Firestore -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
-            authDomain: "kryptonite-nitroprime.firebaseapp.com",
-            projectId: "kryptonite-nitroprime",
-            storageBucket: "kryptonite-nitroprime.firebasestorage.app",
-            messagingSenderId: "802119898761",
-            appId: "1:802119898761:web:6ac8099014fab7ea41d858",
-            measurementId: "G-MMTCVN81ZS"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const username = document.getElementById('usernameInput').value.trim();
-                const password = document.getElementById('passwordInput').value;
-
-                // บัญชีแอดมินฉุกเฉิน (ถ้าต้องการเข้าแบบระบุเอง)
-                if (username === 'admin' && password === '123') {
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('username', 'admin');
-                    localStorage.setItem('isAdmin', 'true');
-                    alert('✅ เข้าสู่ระบบแอดมินสำเร็จ!');
-                    window.location.href = 'shop.html';
-                    return;
-                }
-
-                try {
-                    // ค้นหาบัญชีจาก Firebase collection "members"
-                    const q = query(collection(db, "members"), where("username", "==", username));
-                    const querySnapshot = await getDocs(q);
-
-                    if (querySnapshot.empty) {
-                        alert('❌ ไม่พบชื่อผู้ใช้งานนี้ในระบบ');
-                        return;
-                    }
-
-                    let userData = null;
-                    querySnapshot.forEach((doc) => {
-                        userData = doc.data();
-                    });
-
-                    // ตรวจสอบรหัสผ่าน
-                    if (userData.password === password) {
-                        localStorage.setItem('isLoggedIn', 'true');
-                        localStorage.setItem('username', userData.username);
-                        localStorage.setItem('userBalance', userData.balance || 0);
-                        
-                        if (userData.role === 'ADMIN') {
-                            localStorage.setItem('isAdmin', 'true');
-                        } else {
-                            localStorage.removeItem('isAdmin');
-                        }
-
-                        alert('✅ เข้าสู่ระบบสำเร็จ!');
-                        window.location.href = 'shop.html';
-                    } else {
-                        alert('⚠️ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
-                    }
-
-                } catch (error) {
-                    console.error("Login error: ", error);
-                    alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
-                }
-            });
-        });
-    </script>
 </head>
 <body class="fade-page auth-page-body">
 
@@ -94,17 +19,19 @@
 
             <form class="auth-form" id="loginForm">
                 <div class="input-group">
-                    <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน</label>
-                    <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้งาน" required>
+                    <label><i class="fa-solid fa-user"></i> ชื่อผู้ใช้งาน หรือ อีเมล</label>
+                    <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้งาน หรือ อีเมลของคุณ" value="sasdsasdas" required>
                 </div>
 
                 <div class="input-group">
                     <label><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
-                    <input type="password" id="passwordInput" placeholder="กรอกรหัสผ่าน" required>
+                    <input type="password" placeholder="กรอกรหัสผ่านของคุณ" required>
                 </div>
 
                 <div class="auth-options">
-                    <label><input type="checkbox"> จดจำฉันไว้</label>
+                    <label class="remember-me">
+                        <input type="checkbox"> จดจำฉันไว้
+                    </label>
                     <a href="#" class="forgot-password">ลืมรหัสผ่าน?</a>
                 </div>
 
@@ -116,5 +43,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('usernameInput').value || 'sasdsasdas';
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', username);
+            window.location.href = 'shop.html';
+        });
+    </script>
 </body>
 </html>
