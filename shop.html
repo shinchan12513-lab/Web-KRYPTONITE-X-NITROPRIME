@@ -488,9 +488,12 @@
                     window.location.href = 'admin.html';
                 });
 
-                // แก้ไขการดักจับคลิกซ้ายให้อ้างอิง document เพื่อไม่ให้ไปโดนปุ่มควบคุมด้านบน
-                document.addEventListener('click', async function placeClickHandler(e) {
+                // ปรับปรุงการดักคลิกซ้ายให้แม่นยำและไม่ชนกับปุ่มควบคุม
+                const clickHandler = async function(e) {
                     if (e.target.closest('#bannerControlPanel')) return;
+                    
+                    e.stopPropagation();
+                    e.preventDefault();
 
                     let posX = e.pageX;
                     let posY = e.pageY;
@@ -510,12 +513,15 @@
 
                         alert('✅ บันทึกตำแหน่งและขนาดแบรนด์เนอร์ลงหน้าเว็บเรียบร้อย!');
                         localStorage.removeItem('temp_banner_data');
+                        window.removeEventListener('click', clickHandler, true);
                         window.location.href = 'admin.html';
                     } catch (err) {
-                        console.error(err);
-                        alert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+                        console.error("Firebase Error Details:", err);
+                        alert('❌ เกิดข้อผิดพลาด: ' + (err.message || 'ไม่สามารถบันทึกข้อมูลได้'));
                     }
-                }, { once: true });
+                };
+
+                window.addEventListener('click', clickHandler, { capture: true, once: true });
             }
         }
 
