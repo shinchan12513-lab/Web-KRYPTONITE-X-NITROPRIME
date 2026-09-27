@@ -9,11 +9,83 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- ไอคอนจาก FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* สไตล์สำหรับปุ่มโซเชียลมุมซ้ายและขวาล่าง */
+        .corner-social {
+            position: fixed;
+            bottom: 25px;
+            display: flex;
+            gap: 12px;
+            z-index: 999;
+        }
+        .corner-social.left {
+            left: 30px;
+        }
+        .corner-social.right {
+            right: 30px;
+        }
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            background: rgba(18, 18, 21, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .social-btn.youtube:hover {
+            background: #ff0000;
+            color: #fff;
+            border-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            transform: translateY(-3px);
+        }
+        .social-btn.discord:hover {
+            background: #5865F2;
+            color: #fff;
+            border-color: #5865F2;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .corner-social.left { left: 15px; bottom: 15px; }
+            .corner-social.right { right: 15px; bottom: 15px; }
+            .social-btn { width: 38px; height: 38px; font-size: 15px; }
+        }
+    </style>
 </head>
 <body class="fade-page">
 
     <!-- แสงเรืองแสงพื้นหลัง -->
     <div class="bg-glow"></div>
+
+    <!-- โซเชียลมุมซ้ายล่าง (YouTube & Discord) -->
+    <div class="corner-social left">
+        <a href="ใส่ลิงก์ยูทูปของคุณตรงนี้" target="_blank" class="social-btn youtube" title="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="ใส่ลิงก์ดิสคอร์ดของคุณตรงนี้" target="_blank" class="social-btn discord" title="Discord">
+            <i class="fa-brands fa-discord"></i>
+        </a>
+    </div>
+
+    <!-- โซเชียลมุมขวาล่าง (YouTube & Discord) -->
+    <div class="corner-social right">
+        <a href="ใส่ลิงก์ยูทูปของคุณตรงนี้" target="_blank" class="social-btn youtube" title="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="ใส่ลิงก์ดิสคอร์ดของคุณตรงนี้" target="_blank" class="social-btn discord" title="Discord">
+            <i class="fa-brands fa-discord"></i>
+        </a>
+    </div>
 
     <div class="welcome-container">
         <!-- ป้ายแจ้งเตือนด้านบน -->
