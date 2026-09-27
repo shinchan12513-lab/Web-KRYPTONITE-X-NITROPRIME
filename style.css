@@ -14,6 +14,16 @@ body {
     justify-content: space-between;
     position: relative;
     overflow-x: hidden;
+    align-items: center; /* จัดหน้าเว็บให้อยู่กึ่งกลางหน้าจอแบบมีกรอบ */
+}
+
+/* ================= จัดกรอบหลักของเว็บให้อยู่กึ่งกลาง (Container Layout) ================= */
+.navbar, .main-container, .footer-bar, main, header, footer {
+    width: 100%;
+    max-width: 1280px; /* กำหนดความกว้างกรอบสูงสุดให้สวยงามเหมือนตัวอย่าง */
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .fade-page {
@@ -148,7 +158,7 @@ body:has(.welcome-container) footer {
     position: sticky;
     top: 0;
     z-index: 1000;
-    width: 100%;
+    border-radius: 0 0 12px 12px;
 }
 
 .nav-left {
@@ -229,7 +239,7 @@ body:has(.welcome-container) footer {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    max-width: 1200px;
+    max-width: 1280px;
     width: 100%;
     margin: 30px auto;
     padding: 0 20px;
@@ -574,7 +584,6 @@ body:has(.welcome-container) footer {
     color: #00AFFF;
 }
 
-
 .footer-bar {
     text-align: center;
     padding: 15px;
@@ -589,6 +598,7 @@ body:has(.welcome-container) footer {
     .navbar {
         flex-direction: column;
         gap: 12px;
+        padding: 12px 15px;
     }
     .banners-grid-row {
         grid-template-columns: 1fr;
@@ -806,7 +816,6 @@ body:has(.welcome-container) footer {
     color: #00AFFF !important;
 }
 
-/* บังคับแปลงทุกจุดที่เป็นสีชมพู/แดงในหน้าต่างสมาชิกและปุ่มส่งข้อมูลให้เป็นสีฟ้าทั้งหมด */
 .auth-card svg,
 .auth-card [class*="logo"] {
     color: #00AFFF !important;
