@@ -52,6 +52,17 @@
         .back-link:hover { color: #00AFFF; }
     </style>
 
+    <!-- Global Functions Script -->
+    <script>
+        // ย้ายสลับแท็บออกมาไว้ Global Scope เพื่อให้ HTML เรียกใช้งานได้ทันที
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+    </script>
+
     <!-- Firebase SDK & Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -132,10 +143,8 @@
             } catch (e) { console.error("Log error:", e); }
         }
 
-        // --- เปิดหน้าเว็บจริงเพื่อลากวางแบรนด์เนอร์แบบกำหนดขนาด กxย เอง ---
         window.goToVisualPositioner = () => {
             let imageUrl = document.getElementById('bannerImgUrl').value.trim();
-            let orientation = document.getElementById('bannerOrientation').value;
             let clickable = document.getElementById('bannerClickable').value === 'yes';
             let linkUrl = document.getElementById('bannerLinkUrl').value.trim();
             let width = parseInt(document.getElementById('bannerWidth').value) || 1200;
@@ -147,7 +156,7 @@
             }
 
             localStorage.setItem('temp_banner_data', JSON.stringify({
-                imageUrl, orientation, clickable, linkUrl, width, height
+                imageUrl, clickable, linkUrl, width, height
             }));
 
             window.location.href = 'shop.html?mode=place_banner';
@@ -316,7 +325,7 @@
             }
         }
 
-        // --- 4. จัดการแบรนด์เนอร์ (ลบได้ตลอดเวลา) ---
+        // --- 4. จัดการแบรนด์เนอร์ ---
         function renderBanners(list) {
             const tbody = document.getElementById('bannerTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ยังไม่มีแบรนด์เนอร์ในระบบ</td></tr>` : '';
@@ -325,7 +334,7 @@
                     <tr>
                         <td><img src="${b.imageUrl}" style="max-height: 40px; border-radius: 4px;" alt="Banner"></td>
                         <td>กว้าง ${b.width \vert{}\vert{} 1200} x สูง ${b.height || 600} px</td>
-                        <td>พิกัด (X: ${Math.round(b.posX  0)}, Y:${Math.round(b.posY || 0)})</td>
+                        <td>พิกัด (X: ${Math.round(b.posX \vert{}\vert{} 0)}, Y:${Math.round(b.posY || 0)})</td>
                         <td>${b.clickable ? '<span style="color:#22c55e; font-weight:bold;">กดได้</span>' : '<span style="color:#94a3b8;">โชว์เฉยๆ</span>'}</td>
                         <td style="color: #94a3b8; font-size: 11px;">${b.timestamp}</td>
                         <td><button class="btn btn-danger" onclick="window.deleteBanner('${b.id}')"><i class="fa-solid fa-trash"></i> ลบออกจากเว็บ</button></td>
@@ -404,13 +413,6 @@
             } catch (err) { alert('❌ เกิดข้อผิดพลาด'); }
         }
 
-        window.switchTab = (tabId, btnElement) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
-        }
-
         function renderTransactions(list) {
             const tbody = document.getElementById('trxTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ยังไม่มีประวัติการทำรายการ</td></tr>` : '';
@@ -466,13 +468,13 @@
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="window.switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
-            <button class="tab-btn" onclick="window.switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
-            <button class="tab-btn" onclick="window.switchTab('tab-banners', this)"><i class="fa-solid fa-image"></i> จัดการแบรนด์เนอร์</button>
-            <button class="tab-btn" onclick="window.switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
-            <button class="tab-btn" onclick="window.switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
-            <button class="tab-btn" onclick="window.switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
-            <button class="tab-btn" onclick="window.switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
+            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
+            <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
+            <button class="tab-btn" onclick="switchTab('tab-banners', this)"><i class="fa-solid fa-image"></i> จัดการแบรนด์เนอร์</button>
+            <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
+            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
+            <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
+            <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
 
         <!-- 1. TAB: สมาชิก -->
@@ -538,7 +540,6 @@
                 <input type="text" id="bannerLinkUrl" placeholder="ลิงก์ปลายทางเมื่อคลิก (เช่น หน้าขายสินค้าอีกหน้า หรือ URL)">
             </div>
 
-            <!-- ส่วนกำหนดขนาด กว้าง x ยาว แบบอิสระ พร้อมข้อความตามที่ขอ -->
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                 <div style="font-size: 13px; font-weight: 600; color: #00AFFF; margin-bottom: 10px;"><i class="fa-solid fa-ruler-combined"></i> กำหนดขนาดแบรนด์เนอร์ (พิกเซล)</div>
                 <div class="form-grid" style="margin-bottom: 8px;">
