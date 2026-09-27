@@ -137,6 +137,7 @@
             display: flex; align-items: center; gap: 8px;
             font-weight: 700; font-size: 15px; margin-bottom: 15px;
             letter-spacing: 0.5px; color: #00AFFF;
+            cursor: pointer; /* ทำให้รู้ว่าคลิกได้ */
         }
         .auth-form-group { margin-bottom: 15px; text-align: left; }
         .auth-form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; font-weight: 500; }
@@ -170,7 +171,7 @@
     <!-- แสงเรืองแสงพื้นหลัง -->
     <div class="bg-glow"></div>
 
-    <!-- มุมซ้ายล่าง: KRYPTONITE STORE + โซเชียล + ปุ่มเติมเงินล้ำๆ -->
+    <!-- มุมซ้ายล่าง: KRYPTONITE STORE + โซเชียล + ปุ่มเติมเงิน -->
     <div class="corner-container left">
         <span class="corner-label">KRYPTONITE STORE</span>
         <div class="social-icons-group">
@@ -232,11 +233,12 @@
         <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
     </footer>
 
-    <!-- ================= TOPUP MODAL (ระบบเติมเงิน PromptPay QR ล้ำๆ) ================= -->
+    <!-- ================= TOPUP MODAL (ระบบเติมเงิน PromptPay QR) ================= -->
     <div id="topupModalOverlay" class="auth-modal-overlay">
         <div class="auth-modal-box">
             <div class="auth-close-btn" id="closeTopupModal"><i class="fa-solid fa-xmark"></i></div>
-            <div class="auth-brand"><i class="fa-solid fa-wallet" style="color: #00AFFF;"></i> เติมเงินอัตโนมัติ (PromptPay)</div>
+            <!-- ทำให้หัวข้อคลิกได้และมีเอฟเฟกต์ตอบสนอง -->
+            <div class="auth-brand" onclick="openTopupModal()"><i class="fa-solid fa-wallet" style="color: #00AFFF;"></i> เติมเงินอัตโนมัติ (PromptPay)</div>
 
             <!-- สเต็ปที่ 1: กรอกจำนวนเงิน -->
             <div id="topupStep1">
@@ -274,7 +276,7 @@
         </div>
     </div>
 
-    <!-- Script สำหรับอนิเมชั่นเปลี่ยนหน้าและระบบ QR PromptPay -->
+    <!-- Script สำหรับอนิเมชั่นเปลี่ยนหน้าและระบบ QR PromptPay + ตรวจสอบ Login -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const link = document.querySelector('.transition-link');
@@ -294,7 +296,7 @@
             }
         });
 
-        // --- ระบบ Dynamic QR PromptPay ---
+        // --- ระบบเช็คสถานะการเข้าสู่ระบบ & Dynamic QR PromptPay ---
         const PROMPTPAY_NUMBER = "0933998364";
         const topupModalOverlay = document.getElementById('topupModalOverlay');
         const closeTopupBtn = document.getElementById('closeTopupModal');
@@ -307,7 +309,18 @@
         const qrcodeContainer = document.getElementById('qrcodeContainer');
         let qrCodeInstance = null;
 
+        // จำลองสถานะล็อกอิน (เปลี่ยนเป็นตรวจสอบ session / localStorage จริงของเว็บคุณได้ เช่น localStorage.getItem('isLoggedIn') === 'true')
+        let isLoggedIn = false; 
+
         window.openTopupModal = function() {
+            // เช็คว่าเข้าสู่ระบบหรือยัง
+            if (!isLoggedIn) {
+                alert('❌ กรุณาเข้าสู่ระบบก่อนทำรายการเติมเงินครับ!');
+                // ตัวอย่าง: ถ้ายังไม่ล็อกอิน ให้เด้งไปหน้า login.html (สามารถเปลี่ยนลิงก์ได้ตามต้องการ)
+                // window.location.href = 'login.html';
+                return;
+            }
+
             topupModalOverlay.classList.add('active');
             topupStep1.style.display = 'block';
             topupStep2.style.display = 'none';
