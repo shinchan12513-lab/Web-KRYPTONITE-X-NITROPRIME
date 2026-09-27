@@ -182,7 +182,7 @@
 </head>
 <body class="fade-page">
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- ================= NAVBAR (แคปซูลตรงกลาง) ================= -->
     <header class="navbar">
         <div class="nav-left">
             <a href="shop.html" class="brand-logo">kryptonite<span class="x-mark">x</span>nitroprime</a>
@@ -193,11 +193,11 @@
                 <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการสั่งซื้อ</a>
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
-        </div>
-        <div class="nav-right" id="navRightSection">
-            <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
-            <a href="#" id="openLoginModal" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
-            <a href="#" id="openRegisterModal" class="btn-register"><i class="fa-solid fa-user-plus"></i> สมัครสมาชิก</a>
+            <div class="nav-right" id="navRightSection">
+                <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
+                <a href="#" id="openLoginModal" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
+                <a href="#" id="openRegisterModal" class="btn-register"><i class="fa-solid fa-user-plus"></i> สมัครสมาชิก</a>
+            </div>
         </div>
     </header>
 
@@ -366,10 +366,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ตรวจสอบสถานะแอดมินเบื้องต้นสำหรับแสดงปุ่มลบ
         const isAdminUser = localStorage.getItem('isAdmin') === 'true' || localStorage.getItem('username') === 'admin';
 
-        // 1. โหลดประกาศจาก Firebase แบบ Real-time
         onSnapshot(collection(db, "announcements"), (snapshot) => {
             let list = [];
             snapshot.forEach(docSnap => {
@@ -385,7 +383,6 @@
             }
         });
 
-        // 2. โหลดแบรนด์เนอร์ที่ตั้งค่าตำแหน่งแล้ว พร้อมรองรับรูปทรง (รวมทรงวงกลม/วงรี) และปุ่มลบสำหรับแอดมิน
         onSnapshot(collection(db, "banners"), (snapshot) => {
             document.querySelectorAll('.dynamic-positioned-banner').forEach(el => el.remove());
 
@@ -403,7 +400,6 @@
                 bannerDiv.style.zIndex = '999';
                 bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
 
-                // กำหนดขอบเขตความโค้งตาม shape ที่เลือก
                 let shape = b.shape || 'rectangle';
                 let borderRadiusStyle = '12px';
                 if (shape === 'circle') {
@@ -434,7 +430,6 @@
                     });
                 }
 
-                // ผูก Event ปุ่มลบ
                 if (isAdminUser) {
                     const delBtn = bannerDiv.querySelector('.delete-banner-btn');
                     if (delBtn) {
@@ -457,7 +452,6 @@
             });
         });
 
-        // 3. ตรวจสอบโหมด Visual Positioner (?mode=place_banner)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('mode') === 'place_banner') {
             const rawData = localStorage.getItem('temp_banner_data');
@@ -819,46 +813,46 @@
             navRight.innerHTML = `
                 <a href="#" class="btn-contact"><i class="fa-solid fa-headset"></i> ติดต่อเรา</a>
                 <div style="position: relative; display: inline-block;">
-                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; background: #121215; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 30px;">
-                        <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
-                        <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
-                        <div style="width: 32px; height: 32px; background: #1a1a20; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
-                            <i class="fa-solid fa-user"></i>
+                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #121215; border: 1px solid rgba(0, 175, 255, 0.3); padding: 4px 10px; border-radius: 20px;">
+                        <span style="font-size: 12px; font-weight: 600; color: #fff;">${username}</span>
+                        <span style="font-size: 11px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
+                        <div style="width: 28px; height: 28px; background: #1a1a20; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
+                            <i class="fa-solid fa-user" style="font-size: 11px;"></i>
                         </div>
                     </div>
 
-                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 300px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
-                        <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="width: 42px; height: 42px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 45px; width: 280px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <div style="width: 38px; height: 38px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700; font-size: 13px;">${username.substring(0, 2).toUpperCase()}</div>
                             <div>
-                                <div style="font-size: 14px; font-weight: 600;">${username}</div>
-                                <div style="font-size: 11px; color: #00AFFF; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
+                                <div style="font-size: 13px; font-weight: 600;">${username}</div>
+                                <div style="font-size: 10px; color: #00AFFF; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
                             </div>
                         </div>
 
-                        <div style="background: #121215; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="background: #121215; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <div style="font-size: 11px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
-                                <div style="font-size: 16px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
+                                <div style="font-size: 10px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
+                                <div style="font-size: 14px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
                             </div>
-                            <button style="background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;">เติมเงิน</button>
+                            <button style="background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%); border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;">เติมเงิน</button>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+                        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px;">
                             ${isAdmin ? `
-                                <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 4px;">
-                                    <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน</span>
-                                    <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#00AFFF;"></i>
+                                <a href="admin.html" style="color: #00AFFF; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,175,255,0.1); border: 1px solid rgba(0,175,255,0.3); margin-bottom: 2px;">
+                                    <span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-shield-halved" style="color:#00AFFF;"></i> ระบบหลังบ้าน</span>
+                                    <i class="fa-solid fa-chevron-right" style="font-size:10px; color:#00AFFF;"></i>
                                 </a>
                             ` : ''}
 
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> กรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
-                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:11px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-user" style="color:#00AFFF;"></i> โปรไฟล์</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-gift" style="color:#00AFFF;"></i> กรอกโค้ด</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
+                            <a href="#" style="color: #cbd5e1; text-decoration: none; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;"><span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-clock-rotate-left" style="color:#00AFFF;"></i> ประวัติการซื้อ</span><i class="fa-solid fa-chevron-right" style="font-size:10px; color:#64748b;"></i></a>
                         </div>
 
-                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 8px; padding: 6px 10px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
+                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 6px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
                         </div>
                     </div>
                 </div>
