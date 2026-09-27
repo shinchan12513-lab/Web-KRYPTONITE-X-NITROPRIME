@@ -236,7 +236,7 @@ body:has(.welcome-container) footer {
     flex: 1;
 }
 
-/* ================= ประกาศแจ้งข่าวสาร (แบบข้อความวิ่ง) ================= */
+/* ================= ประกาศแจ้งข่าวสาร ================= */
 .news-section {
     background-color: #121212;
     border: 1px solid rgba(0, 175, 255, 0.2);
@@ -285,7 +285,7 @@ body:has(.welcome-container) footer {
     100% { transform: translateX(-100%); }
 }
 
-/* ================= หมวดหมู่สินค้า (แบนเนอร์คู่ 2 อันเรียงยาว) ================= */
+/* ================= หมวดหมู่สินค้า ================= */
 .categories-section {
     display: flex;
     flex-direction: column;
@@ -435,7 +435,7 @@ body:has(.welcome-container) footer {
 .banner-footer-label a:hover { color: #00AFFF; }
 
 
-/* ================= PRODUCT LISTING PAGE (fivem-project.html) ================= */
+/* ================= PRODUCT LISTING PAGE ================= */
 .category-header-bar {
     display: flex;
     align-items: center;
@@ -594,6 +594,7 @@ body:has(.welcome-container) footer {
         grid-template-columns: 1fr;
     }
 }
+
 /* ================= AUTH PAGES (Login & Register) ================= */
 .auth-page-body {
     display: flex;
@@ -700,21 +701,21 @@ body:has(.welcome-container) footer {
 }
 
 .btn-auth-submit {
-    background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
-    color: #ffffff;
-    border: none;
+    background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
     border-radius: 8px;
     padding: 11px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3) !important;
     transition: all 0.3s ease;
     margin-top: 10px;
 }
 
 .btn-auth-submit:hover {
-    box-shadow: 0 6px 20px rgba(0, 175, 255, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 175, 255, 0.5) !important;
     transform: translateY(-2px);
 }
 
@@ -726,7 +727,7 @@ body:has(.welcome-container) footer {
 }
 
 .auth-footer-text a {
-    color: #00AFFF;
+    color: #00AFFF !important;
     text-decoration: none;
     font-weight: 600;
 }
@@ -735,7 +736,7 @@ body:has(.welcome-container) footer {
     text-decoration: underline;
 }
 
-/* ================= ปรับแต่งโทนสีโปรไฟล์และเมนูด้านขวา (ธีมสีฟ้า Electric Blue) ================= */
+/* ================= ปรับแต่งโทนสีโปรไฟล์ เมนู และปุ่มทั้งหมดให้เป็นสีฟ้า 100% ================= */
 .nav-right .user-profile-btn,
 .nav-right [class*="profile"],
 .nav-right [class*="user"] {
@@ -747,7 +748,9 @@ body:has(.welcome-container) footer {
 .nav-right .user-profile-btn span, 
 .nav-right .user-profile-btn i,
 .nav-right [class*="profile"] span,
-.nav-right [class*="profile"] i {
+.nav-right [class*="profile"] i,
+.nav-right span[style*="color"],
+.nav-right font {
     color: #00AFFF !important;
 }
 
@@ -768,7 +771,8 @@ body:has(.welcome-container) footer {
 
 .profile-dropdown-menu .badge,
 .user-dropdown .badge,
-.dropdown-menu .badge {
+.dropdown-menu .badge,
+[class*="badge"] {
     background: rgba(0, 175, 255, 0.15) !important;
     color: #00AFFF !important;
     border: 1px solid rgba(0, 175, 255, 0.3) !important;
@@ -799,5 +803,11 @@ body:has(.welcome-container) footer {
 .profile-dropdown-menu i,
 .user-dropdown i,
 .dropdown-menu i {
+    color: #00AFFF !important;
+}
+
+/* บังคับแปลงทุกจุดที่เป็นสีชมพู/แดงในหน้าต่างสมาชิกและปุ่มส่งข้อมูลให้เป็นสีฟ้าทั้งหมด */
+.auth-card svg,
+.auth-card [class*="logo"] {
     color: #00AFFF !important;
 }
