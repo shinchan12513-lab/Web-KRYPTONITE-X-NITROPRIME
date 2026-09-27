@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kryptonitexnitroprime - หน้าหลัก</title>
+    <title>KRYPTONITE X NITROPRIME - หน้าหลัก</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cloudflare Turnstile Official Script -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; margin: 0; padding: 0; }
         
@@ -195,13 +193,7 @@
             gap: 6px;
             white-space: nowrap;
         }
-        .announcement-ticker {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-        }
         .announcement-text {
-            display: inline-block;
             font-size: 12px;
             color: #94a3b8;
         }
@@ -211,26 +203,20 @@
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
             border-radius: 18px;
-            padding: 55px 50px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 175, 255, 0.06);
+            padding: 45px 40px;
             margin-bottom: 35px;
-            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 175, 255, 0.06);
         }
         .hero-left-content h1 {
-            font-size: 38px;
+            font-size: 32px;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: 1.2px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(0, 175, 255, 0.5);
         }
         .hero-left-content p {
             font-size: 14px;
             color: #94a3b8;
-            letter-spacing: 0.6px;
         }
 
         /* Stats Grid */
@@ -239,7 +225,6 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-bottom: 35px;
-            width: 100%;
         }
         .stat-card {
             background: #0d0d12;
@@ -249,12 +234,6 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .stat-card:hover {
-            border-color: rgba(0, 175, 255, 0.5);
-            transform: translateY(-2px);
         }
         .stat-icon {
             width: 45px; height: 45px;
@@ -265,119 +244,56 @@
             color: #00AFFF;
             font-size: 18px;
         }
-        .stat-info .stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .stat-info .stat-label {
-            font-size: 11px;
-            color: #94a3b8;
-        }
+        .stat-info .stat-value { font-size: 18px; font-weight: 700; color: #fff; }
+        .stat-info .stat-label { font-size: 11px; color: #94a3b8; }
 
-        /* Section Products */
+        /* Products Grid */
         .section-title-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-            width: 100%;
+            display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 15px; font-weight: 600; color: #fff;
         }
         .section-title-bar i { color: #00AFFF; }
-
         .products-grid-preview {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-bottom: 40px;
-            width: 100%;
         }
         .product-preview-card {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.2);
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.3s, border-color 0.3s;
             position: relative;
         }
-        .product-preview-card:hover {
-            border-color: rgba(0, 175, 255, 0.6);
-            transform: translateY(-3px);
-        }
-        .product-preview-img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            background: #000;
-        }
-        .product-preview-body {
-            padding: 12px;
-        }
-        .product-preview-body h4 {
-            font-size: 13px;
-            color: #cbd5e1;
-            margin-bottom: 6px;
-        }
-        .product-preview-price {
-            font-size: 14px;
-            font-weight: 700;
-            color: #00AFFF;
-        }
+        .product-preview-img { width: 100%; height: 140px; background: #1a1a20; }
+        .product-preview-body { padding: 12px; }
+        .product-preview-body h4 { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
+        .product-preview-price { font-size: 14px; font-weight: 700; color: #00AFFF; }
         .product-tag-badge {
-            position: absolute;
-            top: 8px; left: 8px;
+            position: absolute; top: 8px; left: 8px;
             background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
+            color: #fff; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
         }
 
-        /* Modal Styles */
+        /* Modal */
         .auth-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 99999;
+            justify-content: center; align-items: center;
         }
         .auth-modal-overlay.active { display: flex; }
         .auth-modal-box {
-            background: #09090b;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 20px 22px;
-            position: relative;
+            background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%; max-width: 400px; border-radius: 20px; padding: 20px 22px; position: relative;
         }
         .auth-close-btn {
-            position: absolute;
-            top: 14px; right: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
+            position: absolute; top: 14px; right: 16px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; width: 28px; height: 28px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-        .auth-brand {
-            font-weight: 700; font-size: 14px; margin-bottom: 12px; color: #00AFFF;
-        }
-        .auth-tabs {
-            display: flex; background: #121215; border-radius: 10px; padding: 3px; margin-bottom: 15px;
-        }
-        .auth-tab {
-            flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; color: #64748b; cursor: pointer; border-radius: 8px;
-        }
+        .auth-brand { font-weight: 700; font-size: 14px; margin-bottom: 12px; color: #00AFFF; }
+        .auth-tabs { display: flex; background: #121215; border-radius: 10px; padding: 3px; margin-bottom: 15px; }
+        .auth-tab { flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; color: #64748b; cursor: pointer; border-radius: 8px; }
         .auth-tab.active { background: #000; color: #fff; }
         .auth-form-panel { display: none; }
         .auth-form-panel.active { display: block; }
@@ -393,17 +309,16 @@
             width: 100%; background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%);
             border: none; color: #fff; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px;
         }
-
         footer { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
 
         @media (max-width: 900px) {
-            .stats-grid, .products-grid-preview, .main-hero-banner { grid-template-columns: 1fr; }
+            .stats-grid, .products-grid-preview { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (แสดงผลทันที ไม่ต้องกดเข้าเว็บ) -->
     <header class="navbar">
         <div class="nav-inner">
             <nav class="nav-menu">
@@ -419,7 +334,7 @@
                     <input type="text" id="searchInputField" placeholder="ค้นหาสินค้า">
                 </div>
             </div>
-            <div class="nav-right-actions" id="navRightSection">
+            <div class="nav-right-actions">
                 <a href="#" id="openRegisterModal" style="color: #cbd5e1; text-decoration: none; font-size: 13px;">สมัครสมาชิก</a>
                 <div class="nav-divider"></div>
                 <a href="#" id="openLoginModal" class="btn-login-capsule"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
@@ -427,14 +342,12 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT (เปิดมาเจอหน้านี้เลย) -->
     <main class="main-container">
         <!-- ประกาศ -->
         <div class="announcement-single-capsule">
             <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
-            <div class="announcement-ticker">
-                <span class="announcement-text">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1 — บริการตลอด 24 ชั่วโมง!</span>
-            </div>
+            <div class="announcement-text">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1 — เปิดให้บริการตลอด 24 ชม.</div>
         </div>
 
         <!-- แบนเนอร์หลัก -->
@@ -442,9 +355,8 @@
             <div class="hero-left-content">
                 <span style="font-size: 12px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
                 <h1>KRYPTONITE X NITROPRIME</h1>
-                <p>EVERYTHING GAMERS NEED, ALL IN ONE SHOP — บริการพรีเมียม ปลอดภัย รวดเร็ว 100%</p>
+                <p>บริการเพิ่มประสิทธิภาพ Fivem ปลอดภัย รวดเร็ว ทันใจ มั่นใจได้ 100%</p>
             </div>
-            <div class="hero-right-space"></div>
         </div>
 
         <!-- สถิติ -->
@@ -472,7 +384,7 @@
         <div class="products-grid-preview">
             <div class="product-preview-card">
                 <span class="product-tag-badge">แนะนำ</span>
-                <div style="width:100%; height:140px; background:#1a1a20;"></div>
+                <div class="product-preview-img"></div>
                 <div class="product-preview-body">
                     <h4>มาโค่ - คุมดีดี/กันมอง</h4>
                     <div class="product-preview-price">฿150</div>
@@ -480,7 +392,7 @@
             </div>
             <div class="product-preview-card">
                 <span class="product-tag-badge">ยอดฮิต</span>
-                <div style="width:100%; height:140px; background:#1a1a20;"></div>
+                <div class="product-preview-img"></div>
                 <div class="product-preview-body">
                     <h4>ปลดแบนเกมวาโร V2</h4>
                     <div class="product-preview-price">฿290</div>
@@ -488,7 +400,7 @@
             </div>
             <div class="product-preview-card">
                 <span class="product-tag-badge">ใหม่</span>
-                <div style="width:100%; height:140px; background:#1a1a20;"></div>
+                <div class="product-preview-img"></div>
                 <div class="product-preview-body">
                     <h4>Vortex VIP Lifetime</h4>
                     <div class="product-preview-price">฿350</div>
@@ -496,7 +408,7 @@
             </div>
             <div class="product-preview-card">
                 <span class="product-tag-badge">พิเศษ</span>
-                <div style="width:100%; height:140px; background:#1a1a20;"></div>
+                <div class="product-preview-img"></div>
                 <div class="product-preview-body">
                     <h4>FiveM Booster Pro</h4>
                     <div class="product-preview-price">฿500</div>
@@ -505,7 +417,7 @@
         </div>
     </main>
 
-    <!-- AUTH MODAL -->
+    <!-- AUTH MODAL (เข้าสู่ระบบ / สมัครสมาชิก) -->
     <div id="authModalOverlay" class="auth-modal-overlay">
         <div class="auth-modal-box">
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
@@ -516,27 +428,15 @@
             </div>
             <div id="loginPanel" class="auth-form-panel active">
                 <form>
-                    <div class="auth-form-group">
-                        <label>ชื่อผู้ใช้</label>
-                        <div class="auth-input-wrap"><i class="fa-solid fa-user"></i><input type="text" placeholder="ชื่อผู้ใช้" required></div>
-                    </div>
-                    <div class="auth-form-group">
-                        <label>รหัสผ่าน</label>
-                        <div class="auth-input-wrap"><i class="fa-solid fa-lock"></i><input type="password" placeholder="รหัสผ่าน" required></div>
-                    </div>
+                    <div class="auth-form-group"><label>ชื่อผู้ใช้</label><div class="auth-input-wrap"><i class="fa-solid fa-user"></i><input type="text" placeholder="ชื่อผู้ใช้" required></div></div>
+                    <div class="auth-form-group"><label>รหัสผ่าน</label><div class="auth-input-wrap"><i class="fa-solid fa-lock"></i><input type="password" placeholder="รหัสผ่าน" required></div></div>
                     <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ</button>
                 </form>
             </div>
             <div id="registerPanel" class="auth-form-panel">
                 <form>
-                    <div class="auth-form-group">
-                        <label>ชื่อผู้ใช้</label>
-                        <div class="auth-input-wrap"><i class="fa-solid fa-user"></i><input type="text" placeholder="ชื่อผู้ใช้" required></div>
-                    </div>
-                    <div class="auth-form-group">
-                        <label>รหัสผ่าน</label>
-                        <div class="auth-input-wrap"><i class="fa-solid fa-lock"></i><input type="password" placeholder="รหัสผ่าน" required></div>
-                    </div>
+                    <div class="auth-form-group"><label>ชื่อผู้ใช้</label><div class="auth-input-wrap"><i class="fa-solid fa-user"></i><input type="text" placeholder="ชื่อผู้ใช้" required></div></div>
+                    <div class="auth-form-group"><label>รหัสผ่าน</label><div class="auth-input-wrap"><i class="fa-solid fa-lock"></i><input type="password" placeholder="รหัสผ่าน" required></div></div>
                     <button type="submit" class="auth-submit-btn">สมัครสมาชิก</button>
                 </form>
             </div>
@@ -544,16 +444,14 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 kryptonitexnitroprime — All rights reserved.</p>
+        <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
     </footer>
 
     <script>
         // Search toggle
         const searchToggleBtn = document.getElementById('searchToggleBtn');
         const searchInputWrapper = document.getElementById('searchInputWrapper');
-        searchToggleBtn.addEventListener('click', () => {
-            searchInputWrapper.classList.toggle('active');
-        });
+        searchToggleBtn.addEventListener('click', () => { searchInputWrapper.classList.toggle('active'); });
 
         // Modal control
         const modalOverlay = document.getElementById('authModalOverlay');
