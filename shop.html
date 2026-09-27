@@ -12,6 +12,7 @@
     <!-- Cloudflare Turnstile Official Script -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <style>
+        * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับเป็นสีฟ้า #00AFFF) */
         .auth-modal-overlay {
             display: flex;
@@ -43,7 +44,6 @@
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
             position: relative;
             color: #fff;
-            font-family: 'Prompt', sans-serif;
             transform: scale(0.92) translateY(10px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -131,7 +131,7 @@
         .auth-input-wrap input {
             width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px;
-            outline: none; transition: all 0.25s ease; font-family: 'Prompt', sans-serif;
+            outline: none; transition: all 0.25s ease;
         }
         .auth-input-wrap input::placeholder {
             color: #475569;
@@ -162,7 +162,6 @@
             border: none; color: #fff; padding: 10px; border-radius: 10px;
             font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 2px;
             box-shadow: 0 4px 12px rgba(0, 175, 255, 0.3); transition: all 0.25s ease;
-            font-family: 'Prompt', sans-serif;
             display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .auth-submit-btn:hover { 
@@ -209,7 +208,6 @@
                 <i class="fa-solid fa-bullhorn"></i> ประกาศแจ้งข่าวสาร <span class="news-tag">Promotion & News</span>
             </div>
             <div class="news-ticker-container">
-                <!-- เพิ่ม id ตรงนี้เพื่อให้ JavaScript ดึงข้อมูลประกาศมาเปลี่ยนแบบ Real-time -->
                 <div class="news-ticker-text" id="shopAnnouncementText">
                     กำลังโหลดประกาศ...
                 </div>
@@ -290,7 +288,6 @@
                             </div>
                         </div>
                         
-                        <!-- จุดแสดง Turnstile หน้า Login -->
                         <div class="turnstile-container" id="loginTurnstileBox"></div>
 
                         <button type="submit" class="auth-submit-btn" style="margin-top: 5px;">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
@@ -334,7 +331,6 @@
                             </div>
                         </div>
                         
-                        <!-- จุดแสดง Turnstile หน้า Register -->
                         <div class="turnstile-container" id="regTurnstileBox"></div>
 
                         <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
@@ -370,7 +366,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ดึงประกาศจาก Firebase แบบ Real-time
+        // 1. โหลดประกาศจาก Firebase แบบ Real-time
         onSnapshot(collection(db, "announcements"), (snapshot) => {
             let list = [];
             snapshot.forEach(docSnap => {
@@ -379,14 +375,130 @@
             
             const annTextEl = document.getElementById('shopAnnouncementText');
             if (list.length > 0) {
-                // ดึงรายการล่าสุด (ตัวสุดท้ายของอาเรย์) มาแสดง
                 let latest = list[list.length - 1];
-                // ปรับเปลี่ยนตามชื่อฟิลด์ใน Firebase ของท่าน (เช่น content หรือ text หรือ message)
                 annTextEl.innerText = latest.content || latest.text || latest.message || 'ยินดีต้อนรับสู่ kryptonitexnitroprime';
             } else {
                 annTextEl.innerText = 'ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100%';
             }
         });
+
+        // 2. โหลดแบรนด์เนอร์ที่ตั้งค่าตำแหน่งแล้วจาก Firebase มาแสดงบนหน้าเว็บแบบ Real-time
+        onSnapshot(collection(db, "banners"), (snapshot) => {
+            document.querySelectorAll('.dynamic-positioned-banner').forEach(el => el.remove());
+
+            snapshot.forEach(docSnap => {
+                let b = docSnap.data();
+                let bannerDiv = document.createElement('div');
+                bannerDiv.className = 'dynamic-positioned-banner';
+                bannerDiv.style.position = 'absolute';
+                bannerDiv.style.left = (b.posX || 0) + 'px';
+                bannerDiv.style.top = (b.posY || 0) + 'px';
+                bannerDiv.style.width = (b.width || 350) + 'px';
+                bannerDiv.style.height = (b.height || 180) + 'px';
+                bannerDiv.style.zIndex = '999';
+                bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
+                
+                bannerDiv.innerHTML = `<img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:12px; box-shadow:0 10px 25px rgba(0,175,255,0.2);" alt="Banner">`;
+
+                if (b.clickable && b.linkUrl) {
+                    bannerDiv.addEventListener('click', () => {
+                        window.location.href = b.linkUrl;
+                    });
+                }
+
+                document.body.appendChild(bannerDiv);
+            });
+        });
+
+        // 3. ตรวจสอบโหมด Visual Positioner (?mode=place_banner) เมื่อแอดมินกดมาจากหน้าแอดมิน
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'place_banner') {
+            const rawData = localStorage.getItem('temp_banner_data');
+            if (rawData) {
+                const bannerData = JSON.parse(rawData);
+
+                const controlBar = document.createElement('div');
+                controlBar.innerHTML = `
+                    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; align-items: center; gap: 15px;">
+                        <div>
+                            <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> โหมดเลือกตำแหน่งแบรนด์เนอร์</div>
+                            <div style="font-size: 11px; color: #94a3b8;">ขยับเมาส์เลือกตำแหน่ง | ปรับขนาดด้านข้าง | คลิกซ้ายเพื่อบันทึก</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 12px;">กว้าง:</label>
+                            <input type="range" id="rangeWidth" min="150" max="800" value="350" style="cursor: pointer;">
+                            <label style="font-size: 12px;">สูง:</label>
+                            <input type="range" id="rangeHeight" min="80" max="500" value="180" style="cursor: pointer;">
+                        </div>
+                        <button id="cancelPositionBtn" style="background: #ef4444; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">ยกเลิก</button>
+                    </div>
+                `;
+                document.body.appendChild(controlBar);
+
+                const ghostBanner = document.createElement('div');
+                ghostBanner.style.position = 'absolute';
+                ghostBanner.style.width = '350px';
+                ghostBanner.style.height = '180px';
+                ghostBanner.style.zIndex = '99999';
+                ghostBanner.style.pointerEvents = 'none';
+                ghostBanner.style.border = '2px dashed #00AFFF';
+                ghostBanner.style.borderRadius = '12px';
+                ghostBanner.style.overflow = 'hidden';
+                ghostBanner.style.boxShadow = '0 0 20px rgba(0,175,255,0.6)';
+                ghostBanner.innerHTML = `<img src="${bannerData.imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="Ghost">`;
+                document.body.appendChild(ghostBanner);
+
+                let currentWidth = 350;
+                let currentHeight = 180;
+
+                document.getElementById('rangeWidth').addEventListener('input', (e) => {
+                    currentWidth = parseInt(e.target.value);
+                    ghostBanner.style.width = currentWidth + 'px';
+                });
+                document.getElementById('rangeHeight').addEventListener('input', (e) => {
+                    currentHeight = parseInt(e.target.value);
+                    ghostBanner.style.height = currentHeight + 'px';
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    ghostBanner.style.left = (e.pageX + 15) + 'px';
+                    ghostBanner.style.top = (e.pageY + 15) + 'px';
+                });
+
+                document.getElementById('cancelPositionBtn').addEventListener('click', () => {
+                    localStorage.removeItem('temp_banner_data');
+                    window.location.href = 'admin.html';
+                });
+
+                window.addEventListener('click', async (e) => {
+                    if (e.target.closest('#cancelPositionBtn') || e.target.closest('#rangeWidth') || e.target.closest('#rangeHeight')) return;
+
+                    let posX = e.pageX;
+                    let posY = e.pageY;
+
+                    try {
+                        await addDoc(collection(db, "banners"), {
+                            imageUrl: bannerData.imageUrl,
+                            orientation: bannerData.orientation,
+                            clickable: bannerData.clickable,
+                            linkUrl: bannerData.linkUrl,
+                            posX: posX,
+                            posY: posY,
+                            width: currentWidth,
+                            height: currentHeight,
+                            timestamp: new Date().toLocaleString('th-TH')
+                        });
+
+                        alert('✅ บันทึกตำแหน่งและขนาดแบรนด์เนอร์ลงหน้าเว็บเรียบร้อย!');
+                        localStorage.removeItem('temp_banner_data');
+                        window.location.href = 'admin.html';
+                    } catch (err) {
+                        console.error(err);
+                        alert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+                    }
+                }, { once: true });
+            }
+        }
 
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
