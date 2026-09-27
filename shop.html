@@ -14,22 +14,30 @@
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
+        body {
+            background-color: #060608;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 175, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(0, 100, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 30%, rgba(0, 175, 255, 0.04) 0%, transparent 60%);
+        }
+
         /* Navbar Rectangle Layout (ทรงสี่เหลี่ยมขอบมน อยู่ตรงกลาง) */
         .navbar {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #121215 !important;
+            background-color: #0d0d12 !important;
             padding: 6px 12px;
             border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 12px; /* ปรับเป็นสี่เหลี่ยมขอบมน */
+            border-radius: 12px;
             margin: 25px auto;
             width: fit-content;
             max-width: 95vw;
             position: sticky;
             top: 20px;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 175, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 175, 255, 0.06);
         }
         .nav-inner {
             display: flex;
@@ -49,7 +57,7 @@
             font-weight: 500;
             height: 36px;
             padding: 0 12px;
-            border-radius: 8px; /* ปรับปุ่มเมนูด้านในเป็นสี่เหลี่ยมขอบมน */
+            border-radius: 8px;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
@@ -76,7 +84,7 @@
             box-shadow: 0 0 15px rgba(0, 175, 255, 0.4);
             border: none;
             padding: 7px 16px;
-            border-radius: 8px; /* ปรับปุ่มเข้าสู่ระบบเป็นสี่เหลี่ยมขอบมน */
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             text-decoration: none;
@@ -95,6 +103,205 @@
             height: 18px;
             background: rgba(255, 255, 255, 0.15);
             margin: 0 2px;
+        }
+
+        /* ดีไซน์แถบประกาศคู่ด้านบนแบบเรฟ */
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .announcement-capsule {
+            background: #0d0d12;
+            border: 1px solid rgba(0, 175, 255, 0.25);
+            border-radius: 12px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .announcement-badge {
+            background: rgba(0, 175, 255, 0.15);
+            color: #00AFFF;
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .announcement-ticker {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .announcement-text {
+            display: inline-block;
+            font-size: 12px;
+            color: #94a3b8;
+            animation: tickerScroll 20s linear infinite;
+        }
+        @keyframes tickerScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* แบนเนอร์หลักขนาดใหญ่ตรงกลางสไตล์หรู */
+        .main-hero-banner {
+            background: linear-gradient(135deg, #0e0e16 0%, #09090e 100%);
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0, 175, 255, 0.05);
+            margin-bottom: 30px;
+        }
+        .main-hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 80% 50%, rgba(0, 175, 255, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-left-content h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 175, 255, 0.4);
+        }
+        .hero-left-content p {
+            font-size: 13px;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+        .hero-right-img img {
+            max-height: 200px;
+            filter: drop-shadow(0 10px 20px rgba(0, 175, 255, 0.3));
+        }
+
+        /* กล่องสถิติ 4 ช่อง */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .stat-card {
+            background: #0d0d12;
+            border: 1px solid rgba(0, 175, 255, 0.2);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .stat-card:hover {
+            border-color: rgba(0, 175, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .stat-icon {
+            width: 45px; height: 45px;
+            background: rgba(0, 175, 255, 0.1);
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #00AFFF;
+            font-size: 18px;
+        }
+        .stat-info .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .stat-info .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* ส่วนสินค้าแนะนำ */
+        .section-title-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .section-title-bar i { color: #00AFFF; }
+
+        .products-grid-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .product-preview-card {
+            background: #0d0d12;
+            border: 1px solid rgba(0, 175, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+        }
+        .product-preview-card:hover {
+            border-color: rgba(0, 175, 255, 0.6);
+            transform: translateY(-3px);
+        }
+        .product-preview-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background: #000;
+        }
+        .product-preview-body {
+            padding: 12px;
+        }
+        .product-preview-body h4 {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        .product-preview-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00AFFF;
+        }
+        .product-tag-badge {
+            position: absolute;
+            top: 8px; left: 8px;
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 900px) {
+            .announcements-grid, .stats-grid, .products-grid-preview {
+                grid-template-columns: 1fr;
+            }
+            .main-hero-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px;
+            }
         }
 
         /* สไตล์ Modal และฟอร์มพรีเมียม (ปรับเป็นสีฟ้า #00AFFF) */
@@ -271,7 +478,7 @@
         <div class="nav-inner">
             <nav class="nav-menu">
                 <a href="shop.html" class="active"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
-                <a href="#"><i class="fa-solid fa-store"></i> ร้านค้า</a>
+                <a href="fivem-project.html"><i class="fa-solid fa-store"></i> ร้านค้า</a>
                 <a href="#"><i class="fa-solid fa-wallet"></i> เติมเงิน</a>
                 <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการสั่งซื้อ</a>
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
@@ -290,54 +497,107 @@
 
     <!-- ================= MAIN CONTENT ================= -->
     <main class="main-container full-width-layout">
-        <div class="news-section">
-            <div class="news-header">
-                <i class="fa-solid fa-bullhorn"></i> ประกาศแจ้งข่าวสาร <span class="news-tag">Promotion & News</span>
+        
+        <!-- แถบประกาศคู่ด้านบนแบบเรฟ -->
+        <div class="announcements-grid">
+            <div class="announcement-capsule">
+                <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
+                <div class="announcement-ticker">
+                    <span class="announcement-text" id="announcementText1">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1</span>
+                </div>
             </div>
-            <div class="news-ticker-container">
-                <div class="news-ticker-text" id="shopAnnouncementText">
-                    กำลังโหลดประกาศ...
+            <div class="announcement-capsule">
+                <div class="announcement-badge"><i class="fa-solid fa-bolt"></i> ANNOUNCE</div>
+                <div class="announcement-ticker">
+                    <span class="announcement-text" id="announcementText2">โปรโมชั่นเติมเงินรับโบนัสพิเศษฟรีตลอด 24 ชั่วโมง!</span>
                 </div>
             </div>
         </div>
 
-        <div class="categories-section">
-            <div class="cat-header-top">
-                <span class="cat-subtitle-tag">— CATEGORIES</span>
-                <div class="cat-title-row">
-                    <h2>หมวดหมู่สินค้า</h2>
-                    <a href="#" class="cat-all-link">ทุกหมวดหมู่ <i class="fa-solid fa-arrow-right"></i></a>
+        <!-- แบนเนอร์หลักขนาดใหญ่ตรงกลางสไตล์หรู -->
+        <div class="main-hero-banner">
+            <div class="hero-left-content">
+                <span style="font-size: 11px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
+                <h1>KRYPTONITE X NITROPRIME</h1>
+                <p>EVERYTHING GAMERS NEED, ALL IN ONE SHOP — บริการพรีเมียม ปลอดภัย รวดเร็ว 100%</p>
+            </div>
+            <div class="hero-right-img">
+                <img src="banner2.png" alt="Hero Banner">
+            </div>
+        </div>
+
+        <!-- กล่องสถิติ 4 ช่อง -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value">95 คน</div>
+                    <div class="stat-label">ผู้ใช้งานออนไลน์</div>
                 </div>
             </div>
-
-            <div class="banners-grid-row">
-                <div class="banner-card-wrapper">
-                    <div class="hero-banner banner-one">
-                        <div class="banner-content">
-                            <span class="banner-tag-small">โปรแกรม FiveM</span>
-                            <h1>FIVE-M PROJECT</h1>
-                            <span class="banner-sub">CLICK TO SHOP</span>
-                        </div>
-                    </div>
-                    <div class="banner-footer-label">
-                        <span><span class="num">01</span> KRYPTONITE</span>
-                        <a href="#">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-box-archive"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value">17 รายการ</div>
+                    <div class="stat-label">สินค้าทั้งหมด</div>
                 </div>
-
-                <div class="banner-card-wrapper">
-                    <a href="fivem-project.html" style="text-decoration: none;">
-                        <div class="hero-banner banner-image-box">
-                            <img src="banner2.png" alt="Candy Store" class="banner-img">
-                        </div>
-                    </a>
-                    <div class="banner-footer-label">
-                        <span><span class="num">02</span> PREMIUM STORE</span>
-                        <a href="fivem-project.html">ดูสินค้า <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-cubes"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value">112 ชิ้น</div>
+                    <div class="stat-label">คลังสินค้า</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value">25 ชิ้น</div>
+                    <div class="stat-label">ขายแล้ววันนี้</div>
                 </div>
             </div>
         </div>
+
+        <!-- หมวดหมู่สินค้าแนะนำ -->
+        <div class="section-title-bar">
+            <i class="fa-solid fa-fire"></i> สินค้าแนะนำ
+        </div>
+
+        <div class="products-grid-preview">
+            <div class="product-preview-card">
+                <span class="product-tag-badge">แนะนำ</span>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
+                <div class="product-preview-body">
+                    <h4>มาโค่ - คุมดีดี/กันมอง</h4>
+                    <div class="product-preview-price">฿150</div>
+                </div>
+            </div>
+            <div class="product-preview-card">
+                <span class="product-tag-badge">ยอดฮิต</span>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
+                <div class="product-preview-body">
+                    <h4>ปลดแบนเกมวาโร V2</h4>
+                    <div class="product-preview-price">฿290</div>
+                </div>
+            </div>
+            <div class="product-preview-card">
+                <span class="product-tag-badge">ใหม่</span>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
+                <div class="product-preview-body">
+                    <h4>Vortex VIP Lifetime</h4>
+                    <div class="product-preview-price">฿350</div>
+                </div>
+            </div>
+            <div class="product-preview-card">
+                <span class="product-tag-badge">พิเศษ</span>
+                <img src="banner2.png" alt="Product" class="product-preview-img">
+                <div class="product-preview-body">
+                    <h4>FiveM Booster Pro</h4>
+                    <div class="product-preview-price">฿500</div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- ================= AUTH MODAL POPUP ================= -->
@@ -461,12 +721,13 @@
                 list.push(docSnap.data());
             });
             
-            const annTextEl = document.getElementById('shopAnnouncementText');
+            const annText1 = document.getElementById('announcementText1');
+            const annText2 = document.getElementById('announcementText2');
             if (list.length > 0) {
                 let latest = list[list.length - 1];
-                annTextEl.innerText = latest.content || latest.text || latest.message || 'ยินดีต้อนรับสู่ kryptonitexnitroprime';
-            } else {
-                annTextEl.innerText = 'ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100%';
+                let msg = latest.content || latest.text || latest.message || 'ยินดีต้อนรับสู่ kryptonitexnitroprime';
+                if (annText1) annText1.innerText = msg;
+                if (annText2) annText2.innerText = msg;
             }
         });
 
