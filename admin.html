@@ -73,14 +73,12 @@
         let membersList = [];
         let currentAdminName = localStorage.getItem('username') || 'AdminOwner';
         
-        // Discord Webhook URLs
         const TOPUP_WEBHOOK_URL = "https://discord.com/api/webhooks/1553709935911637082/j_aSH-2ysIqiAb7doIPw3AE3y11jY3w1j57oBWy3ND_MD7-FhFTZQ3Jg6EcTbgRCSjRF";
         const PURCHASE_WEBHOOK_URL = "https://discord.com/api/webhooks/1553710597655240846/38thWmUlDiUCF3KHmWash_jkxXl-qZSZOdu9T1W3My_hlhQBVyiTNX5GYXGQ-aaGwuSn";
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('adminName').innerText = currentAdminName;
 
-            // Real-time Listeners
             onSnapshot(collection(db, "members"), (snapshot) => {
                 membersList = [];
                 snapshot.forEach(docSnap => membersList.push({ id: docSnap.id, ...docSnap.data() }));
@@ -109,6 +107,12 @@
                 let list = [];
                 snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
                 renderCoupons(list);
+            });
+
+            onSnapshot(collection(db, "banners"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderBanners(list);
             });
 
             onSnapshot(collection(db, "admin_logs"), (snapshot) => {
@@ -248,7 +252,7 @@
             let expireDays = parseInt(document.getElementById('couponExpireDays').value);
             
             if (!code || isNaN(discount) || discount < 1 || discount > 100 || isNaN(expireDays) || expireDays < 1) {
-                alert('❌ กรุณากรอกข้อมูลให้ถูกต้อง (ส่วนลด 1-100% และอายุโค้ดอย่างน้อย 1 วัน)');
+                alert('❌ กรุณากรอกข้อมูลให้ถูกต้อง');
                 return;
             }
 
@@ -262,7 +266,7 @@
                 createdDate: new Date().toLocaleDateString('th-TH')
             });
 
-            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}\%, อายุ ${expireDays} วัน)`);
+            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}%)`);
             document.getElementById('couponCode').value = '';
             document.getElementById('couponDiscount').value = '';
             document.getElementById('couponExpireDays').value = '';
@@ -291,27 +295,72 @@
             }
         }
 
-        // --- 4. จำลองแจ้งเตือนการเติมเงินเข้า Discord ---
+        // --- 4. จัดการแบรนด์เนอร์ (Banner Management) ---
+        window.addBanner = async () => {
+            let imageUrl = document.getElementById('bannerImgUrl').value.trim();
+            let width = document.getElementById('bannerWidth').value.trim() || '100%';
+            let height = document.getElementById('bannerHeight').value.trim() || 'auto';
+            let clickable = document.getElementById('bannerClickable').value === 'yes';
+            let linkUrl = document.getElementById('bannerLinkUrl').value.trim();
+
+            if (!imageUrl) {
+                alert('❌ กรุณากรอกลิงก์รูปภาพแบรนด์เนอร์');
+                return;
+            }
+
+            await addDoc(collection(db, "banners"), {
+                imageUrl,
+                width,
+                height,
+                clickable,
+                linkUrl: clickable ? linkUrl : '',
+                timestamp: new Date().toLocaleString('th-TH')
+            });
+
+            logAction(`เพิ่มแบรนด์เนอร์ใหม่`);
+            document.getElementById('bannerImgUrl').value = '';
+            document.getElementById('bannerWidth').value = '';
+            document.getElementById('bannerHeight').value = '';
+            document.getElementById('bannerLinkUrl').value = '';
+            alert('✅ เพิ่มแบรนด์เนอร์สำเร็จ');
+        }
+
+        function renderBanners(list) {
+            const tbody = document.getElementById('bannerTableBody');
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ยังไม่มีแบรนด์เนอร์ในระบบ</td></tr>` : '';
+            list.forEach(b => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${b.imageUrl}" style="max-height: 40px; border-radius: 4px;" alt="Banner"></td>
+                        <td style="color: #00AFFF;">${b.width} ×${b.height}</td>
+                        <td>${b.clickable ? '<span style="color:#22c55e; font-weight:bold;">กดได้</span>' : '<span style="color:#94a3b8;">โชว์อย่างเดียว</span>'}</td>
+                        <td style="color: #cbd5e1; font-size: 11px; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${b.linkUrl || '-'}</td>
+                        <td style="color: #94a3b8; font-size: 11px;">${b.timestamp}</td>
+                        <td><button class="btn btn-danger" onclick="window.deleteBanner('${b.id}')"><i class="fa-solid fa-trash"></i> ลบ</button></td>
+                    </tr>`;
+            });
+        }
+
+        window.deleteBanner = async (id) => {
+            if (confirm('ยืนยันลบแบรนด์เนอร์นี้?')) {
+                await deleteDoc(doc(db, "banners", id));
+                logAction('ลบแบรนด์เนอร์');
+            }
+        }
+
+        // --- 5. จำลองแจ้งเตือนการเติมเงินเข้า Discord ---
         window.testSimulateTopup = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่เติมเงิน:", "CyberGamer99");
             let fullname = prompt("ระบุชื่อ-นามสกุลจริงผู้โอนเงิน:", "สมชาย ใจดี");
             let amount = parseFloat(prompt("ระบุจำนวนเงินที่เติม (บาท):", "500"));
 
             if (!username || !fullname || isNaN(amount)) return;
-
             let timestamp = new Date().toLocaleString('th-TH');
 
-            await addDoc(collection(db, "transactions"), {
-                username: username,
-                fullname: fullname,
-                amount: amount,
-                detail: `เติมเงินเข้ากระเป๋าสำเร็จ (โอนผ่านธนาคาร)`,
-                timestamp: timestamp
-            });
+            await addDoc(collection(db, "transactions"), { username, fullname, amount, detail: `เติมเงินเข้ากระเป๋าสำเร็จ (โอนผ่านธนาคาร)`, timestamp });
 
             const discordPayload = {
                 username: "Vortex Official Bot",
-                avatar_url: "https://i.imgur.com/4M34hi2.png",
                 embeds: [{
                     title: "💳 แจ้งเตือนการเติมเงินสำเร็จ (Top-up Alert)",
                     color: 39423,
@@ -321,46 +370,30 @@
                         { name: "💰 จำนวนเงิน", value: `\`+฿${amount.toFixed(2)}\``, inline: false },
                         { name: "🕒 วันเวลาที่ทำรายการ", value: `\`${timestamp}\``, inline: false }
                     ],
-                    footer: { text: "Vortex Official Security & Payment System" },
-                    timestamp: new Date().toISOString()
+                    footer: { text: "Vortex Official Security & Payment System" }
                 }]
             };
 
             try {
-                await fetch(TOPUP_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(discordPayload)
-                });
+                await fetch(TOPUP_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(discordPayload) });
                 alert('✅ ส่งแจ้งเตือนการเติมเงินเข้า Discord สำเร็จ!');
-                logAction(`จำลองเติมเงินให้ ${username} (${amount} บาท)`);
-            } catch (err) {
-                console.error("Discord Webhook Error:", err);
-                alert('❌ เกิดข้อผิดพลาดในการส่ง Discord Webhook');
-            }
+                logAction(`จำลองเติมเงินให้ ${username}`);
+            } catch (err) { alert('❌ เกิดข้อผิดพลาด'); }
         }
 
-        // --- 5. จำลองแจ้งเตือนการซื้อสินค้าเข้า Discord ---
+        // --- 6. จำลองแจ้งเตือนการซื้อสินค้าเข้า Discord ---
         window.testSimulatePurchase = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่ซื้อสินค้า:", "ProGamer_TH");
-            let productName = prompt("ระบุชื่อสินค้าอย่างละเอียด:", "Vortex VIP Lifetime Package + Script Unlock");
+            let productName = prompt("ระบุชื่อสินค้า:", "Vortex VIP Lifetime Package");
             let price = parseFloat(prompt("ระบุราคาสินค้า (บาท):", "350"));
 
             if (!username || !productName || isNaN(price)) return;
-
             let timestamp = new Date().toLocaleString('th-TH');
 
-            await addDoc(collection(db, "transactions"), {
-                username: username,
-                fullname: "ซื้อสินค้าผ่านระบบออโต้",
-                amount: price,
-                detail: `ซื้อสินค้า: ${productName}`,
-                timestamp: timestamp
-            });
+            await addDoc(collection(db, "transactions"), { username, fullname: "ซื้อสินค้าผ่านระบบออโต้", amount: price, detail: `ซื้อสินค้า: ${productName}`, timestamp });
 
             const discordPayload = {
                 username: "Vortex Official Store Bot",
-                avatar_url: "https://i.imgur.com/4M34hi2.png",
                 embeds: [{
                     title: "🛒 มีคำสั่งซื้อสินค้าใหม่สำเร็จ! (New Order)",
                     color: 39423,
@@ -370,23 +403,15 @@
                         { name: "💵 ราคา", value: `\`฿${price.toFixed(2)}\``, inline: true },
                         { name: "🕒 เวลาทำรายการ", value: `\`${timestamp}\``, inline: true }
                     ],
-                    footer: { text: "Vortex Official Automatic Store System" },
-                    timestamp: new Date().toISOString()
+                    footer: { text: "Vortex Official Automatic Store System" }
                 }]
             };
 
             try {
-                await fetch(PURCHASE_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(discordPayload)
-                });
+                await fetch(PURCHASE_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(discordPayload) });
                 alert('✅ ส่งแจ้งเตือนการซื้อสินค้าเข้า Discord สำเร็จ!');
-                logAction(`จำลองคำสั่งซื้อสินค้า (${productName}) โดย ${username}`);
-            } catch (err) {
-                console.error("Discord Purchase Webhook Error:", err);
-                alert('❌ เกิดข้อผิดพลาดในการส่ง Discord Webhook');
-            }
+                logAction(`จำลองคำสั่งซื้อ ${productName}`);
+            } catch (err) { alert('❌ เกิดข้อผิดพลาด'); }
         }
 
         function renderTransactions(list) {
@@ -397,14 +422,14 @@
                     <tr>
                         <td style="color: #94a3b8; font-size: 12px;">${t.timestamp || '-'}</td>
                         <td><b>${t.username || 'ไม่ระบุ'}</b></td>
-                        <td style="color: #cbd5e1;">${t.fullname || 'ไม่ระบุชื่อ-นามสกุล'}</td>
+                        <td style="color: #cbd5e1;">${t.fullname || '-'}</td>
                         <td>${t.detail || '-'}</td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${parseFloat(t.amount || 0).toFixed(2)}</td>
                     </tr>`;
             });
         }
 
-        // --- 6. ระบบประกาศหน้าเว็บ ---
+        // --- 7. ระบบประกาศหน้าเว็บ ---
         window.saveAnnouncement = async () => {
             let content = document.getElementById('announcementText').value.trim();
             if (!content) return;
@@ -422,7 +447,7 @@
             });
         }
 
-        // --- 7. บันทึกแอดมิน ---
+        // --- 8. บันทึกแอดมิน ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -449,12 +474,13 @@
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ - Vortex Official</h2>
         <p>ผู้ดูแลระบบปัจจุบัน: <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span></p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> เชื่อมต่อระบบ Discord Webhook ทั้ง 2 ช่องทางเรียบร้อย</div>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการร้านค้าและแบรนด์เนอร์พร้อมใช้งาน</div>
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
             <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
+            <button class="tab-btn" onclick="switchTab('tab-banners', this)"><i class="fa-solid fa-image"></i> จัดการแบรนด์เนอร์</button>
             <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
             <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
             <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
@@ -510,13 +536,50 @@
             </div>
         </div>
 
-        <!-- 3. TAB: คูปองส่วนลด -->
+        <!-- 3. TAB: จัดการแบรนด์เนอร์ -->
+        <div id="tab-banners" class="tab-content">
+            <h3><i class="fa-solid fa-image"></i> เพิ่มและกำหนดขนาดแบรนด์เนอร์หน้าเว็บ</h3>
+            <div class="form-grid">
+                <input type="text" id="bannerImgUrl" placeholder="ลิงก์รูปภาพแบรนด์เนอร์ (URL)">
+                <input type="text" id="bannerWidth" placeholder="ความกว้าง เช่น 100% หรือ 800px">
+                <input type="text" id="bannerHeight" placeholder="ความสูง เช่น 250px หรือ auto">
+            </div>
+            <div class="form-grid">
+                <select id="bannerClickable" onchange="document.getElementById('linkContainer').style.display = this.value === 'yes' ? 'block' : 'none'">
+                    <option value="no">โชว์อย่างเดียว (คลิกไม่ได้)</option>
+                    <option value="yes">สามารถคลิกเพื่อลิงก์ไปหน้าอื่นได้</option>
+                </select>
+            </div>
+            <div id="linkContainer" style="display: none; margin-bottom: 15px;">
+                <input type="text" id="bannerLinkUrl" placeholder="ลิงก์ปลายทางเมื่อคลิก (เช่น https://... หรือหน้าโปรโมชั่น)">
+            </div>
+            <button class="btn btn-primary" onclick="window.addBanner()"><i class="fa-solid fa-plus"></i> บันทึกแบรนด์เนอร์</button>
+
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-images"></i> รายการแบรนด์เนอร์ทั้งหมด</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>รูปตัวอย่าง</th>
+                            <th>ขนาด (กว้าง × สูง)</th>
+                            <th>สถานะการคลิก</th>
+                            <th>ลิงก์ปลายทาง</th>
+                            <th>วันที่สร้าง</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bannerTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. TAB: คูปองส่วนลด -->
         <div id="tab-coupons" class="tab-content">
-            <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด (กำหนด % และวันหมดอายุ)</h3>
+            <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด</h3>
             <div class="form-grid">
                 <input type="text" id="couponCode" placeholder="ชื่อโค้ด เช่น VORTEX50">
                 <input type="number" id="couponDiscount" min="1" max="100" placeholder="เปอร์เซ็นต์ส่วนลด (1 - 100)">
-                <input type="number" id="couponExpireDays" min="1" placeholder="อายุโค้ด (จำนวนวัน เช่น 7 หรือ 30)">
+                <input type="number" id="couponExpireDays" min="1" placeholder="อายุโค้ด (จำนวนวัน)">
             </div>
             <button class="btn btn-primary" onclick="window.addCoupon()"><i class="fa-solid fa-circle-plus"></i> สร้างคูปองส่วนลด</button>
 
@@ -537,7 +600,7 @@
             </div>
         </div>
 
-        <!-- 4. TAB: ประวัติทำรายการ & แจ้งเตือน Discord -->
+        <!-- 5. TAB: ประวัติทำรายการ & แจ้งเตือน Discord -->
         <div id="tab-transactions" class="tab-content">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <h3><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & ทดสอบ Discord Webhook</h3>
@@ -562,7 +625,7 @@
             </div>
         </div>
 
-        <!-- 5. TAB: ประกาศหน้าเว็บ -->
+        <!-- 6. TAB: ประกาศหน้าเว็บ -->
         <div id="tab-announcement" class="tab-content">
             <h3><i class="fa-solid fa-bullhorn"></i> ตั้งค่าประกาศหน้าเว็บไซต์</h3>
             <textarea id="announcementText" rows="3" placeholder="พิมพ์ข้อความประกาศแจ้งเตือนโปรโมชั่น..."></textarea>
@@ -572,7 +635,7 @@
             <div id="announcementList"></div>
         </div>
 
-        <!-- 6. TAB: บันทึกแอดมิน -->
+        <!-- 7. TAB: บันทึกแอดมิน -->
         <div id="tab-logs" class="tab-content">
             <h3><i class="fa-solid fa-clipboard-list"></i> ตรวจสอบการทำงานของแอดมิน (Audit Log)</h3>
             <div style="overflow-x: auto;">
