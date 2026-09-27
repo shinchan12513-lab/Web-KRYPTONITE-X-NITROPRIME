@@ -734,3 +734,70 @@ body:has(.welcome-container) footer {
 .auth-footer-text a:hover {
     text-decoration: underline;
 }
+
+/* ================= ปรับแต่งโทนสีโปรไฟล์และเมนูด้านขวา (ธีมสีฟ้า Electric Blue) ================= */
+.nav-right .user-profile-btn,
+.nav-right [class*="profile"],
+.nav-right [class*="user"] {
+    border-color: rgba(0, 175, 255, 0.3) !important;
+    background-color: rgba(0, 175, 255, 0.08) !important;
+    color: #00AFFF !important;
+}
+
+.nav-right .user-profile-btn span, 
+.nav-right .user-profile-btn i,
+.nav-right [class*="profile"] span,
+.nav-right [class*="profile"] i {
+    color: #00AFFF !important;
+}
+
+.nav-right .avatar-box,
+.nav-right .profile-avatar,
+.nav-right svg {
+    border-color: #00AFFF !important;
+    color: #00AFFF !important;
+}
+
+.profile-dropdown-menu,
+.user-dropdown,
+.dropdown-menu {
+    background: #121212 !important;
+    border: 1px solid rgba(0, 175, 255, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 175, 255, 0.05) !important;
+}
+
+.profile-dropdown-menu .badge,
+.user-dropdown .badge,
+.dropdown-menu .badge {
+    background: rgba(0, 175, 255, 0.15) !important;
+    color: #00AFFF !important;
+    border: 1px solid rgba(0, 175, 255, 0.3) !important;
+}
+
+.profile-dropdown-menu .btn-topup,
+.user-dropdown .btn-topup,
+.btn-topup {
+    background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 175, 255, 0.3) !important;
+    border: none !important;
+}
+
+.profile-dropdown-menu a,
+.user-dropdown a,
+.dropdown-menu a {
+    color: #cbd5e1 !important;
+}
+
+.profile-dropdown-menu a:hover,
+.user-dropdown a:hover,
+.dropdown-menu a:hover {
+    color: #00AFFF !important;
+    background-color: rgba(0, 175, 255, 0.1) !important;
+}
+
+.profile-dropdown-menu i,
+.user-dropdown i,
+.dropdown-menu i {
+    color: #00AFFF !important;
+}
