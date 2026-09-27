@@ -99,12 +99,6 @@
                 renderTransactions(list);
             });
 
-            onSnapshot(collection(db, "ip_bans"), (snapshot) => {
-                let list = [];
-                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
-                renderIpBans(list);
-            });
-
             onSnapshot(collection(db, "announcements"), (snapshot) => {
                 let list = [];
                 snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
@@ -134,7 +128,7 @@
             } catch (e) { console.error("Log error:", e); }
         }
 
-        // --- 1. จัดการสมาชิก & ระบบแบน ---
+        // --- 1. จัดการสมาชิก ---
         function renderMembers(data) {
             const tbody = document.getElementById('memberTableBody');
             tbody.innerHTML = data.length === 0 ? `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>` : '';
@@ -209,48 +203,7 @@
             }
         }
 
-        // --- 2. ระบบจัดการแบน IP / อุปกรณ์ ---
-        window.addIpBan = async () => {
-            let ip = document.getElementById('banIpAddress').value.trim();
-            let reason = document.getElementById('banReason').value.trim() || 'ละเมิดกฎระบบ';
-            if (!ip) { alert('กรุณากรอกหมายเลข IP Address หรือรหัสอุปกรณ์'); return; }
-
-            await addDoc(collection(db, "ip_bans"), {
-                ip: ip,
-                reason: reason,
-                admin: currentAdminName,
-                timestamp: new Date().toLocaleString('th-TH')
-            });
-
-            logAction(`แบน IP/Device: ${ip} (เหตุผล: ${reason})`);
-            document.getElementById('banIpAddress').value = '';
-            document.getElementById('banReason').value = '';
-            alert(`🚫 บล็อก IP: ${ip} เรียบร้อยแล้ว`);
-        }
-
-        function renderIpBans(list) {
-            const tbody = document.getElementById('ipBanTableBody');
-            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ไม่มีรายการแบน IP</td></tr>` : '';
-            list.forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><b style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> ${item.ip}</b></td>
-                        <td>${item.reason}</td>
-                        <td style="color: #00AFFF;">${item.admin || 'System'}</td>
-                        <td style="color: #94a3b8; font-size: 12px;">${item.timestamp}</td>
-                        <td><button class="btn btn-primary" onclick="window.removeIpBan('${item.id}', '${item.ip}')"><i class="fa-solid fa-unlock"></i> ปลดแบน</button></td>
-                    </tr>`;
-            });
-        }
-
-        window.removeIpBan = async (id, ip) => {
-            if (confirm(`ยืนยันปลดแบน IP/อุปกรณ์: ${ip}?`)) {
-                await deleteDoc(doc(db, "ip_bans", id));
-                logAction(`ปลดแบน IP/Device: ${ip}`);
-            }
-        }
-
-        // --- 3. จัดการสินค้าและสต็อก ---
+        // --- 2. จัดการสินค้าและสต็อก ---
         window.addProduct = async () => {
             let name = document.getElementById('prodName').value.trim();
             let price = parseFloat(document.getElementById('prodPrice').value);
@@ -288,7 +241,7 @@
             }
         }
 
-        // --- 4. ระบบคูปองส่วนลด ---
+        // --- 3. ระบบคูปองส่วนลด ---
         window.addCoupon = async () => {
             let code = document.getElementById('couponCode').value.trim().toUpperCase();
             let discount = parseInt(document.getElementById('couponDiscount').value);
@@ -338,7 +291,7 @@
             }
         }
 
-        // --- 5. จำลองแจ้งเตือนการเติมเงินเข้า Discord ---
+        // --- 4. จำลองแจ้งเตือนการเติมเงินเข้า Discord ---
         window.testSimulateTopup = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่เติมเงิน:", "CyberGamer99");
             let fullname = prompt("ระบุชื่อ-นามสกุลจริงผู้โอนเงิน:", "สมชาย ใจดี");
@@ -387,7 +340,7 @@
             }
         }
 
-        // --- 6. จำลองแจ้งเตือนการซื้อสินค้าเข้า Discord ---
+        // --- 5. จำลองแจ้งเตือนการซื้อสินค้าเข้า Discord ---
         window.testSimulatePurchase = async () => {
             let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่ซื้อสินค้า:", "ProGamer_TH");
             let productName = prompt("ระบุชื่อสินค้าอย่างละเอียด:", "Vortex VIP Lifetime Package + Script Unlock");
@@ -451,7 +404,7 @@
             });
         }
 
-        // --- 7. ระบบประกาศหน้าเว็บ ---
+        // --- 6. ระบบประกาศหน้าเว็บ ---
         window.saveAnnouncement = async () => {
             let content = document.getElementById('announcementText').value.trim();
             if (!content) return;
@@ -469,7 +422,7 @@
             });
         }
 
-        // --- 8. บันทึกแอดมิน ---
+        // --- 7. บันทึกแอดมิน ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -500,8 +453,7 @@
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก & แบน</button>
-            <button class="tab-btn" onclick="switchTab('tab-ipbans', this)"><i class="fa-solid fa-ban"></i> จัดการแบน IP / อุปกรณ์</button>
+            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
             <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
             <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
             <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
@@ -509,9 +461,9 @@
             <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
 
-        <!-- 1. TAB: สมาชิก & แบน -->
+        <!-- 1. TAB: สมาชิก -->
         <div id="tab-members" class="tab-content active">
-            <h3><i class="fa-solid fa-users"></i> รายชื่อสมาชิก, เครดิต และระบบระงับผู้ใช้ (Ban)</h3>
+            <h3><i class="fa-solid fa-users"></i> รายชื่อสมาชิก, เครดิต และจัดการผู้ใช้</h3>
             <div style="margin-bottom: 15px;">
                 <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อยูสเซอร์ลูกค้า..." onkeyup="filterTable()">
             </div>
@@ -523,7 +475,7 @@
                             <th>สถานะ</th>
                             <th>ยอดเครดิต</th>
                             <th>ปรับเครดิต</th>
-                            <th>จัดการสิทธิ์ / แบน</th>
+                            <th>จัดการสิทธิ์ / ระงับ</th>
                             <th>ลบ</th>
                         </tr>
                     </thead>
@@ -532,33 +484,7 @@
             </div>
         </div>
 
-        <!-- 2. TAB: จัดการแบน IP / อุปกรณ์ -->
-        <div id="tab-ipbans" class="tab-content">
-            <h3><i class="fa-solid fa-ban"></i> ระบบบล็อก IP Address หรือ Device ที่พยายามก่อกวนระบบ</h3>
-            <div class="form-grid">
-                <input type="text" id="banIpAddress" placeholder="ระบุ IP Address เช่น 192.168.1.50">
-                <input type="text" id="banReason" placeholder="เหตุผลในการแบน เช่น บอทยิงเว็บ, โกงระบบ">
-            </div>
-            <button class="btn btn-danger" onclick="window.addIpBan()"><i class="fa-solid fa-shield-cat"></i> บล็อก IP นี้ทันที</button>
-
-            <h3 style="margin-top: 30px;"><i class="fa-solid fa-list-ul"></i> รายชื่อ IP ที่ถูกแบนอยู่ในปัจจุบัน</h3>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>IP Address</th>
-                            <th>เหตุผล</th>
-                            <th>แอดมินผู้บล็อก</th>
-                            <th>วันที่แบน</th>
-                            <th>ปลดแบน</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ipBanTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 3. TAB: สินค้าและสต็อก -->
+        <!-- 2. TAB: สินค้าและสต็อก -->
         <div id="tab-products" class="tab-content">
             <h3><i class="fa-solid fa-box-archive"></i> เพิ่มสินค้าและคีย์สต็อกอัตโนมัติ</h3>
             <div class="form-grid">
@@ -584,7 +510,7 @@
             </div>
         </div>
 
-        <!-- 4. TAB: คูปองส่วนลด -->
+        <!-- 3. TAB: คูปองส่วนลด -->
         <div id="tab-coupons" class="tab-content">
             <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด (กำหนด % และวันหมดอายุ)</h3>
             <div class="form-grid">
@@ -611,7 +537,7 @@
             </div>
         </div>
 
-        <!-- 5. TAB: ประวัติทำรายการ & แจ้งเตือน Discord -->
+        <!-- 4. TAB: ประวัติทำรายการ & แจ้งเตือน Discord -->
         <div id="tab-transactions" class="tab-content">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <h3><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & ทดสอบ Discord Webhook</h3>
@@ -636,7 +562,7 @@
             </div>
         </div>
 
-        <!-- 6. TAB: ประกาศหน้าเว็บ -->
+        <!-- 5. TAB: ประกาศหน้าเว็บ -->
         <div id="tab-announcement" class="tab-content">
             <h3><i class="fa-solid fa-bullhorn"></i> ตั้งค่าประกาศหน้าเว็บไซต์</h3>
             <textarea id="announcementText" rows="3" placeholder="พิมพ์ข้อความประกาศแจ้งเตือนโปรโมชั่น..."></textarea>
@@ -646,7 +572,7 @@
             <div id="announcementList"></div>
         </div>
 
-        <!-- 7. TAB: บันทึกแอดมิน -->
+        <!-- 6. TAB: บันทึกแอดมิน -->
         <div id="tab-logs" class="tab-content">
             <h3><i class="fa-solid fa-clipboard-list"></i> ตรวจสอบการทำงานของแอดมิน (Audit Log)</h3>
             <div style="overflow-x: auto;">
