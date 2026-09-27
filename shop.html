@@ -209,8 +209,9 @@
                 <i class="fa-solid fa-bullhorn"></i> ประกาศแจ้งข่าวสาร <span class="news-tag">Promotion & News</span>
             </div>
             <div class="news-ticker-container">
-                <div class="news-ticker-text">
-                    ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.[cite: 11]
+                <!-- เพิ่ม id ตรงนี้เพื่อให้ JavaScript ดึงข้อมูลประกาศมาเปลี่ยนแบบ Real-time -->
+                <div class="news-ticker-text" id="shopAnnouncementText">
+                    กำลังโหลดประกาศ...
                 </div>
             </div>
         </div>
@@ -354,7 +355,7 @@
     <!-- ================= SCRIPT ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, where, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
@@ -368,6 +369,24 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // ดึงประกาศจาก Firebase แบบ Real-time
+        onSnapshot(collection(db, "announcements"), (snapshot) => {
+            let list = [];
+            snapshot.forEach(docSnap => {
+                list.push(docSnap.data());
+            });
+            
+            const annTextEl = document.getElementById('shopAnnouncementText');
+            if (list.length > 0) {
+                // ดึงรายการล่าสุด (ตัวสุดท้ายของอาเรย์) มาแสดง
+                let latest = list[list.length - 1];
+                // ปรับเปลี่ยนตามชื่อฟิลด์ใน Firebase ของท่าน (เช่น content หรือ text หรือ message)
+                annTextEl.innerText = latest.content || latest.text || latest.message || 'ยินดีต้อนรับสู่ kryptonitexnitroprime';
+            } else {
+                annTextEl.innerText = 'ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100%';
+            }
+        });
 
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
