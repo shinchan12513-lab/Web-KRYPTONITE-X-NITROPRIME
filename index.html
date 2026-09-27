@@ -9,10 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- ไอคอนจาก FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QRCode JS Library สำหรับสร้าง QR Code PromptPay -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        /* สไตล์สำหรับปุ่มโซเชียลและปุ่มเติมเงินมุมซ้ายล่าง */
+        /* สไตล์สำหรับปุ่มโซเชียลและข้อความมุมซ้ายและขวาล่าง */
         .corner-container {
             position: fixed;
             bottom: 25px;
@@ -26,12 +24,11 @@
         }
         .corner-container.right {
             right: 30px;
-            flex-direction: row-reverse;
+            flex-direction: row-reverse; /* สลับตำแหน่งข้อความกับปุ่มให้อยู่ด้านในฝั่งขวา */
         }
         .social-icons-group {
             display: flex;
             gap: 8px;
-            align-items: center;
         }
         .social-btn {
             width: 42px;
@@ -48,7 +45,6 @@
             text-decoration: none;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
         }
         .social-btn.youtube:hover {
             background: #ff0000;
@@ -64,126 +60,24 @@
             box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
             transform: translateY(-2px);
         }
-        /* ปุ่มเติมเงินแบบมีข้อความตามรูปที่ส่งมา */
-        .topup-text-btn {
-            height: 42px;
-            padding: 0 16px;
-            background: rgba(18, 18, 21, 0.9);
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 21px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #00AFFF;
-            font-family: 'Prompt', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-        }
-        .topup-text-btn:hover {
-            background: #00AFFF;
-            color: #fff;
-            border-color: #00AFFF;
-            box-shadow: 0 0 20px rgba(0, 175, 255, 0.5);
-            transform: translateY(-2px);
-        }
         .corner-label {
             font-family: 'Prompt', sans-serif;
             font-size: 11px;
             font-weight: 500;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.35); /* สีจางๆ แต่มองเห็น */
             text-transform: uppercase;
             transition: color 0.3s ease;
             user-select: none;
         }
         .corner-container:hover .corner-label {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.7); /* สว่างขึ้นเล็กน้อยเมื่อเอาเมาส์ชี้ */
         }
-
-        /* Modal & Auth Styles สำหรับระบบเติมเงิน */
-        .auth-modal-overlay {
-            display: none;
-            opacity: 0;
-            visibility: hidden;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s ease, visibility 0.3s;
-        }
-        .auth-modal-overlay.active {
-            display: flex;
-            opacity: 1;
-            visibility: visible;
-        }
-        .auth-modal-box {
-            background: #09090b;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 20px 24px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
-            position: relative;
-            color: #fff;
-            transform: scale(0.92) translateY(10px);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: 'Prompt', sans-serif;
-        }
-        .auth-modal-overlay.active .auth-modal-box {
-            transform: scale(1) translateY(0);
-        }
-        .auth-close-btn {
-            position: absolute;
-            top: 14px; right: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .auth-close-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-        .auth-brand {
-            display: flex; align-items: center; gap: 8px;
-            font-weight: 700; font-size: 15px; margin-bottom: 15px;
-            letter-spacing: 0.5px; color: #00AFFF;
-        }
-        .auth-form-group { margin-bottom: 15px; text-align: left; }
-        .auth-form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; font-weight: 500; }
-        .auth-input-wrap { position: relative; display: flex; align-items: center; }
-        .auth-input-wrap > i:first-child { position: absolute; left: 14px; color: #64748b; font-size: 13px; }
-        .auth-input-wrap input {
-            width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px; padding: 10px 14px 10px 38px; color: #fff; font-size: 14px; outline: none;
-            font-family: 'Prompt', sans-serif;
-        }
-        .auth-input-wrap input:focus { border-color: #00AFFF; background: #16161a; box-shadow: 0 0 10px rgba(0, 175, 255, 0.15); }
-        .auth-submit-btn {
-            width: 100%; background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%);
-            border: none; color: #fff; padding: 11px; border-radius: 10px; font-size: 14px; font-weight: 600;
-            cursor: pointer; margin-top: 5px; box-shadow: 0 4px 12px rgba(0, 175, 255, 0.3);
-            font-family: 'Prompt', sans-serif;
-            transition: opacity 0.2s;
-        }
-        .auth-submit-btn:hover { opacity: 0.9; }
 
         @media (max-width: 768px) {
             .corner-container.left { left: 15px; bottom: 15px; }
             .corner-container.right { right: 15px; bottom: 15px; }
             .social-btn { width: 36px; height: 36px; font-size: 14px; }
-            .topup-text-btn { height: 36px; padding: 0 12px; font-size: 12px; }
             .corner-label { font-size: 9px; }
         }
     </style>
@@ -193,7 +87,7 @@
     <!-- แสงเรืองแสงพื้นหลัง -->
     <div class="bg-glow"></div>
 
-    <!-- มุมซ้ายล่าง: KRYPTONITE STORE + โซเชียล + ปุ่มเติมเงิน -->
+    <!-- มุมซ้ายล่าง: KRYPTONITE STORE + โซเชียล -->
     <div class="corner-container left">
         <span class="corner-label">KRYPTONITE STORE</span>
         <div class="social-icons-group">
@@ -203,10 +97,6 @@
             <a href="https://discord.gg/DuWWvxs6P4" target="_blank" class="social-btn discord" title="Discord Kryptonite">
                 <i class="fa-brands fa-discord"></i>
             </a>
-            <!-- ปุ่มเติมเงินแบบมีข้อความตามที่คุณต้องการ -->
-            <button type="button" onclick="openTopupModal()" class="topup-text-btn" title="เติมเงิน (PromptPay QR)">
-                <i class="fa-solid fa-wallet"></i> เติมเงิน
-            </button>
         </div>
     </div>
 
@@ -255,156 +145,26 @@
         <p>&copy; 2026 KRYPTONITE X NITROPRIME — All rights reserved.</p>
     </footer>
 
-    <!-- ================= TOPUP MODAL (ระบบเติมเงิน PromptPay QR) ================= -->
-    <div id="topupModalOverlay" class="auth-modal-overlay">
-        <div class="auth-modal-box">
-            <div class="auth-close-btn" onclick="closeTopupModal()"><i class="fa-solid fa-xmark"></i></div>
-            <div class="auth-brand"><i class="fa-solid fa-wallet" style="color: #00AFFF;"></i> เติมเงินอัตโนมัติ (PromptPay)</div>
-
-            <!-- สเต็ปที่ 1: กรอกจำนวนเงิน -->
-            <div id="topupStep1">
-                <div class="auth-form-group">
-                    <label>ระบุจำนวนเงินที่ต้องการเติม (บาท)</label>
-                    <div class="auth-input-wrap">
-                        <i class="fa-solid fa-baht-sign"></i>
-                        <input type="number" id="topupAmountInput" placeholder="เช่น 50, 100, 500" min="1" step="any">
-                    </div>
-                </div>
-                <button type="button" class="auth-submit-btn" onclick="generateQRCodePromptPay()">
-                    สร้าง QR Code โอนเงิน <i class="fa-solid fa-qrcode"></i>
-                </button>
-            </div>
-
-            <!-- สเต็ปที่ 2: แสดง QR Code ตามยอดเงิน -->
-            <div id="topupStep2" style="display: none; text-align: center;">
-                <div style="font-size: 13px; color: #94a3b8; margin-bottom: 12px;">
-                    สแกน QR เพื่อโอนเข้าบัญชี (0933998364)<br>ยอดชำระ: <span id="displayTargetAmount" style="color: #00AFFF; font-weight: 700; font-size: 18px;">0</span> บาท
-                </div>
-                
-                <!-- กล่องแสดง QR Code สีขาว -->
-                <div style="background: #ffffff; padding: 14px; border-radius: 12px; display: inline-block; margin-bottom: 12px; box-shadow: 0 0 20px rgba(0, 175, 255, 0.2);">
-                    <div id="qrcodeContainer"></div>
-                </div>
-
-                <div style="font-size: 11px; color: #64748b; margin-bottom: 15px;">
-                    <i class="fa-solid fa-circle-notch fa-spin" style="color: #00AFFF;"></i> QR Code ล็อกยอดเงินเรียบร้อยแล้ว
-                </div>
-
-                <button type="button" class="auth-submit-btn" onclick="backToStep1()" style="background: #1a1a20; border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1;">
-                    <i class="fa-solid fa-arrow-left"></i> กลับไปเปลี่ยนจำนวนเงิน
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script ควบคุมการทำงานทั้งหมด -->
+    <!-- Script สำหรับทำอนิเมชั่นเปลี่ยนหน้าแบบสมูท -->
     <script>
-        // ควบคุมแอนิเมชันเปลี่ยนหน้าเว็บไซต์หลัก
         document.addEventListener('DOMContentLoaded', () => {
             const link = document.querySelector('.transition-link');
             if (link) {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const targetUrl = this.getAttribute('href');
+                    
+                    document.body.style.opacity = '1';
+                    document.body.style.transition = 'opacity 0.5s ease';
                     document.body.style.opacity = '0';
+
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 500);
                 });
             }
         });
-
-        // --- ฟังก์ชันระบบเติมเงิน (Global Scope เพื่อให้กดเรียกได้ทันที) ---
-        const PROMPTPAY_NUMBER = "0933998364";
-
-        function openTopupModal() {
-            const modal = document.getElementById('topupModalOverlay');
-            const step1 = document.getElementById('topupStep1');
-            const step2 = document.getElementById('topupStep2');
-            const input = document.getElementById('topupAmountInput');
-            
-            if (modal) {
-                modal.classList.add('active');
-                if (step1) step1.style.display = 'block';
-                if (step2) step2.style.display = 'none';
-                if (input) input.value = '';
-            }
-        }
-
-        function closeTopupModal() {
-            const modal = document.getElementById('topupModalOverlay');
-            if (modal) {
-                modal.classList.remove('active');
-            }
-        }
-
-        function backToStep1() {
-            document.getElementById('topupStep2').style.display = 'none';
-            document.getElementById('topupStep1').style.display = 'block';
-        }
-
-        // ปิด Modal เมื่อคลิกพื้นที่ว่างด้านนอก
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('topupModalOverlay');
-            if (e.target === modal) {
-                closeTopupModal();
-            }
-        });
-
-        function generatePromptPayPayload(mobile, amount) {
-            let cleanId = mobile.replace(/[^0-9]/g, '');
-            let targetType = cleanId.length >= 13 ? "02" : "01";
-            if (cleanId.length === 10) cleanId = "0066" + cleanId.substring(1);
-
-            let formattedTarget = targetType + ("00" + cleanId.length).slice(-2) + cleanId;
-            let merchantAccount = "0016A000000677010111" + ("00" + formattedTarget.length).slice(-2) + formattedTarget;
-            
-            let formattedAmount = parseFloat(amount).toFixed(2);
-            let amountField = "54" + ("00" + formattedAmount.length).slice(-2) + formattedAmount;
-
-            let data = "000201" + "010211" + "2937" + merchantAccount + "5802TH" + "5303764" + amountField + "6304";
-            let crc = crc16(data);
-            return data + crc;
-        }
-
-        function crc16(text) {
-            let crc = 0xFFFF;
-            for (let c = 0; c < text.length; c++) {
-                crc ^= text.charCodeAt(c) << 8;
-                for (let i = 0; i < 8; i++) {
-                    if (crc & 0x8000) { crc = (crc << 1) ^ 0x1021; } else { crc = crc << 1; }
-                }
-            }
-            let hex = (crc & 0xFFFF).toString(16).toUpperCase();
-            return "0000".substr(0, 4 - hex.length) + hex;
-        }
-
-        function generateQRCodePromptPay() {
-            const amountInput = document.getElementById('topupAmountInput');
-            const amount = parseFloat(amountInput.value);
-
-            if (!amount || amount <= 0) {
-                alert('❌ กรุณากรอกจำนวนเงินให้ถูกต้องครับ');
-                return;
-            }
-
-            document.getElementById('displayTargetAmount').innerText = amount.toFixed(2);
-            document.getElementById('topupStep1').style.display = 'none';
-            document.getElementById('topupStep2').style.display = 'block';
-
-            const qrPayload = generatePromptPayPayload(PROMPTPAY_NUMBER, amount);
-            const container = document.getElementById('qrcodeContainer');
-            container.innerHTML = "";
-
-            new QRCode(container, {
-                text: qrPayload,
-                width: 190,
-                height: 190,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
     </script>
+
 </body>
 </html>
