@@ -72,6 +72,7 @@
 
         let membersList = [];
         let currentAdminName = localStorage.getItem('username') || 'AdminOwner';
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1553709935911637082/j_aSH-2ysIqiAb7doIPw3AE3y11jY3w1j57oBWy3ND_MD7-FhFTZQ3Jg6EcTbgRCSjRF";
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('adminName').innerText = currentAdminName;
@@ -93,6 +94,12 @@
                 let list = [];
                 snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
                 renderTransactions(list);
+            });
+
+            onSnapshot(collection(db, "ip_bans"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderIpBans(list);
             });
 
             onSnapshot(collection(db, "announcements"), (snapshot) => {
@@ -139,8 +146,8 @@
                         <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${role}</span></td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${balance.toFixed(2)}</td>
                         <td>
-                            <button class="btn btn-primary" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'add')"><i class="fa-solid fa-plus"></i></button>
-                            <button class="btn btn-warning" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'sub')"><i class="fa-solid fa-minus"></i></button>
+                            <button class="btn btn-primary" onclick="window.updateCredit('${m.id}', '${m.username}',${balance}, 'add')"><i class="fa-solid fa-plus"></i></button>
+                            <button class="btn btn-warning" onclick="window.updateCredit('${m.id}', '${m.username}',${balance}, 'sub')"><i class="fa-solid fa-minus"></i></button>
                         </td>
                         <td>
                             <button class="btn btn-role" onclick="window.updateRole('${m.id}', '${m.username}', '${role}')"><i class="fa-solid fa-user-gear"></i> สิทธิ์</button>
@@ -199,7 +206,48 @@
             }
         }
 
-        // --- 2. จัดการสินค้าและสต็อก ---
+        // --- 2. ระบบจัดการแบน IP / อุปกรณ์ ---
+        window.addIpBan = async () => {
+            let ip = document.getElementById('banIpAddress').value.trim();
+            let reason = document.getElementById('banReason').value.trim() || 'ละเมิดกฎระบบ';
+            if (!ip) { alert('กรุณากรอกหมายเลข IP Address หรือรหัสอุปกรณ์'); return; }
+
+            await addDoc(collection(db, "ip_bans"), {
+                ip: ip,
+                reason: reason,
+                admin: currentAdminName,
+                timestamp: new Date().toLocaleString('th-TH')
+            });
+
+            logAction(`แบน IP/Device: ${ip} (เหตุผล: ${reason})`);
+            document.getElementById('banIpAddress').value = '';
+            document.getElementById('banReason').value = '';
+            alert(`🚫 บล็อก IP: ${ip} เรียบร้อยแล้ว`);
+        }
+
+        function renderIpBans(list) {
+            const tbody = document.getElementById('ipBanTableBody');
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ไม่มีรายการแบน IP</td></tr>` : '';
+            list.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> ${item.ip}</b></td>
+                        <td>${item.reason}</td>
+                        <td style="color: #00AFFF;">${item.admin || 'System'}</td>
+                        <td style="color: #94a3b8; font-size: 12px;">${item.timestamp}</td>
+                        <td><button class="btn btn-primary" onclick="window.removeIpBan('${item.id}', '${item.ip}')"><i class="fa-solid fa-unlock"></i> ปลดแบน</button></td>
+                    </tr>`;
+            });
+        }
+
+        window.removeIpBan = async (id, ip) => {
+            if (confirm(`ยืนยันปลดแบน IP/อุปกรณ์: ${ip}?`)) {
+                await deleteDoc(doc(db, "ip_bans", id));
+                logAction(`ปลดแบน IP/Device: ${ip}`);
+            }
+        }
+
+        // --- 3. จัดการสินค้าและสต็อก ---
         window.addProduct = async () => {
             let name = document.getElementById('prodName').value.trim();
             let price = parseFloat(document.getElementById('prodPrice').value);
@@ -237,7 +285,7 @@
             }
         }
 
-        // --- 3. ระบบคูปองส่วนลด ---
+        // --- 4. ระบบคูปองส่วนลด ---
         window.addCoupon = async () => {
             let code = document.getElementById('couponCode').value.trim().toUpperCase();
             let discount = parseInt(document.getElementById('couponDiscount').value);
@@ -258,11 +306,11 @@
                 createdDate: new Date().toLocaleDateString('th-TH')
             });
 
-            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}%, อายุ ${expireDays} วัน)`);
+            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}\%, อายุ ${expireDays} วัน)`);
             document.getElementById('couponCode').value = '';
             document.getElementById('couponDiscount').value = '';
             document.getElementById('couponExpireDays').value = '';
-            alert(`✅ สร้างคูปอง ${code} สำเร็จ! (หมดอายุวันที่ ${expireDate.toLocaleDateString('th-TH')})`);
+            alert(`✅ สร้างคูปอง ${code} สำเร็จ!`);
         }
 
         function renderCoupons(list) {
@@ -283,26 +331,77 @@
         window.deleteCoupon = async (id, code) => {
             if (confirm(`ยืนยันลบคูปอง ${code}?`)) {
                 await deleteDoc(doc(db, "coupons", id));
-                logAction(`ลบคูปองส่วนลด: ${code}`);
+                logAction(`lบคูปองส่วนลด: ${code}`);
             }
         }
 
-        // --- 4. ประวัติการทำรายการ ---
+        // --- 5. จำลองจำแนก/ทดสอบแจ้งเตือนเติมเงินเข้า Discord Webhook เท่ๆ ---
+        window.testSimulateTopup = async () => {
+            let username = prompt("ระบุชื่อยูสเซอร์ลูกค้าที่เติมเงิน:", "CyberGamer99");
+            let fullname = prompt("ระบุชื่อ-นามสกุลจริงผู้โอนเงิน:", "สมชาย ใจดี");
+            let amount = parseFloat(prompt("ระบุจำนวนเงินที่เติม (บาท):", "500"));
+
+            if (!username || !fullname || isNaN(amount)) return;
+
+            let timestamp = new Date().toLocaleString('th-TH');
+
+            // บันทึกลงฐานข้อมูล Transactions
+            await addDoc(collection(db, "transactions"), {
+                username: username,
+                fullname: fullname,
+                amount: amount,
+                detail: `เติมเงินเข้ากระเป๋าสำเร็จ (โอนผ่านธนาคาร)`,
+                timestamp: timestamp
+            });
+
+            // ส่ง Discord Webhook รูปแบบ Embed สุดเท่
+            const discordPayload = {
+                username: "Vortex Official Bot",
+                avatar_url: "https://i.imgur.com/4M34hi2.png",
+                embeds: [{
+                    title: "💳 แจ้งเตือนการเติมเงินสำเร็จ (Top-up Alert)",
+                    color: 39423, // Electric Blue #00AFFF ในรูปแบบ Decimal
+                    fields: [
+                        { name: "👤 ยูสเซอร์เนม", value: `\`${username}\``, inline: true },
+                        { name: "📝 ชื่อ-นามสกุล ผู้โอน", value: `**${fullname}**`, inline: true },
+                        { name: "💰 จำนวนเงิน", value: `\`+฿${amount.toFixed(2)}\``, inline: false },
+                        { name: "🕒 วันเวลาที่ทำรายการ", value: `\`${timestamp}\``, inline: false }
+                    ],
+                    footer: { text: "Vortex Official Security & Payment System" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(discordPayload)
+                });
+                alert('✅ จำลองการเติมเงินและส่งแจ้งเตือนไปที่ Discord สำเร็จ!');
+                logAction(`จำลองเติมเงินให้ ${username} (${amount} บาท) และส่ง Discord Alert`);
+            } catch (err) {
+                console.error("Discord Webhook Error:", err);
+                alert('❌ เกิดข้อผิดพลาดในการส่ง Discord Webhook');
+            }
+        }
+
         function renderTransactions(list) {
             const tbody = document.getElementById('trxTableBody');
-            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">ยังไม่มีประวัติการทำรายการ</td></tr>` : '';
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ยังไม่มีประวัติการทำรายการ</td></tr>` : '';
             list.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(t => {
                 tbody.innerHTML += `
                     <tr>
                         <td style="color: #94a3b8; font-size: 12px;">${t.timestamp || '-'}</td>
                         <td><b>${t.username || 'ไม่ระบุ'}</b></td>
+                        <td style="color: #cbd5e1;">${t.fullname || 'ไม่ระบุชื่อ-นามสกุล'}</td>
                         <td>${t.detail || '-'}</td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${parseFloat(t.amount || 0).toFixed(2)}</td>
                     </tr>`;
             });
         }
 
-        // --- 5. ระบบประกาศหน้าเว็บ ---
+        // --- 6. ระบบประกาศหน้าเว็บ ---
         window.saveAnnouncement = async () => {
             let content = document.getElementById('announcementText').value.trim();
             if (!content) return;
@@ -320,7 +419,7 @@
             });
         }
 
-        // --- 6. บันทึกการทำงานแอดมิน ---
+        // --- 7. บันทึกแอดมิน ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -347,14 +446,15 @@
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ - Vortex Official</h2>
         <p>ผู้ดูแลระบบปัจจุบัน: <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span></p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบเชื่อมต่อ Firebase Real-time พร้อมใช้งานจริง 100%</div>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบเชื่อมต่อ Firebase & Discord Webhook พร้อมใช้งานจริง 100%</div>
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก & แบน</button>
+            <button class="tab-btn" onclick="switchTab('tab-ipbans', this)"><i class="fa-solid fa-ban"></i> จัดการแบน IP / อุปกรณ์</button>
             <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
             <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
-            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ</button>
+            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & เติมเงิน</button>
             <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
             <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
@@ -382,7 +482,33 @@
             </div>
         </div>
 
-        <!-- 2. TAB: สินค้าและสต็อก -->
+        <!-- 2. TAB: จัดการแบน IP / อุปกรณ์ -->
+        <div id="tab-ipbans" class="tab-content">
+            <h3><i class="fa-solid fa-ban"></i> ระบบบล็อก IP Address หรือ Device ที่พยายามก่อกวนระบบ</h3>
+            <div class="form-grid">
+                <input type="text" id="banIpAddress" placeholder="ระบุ IP Address เช่น 192.168.1.50">
+                <input type="text" id="banReason" placeholder="เหตุผลในการแบน เช่น บอทยิงเว็บ, โกงระบบ">
+            </div>
+            <button class="btn btn-danger" onclick="window.addIpBan()"><i class="fa-solid fa-shield-cat"></i> บล็อก IP นี้ทันที</button>
+
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-list-ul"></i> รายชื่อ IP ที่ถูกแบนอยู่ในปัจจุบัน</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>เหตุผล</th>
+                            <th>แอดมินผู้บล็อก</th>
+                            <th>วันที่แบน</th>
+                            <th>ปลดแบน</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ipBanTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. TAB: สินค้าและสต็อก -->
         <div id="tab-products" class="tab-content">
             <h3><i class="fa-solid fa-box-archive"></i> เพิ่มสินค้าและคีย์สต็อกอัตโนมัติ</h3>
             <div class="form-grid">
@@ -408,7 +534,7 @@
             </div>
         </div>
 
-        <!-- 3. TAB: คูปองส่วนลด -->
+        <!-- 4. TAB: คูปองส่วนลด -->
         <div id="tab-coupons" class="tab-content">
             <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด (กำหนด % และวันหมดอายุ)</h3>
             <div class="form-grid">
@@ -435,15 +561,19 @@
             </div>
         </div>
 
-        <!-- 4. TAB: ประวัติทำรายการ -->
+        <!-- 5. TAB: ประวัติทำรายการ & เติมเงิน -->
         <div id="tab-transactions" class="tab-content">
-            <h3><i class="fa-solid fa-receipt"></i> ประวัติการซื้อและการเติมเงินของลูกค้า</h3>
-            <div style="overflow-x: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <h3><i class="fa-solid fa-receipt"></i> ประวัติการทำรายการ & แจ้งเตือน Discord Webhook</h3>
+                <button class="btn btn-primary" onclick="window.testSimulateTopup()"><i class="fa-solid fa-paper-plane"></i> ทดสอบจำลองการเติมเงินเข้า Discord</button>
+            </div>
+            <div style="overflow-x: auto; margin-top: 10px;">
                 <table>
                     <thead>
                         <tr>
                             <th>วันเวลา</th>
-                            <th>ยูสเซอร์</th>
+                            <th>ยูสเซอร์เนม</th>
+                            <th>ชื่อ-นามสกุล ผู้โอน</th>
                             <th>รายละเอียดรายการ</th>
                             <th>จำนวนเงิน</th>
                         </tr>
@@ -453,7 +583,7 @@
             </div>
         </div>
 
-        <!-- 5. TAB: ประกาศหน้าเว็บ -->
+        <!-- 6. TAB: ประกาศหน้าเว็บ -->
         <div id="tab-announcement" class="tab-content">
             <h3><i class="fa-solid fa-bullhorn"></i> ตั้งค่าประกาศหน้าเว็บไซต์</h3>
             <textarea id="announcementText" rows="3" placeholder="พิมพ์ข้อความประกาศแจ้งเตือนโปรโมชั่น..."></textarea>
@@ -463,7 +593,7 @@
             <div id="announcementList"></div>
         </div>
 
-        <!-- 6. TAB: บันทึกแอดมิน -->
+        <!-- 7. TAB: บันทึกแอดมิน -->
         <div id="tab-logs" class="tab-content">
             <h3><i class="fa-solid fa-clipboard-list"></i> ตรวจสอบการทำงานของแอดมิน (Audit Log)</h3>
             <div style="overflow-x: auto;">
