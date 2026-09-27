@@ -42,12 +42,13 @@
         .nav-inner {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .nav-menu {
             display: flex;
             align-items: center;
             gap: 6px;
+            transition: all 0.3s ease;
         }
         .nav-menu a {
             color: #94a3b8;
@@ -72,6 +73,66 @@
             color: #00AFFF;
             font-size: 15px;
         }
+
+        /* ปุ่มค้นหาและช่องค้นหาสไลด์ */
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-toggle-btn {
+            background: rgba(0, 175, 255, 0.1);
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            color: #00AFFF;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .search-toggle-btn:hover {
+            background: rgba(0, 175, 255, 0.2);
+            color: #ffffff;
+        }
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            background: #121215;
+            border: 1px solid rgba(0, 175, 255, 0.4);
+            border-radius: 10px;
+            padding: 0;
+        }
+        .search-input-wrapper.active {
+            width: 240px;
+            opacity: 1;
+            padding: 0 10px;
+        }
+        .search-input-wrapper i {
+            color: #00AFFF;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        .search-input-wrapper input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 13px;
+            width: 100%;
+            height: 38px;
+            font-family: 'Prompt', sans-serif;
+        }
+        .search-input-wrapper input::placeholder {
+            color: #64748b;
+        }
+
         .nav-right-actions {
             display: flex;
             align-items: center;
@@ -111,6 +172,9 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 25px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .announcement-capsule {
             background: #0d0d12;
@@ -152,26 +216,20 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* แบนเนอร์หลักสไตล์เดิม (เอารูปสีทองออก เหลือแค่ข้อความและเลเยอร์หรู) */
+        /* แบนเนอร์หลักขนาดเท่าเดิมตอนที่มีรูปภาพฝั่งขวา (ใช้โครงสร้าง Grid 2 คอลัมน์ แต่ฝั่งขวาเว้นว่างไว้) */
         .main-hero-banner {
-            background: linear-gradient(135deg, #0e0e16 0%, #09090e 100%);
+            background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
             border-radius: 16px;
-            padding: 45px 40px;
-            position: relative;
-            overflow: hidden;
+            padding: 35px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0, 175, 255, 0.05);
             margin-bottom: 30px;
             max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
-        }
-        .main-hero-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 80% 50%, rgba(0, 175, 255, 0.12) 0%, transparent 60%);
-            pointer-events: none;
         }
         .hero-left-content h1 {
             font-size: 32px;
@@ -299,7 +357,7 @@
         }
 
         @media (max-width: 900px) {
-            .announcements-grid, .stats-grid, .products-grid-preview {
+            .announcements-grid, .stats-grid, .products-grid-preview, .main-hero-banner {
                 grid-template-columns: 1fr;
             }
         }
@@ -490,6 +548,17 @@
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
 
+            <!-- ปุ่มแว่นขยายและช่องค้นหาสไลด์ -->
+            <div class="search-container">
+                <div class="search-toggle-btn" id="searchToggleBtn" title="ค้นหาสินค้า">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="search-input-wrapper" id="searchInputWrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInputField" placeholder="ค้นหาสินค้า">
+                </div>
+            </div>
+
             <div class="nav-right-actions" id="navRightSection">
                 <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #94a3b8; padding: 0 4px;">
                     <i class="fa-solid fa-globe" style="color: #00AFFF;"></i> TH
@@ -505,7 +574,7 @@
     <main class="main-container full-width-layout">
         
         <!-- แถบประกาศคู่ด้านบนแบบเรฟ -->
-        <div class="announcements-grid" style="max-width: 1200px; margin-left: auto; margin-right: auto;">
+        <div class="announcements-grid">
             <div class="announcement-capsule">
                 <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
                 <div class="announcement-ticker">
@@ -520,13 +589,14 @@
             </div>
         </div>
 
-        <!-- แบนเนอร์หลักสไตล์เดิม (เอารูปสีทองออก คงเหลือข้อความและเลเยอร์หรู) -->
+        <!-- แบนเนอร์หลักขนาดเท่าเดิม (โครงสร้าง Grid 2 คอลัมน์โดยเอารูปออก) -->
         <div class="main-hero-banner">
             <div class="hero-left-content">
                 <span style="font-size: 11px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
                 <h1>KRYPTONITE X NITROPRIME</h1>
                 <p>EVERYTHING GAMERS NEED, ALL IN ONE SHOP — บริการพรีเมียม ปลอดภัย รวดเร็ว 100%</p>
             </div>
+            <div class="hero-right-space"></div>
         </div>
 
         <!-- กล่องสถิติ 4 ช่อง -->
@@ -715,6 +785,27 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // ระบบสไลด์ช่องค้นหาเมื่อกดแว่นขยาย
+        const searchToggleBtn = document.getElementById('searchToggleBtn');
+        const searchInputWrapper = document.getElementById('searchInputWrapper');
+        const searchInputField = document.getElementById('searchInputField');
+
+        searchToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            searchInputWrapper.classList.toggle('active');
+            if (searchInputWrapper.classList.contains('active')) {
+                searchInputField.focus();
+            } else {
+                searchInputField.value = '';
+            }
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!searchInputWrapper.contains(e.target) && !searchToggleBtn.contains(e.target)) {
+                searchInputWrapper.classList.remove('active');
+            }
+        });
 
         const isAdminUser = localStorage.getItem('isAdmin') === 'true' || localStorage.getItem('username') === 'admin';
 
