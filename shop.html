@@ -14,7 +14,7 @@
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
-        /* Navbar Capsule Layout (ปรับให้ชิดกันพอดีและอยู่ตรงกลาง) */
+        /* Navbar Rectangle Layout (ทรงสี่เหลี่ยมขอบมน อยู่ตรงกลาง) */
         .navbar {
             display: flex;
             justify-content: center;
@@ -22,7 +22,7 @@
             background-color: #121215 !important;
             padding: 6px 12px;
             border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 50px;
+            border-radius: 12px; /* ปรับเป็นสี่เหลี่ยมขอบมน */
             margin: 25px auto;
             width: fit-content;
             max-width: 95vw;
@@ -34,7 +34,7 @@
         .nav-inner {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .nav-menu {
             display: flex;
@@ -49,7 +49,7 @@
             font-weight: 500;
             height: 36px;
             padding: 0 12px;
-            border-radius: 20px;
+            border-radius: 8px; /* ปรับปุ่มเมนูด้านในเป็นสี่เหลี่ยมขอบมน */
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
@@ -75,8 +75,8 @@
             background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
             box-shadow: 0 0 15px rgba(0, 175, 255, 0.4);
             border: none;
-            padding: 7px 18px;
-            border-radius: 20px;
+            padding: 7px 16px;
+            border-radius: 8px; /* ปรับปุ่มเข้าสู่ระบบเป็นสี่เหลี่ยมขอบมน */
             font-size: 13px;
             font-weight: 600;
             text-decoration: none;
@@ -266,7 +266,7 @@
 </head>
 <body class="fade-page">
 
-    <!-- ================= NAVBAR (แคปซูลตรงกลาง กระชับชิดกัน) ================= -->
+    <!-- ================= NAVBAR (ทรงสี่เหลี่ยมขอบมน อยู่ตรงกลาง) ================= -->
     <header class="navbar">
         <div class="nav-inner">
             <nav class="nav-menu">
@@ -899,24 +899,24 @@
             const navRight = document.getElementById('navRightSection');
             navRight.innerHTML = `
                 <div style="position: relative; display: inline-block;">
-                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #1a1a20; border: 1px solid rgba(0, 175, 255, 0.3); padding: 4px 10px; border-radius: 20px;">
-                        <div style="width: 26px; height: 26px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
+                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #1a1a20; border: 1px solid rgba(0, 175, 255, 0.3); padding: 4px 10px; border-radius: 8px;">
+                        <div style="width: 26px; height: 26px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
                             <i class="fa-solid fa-user" style="font-size: 11px;"></i>
                         </div>
                         <span style="font-size: 12px; font-weight: 600; color: #fff;">${username}</span>
                         <span style="font-size: 11px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
                     </div>
 
-                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 45px; width: 280px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff; text-align: left;">
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 45px; width: 280px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff; text-align: left;">
                         <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="width: 38px; height: 38px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700; font-size: 13px;">${username.substring(0, 2).toUpperCase()}</div>
+                            <div style="width: 38px; height: 38px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700; font-size: 13px;">${username.substring(0, 2).toUpperCase()}</div>
                             <div>
                                 <div style="font-size: 13px; font-weight: 600;">${username}</div>
                                 <div style="font-size: 10px; color: #00AFFF; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
                             </div>
                         </div>
 
-                        <div style="background: #121215; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 10px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="background: #121215; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 8px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <div style="font-size: 10px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
                                 <div style="font-size: 14px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
