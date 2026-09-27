@@ -25,7 +25,7 @@
         .tab-content.active { display: block; }
 
         /* Form & Inputs */
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
         input, select, textarea { width: 100%; padding: 10px 15px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #00AFFF; }
         
@@ -114,7 +114,6 @@
             });
         });
 
-        // ฟังก์ชันบันทึก Log แอดมินลง Firebase จริง
         async function logAction(actionText) {
             try {
                 await addDoc(collection(db, "admin_logs"), {
@@ -209,7 +208,7 @@
             
             let stockArray = stock ? stock.split('\n').map(s => s.trim()).filter(s => s !== '') : [];
             await addDoc(collection(db, "products"), { name, price, stock: stockArray });
-            logAction(`เพิ่มสินค้าใหม่: ${name} (ราคา ฿${price})`);
+            logAction(`เพิ่มสินค้าใหม่: ${name}`);
             document.getElementById('prodName').value = '';
             document.getElementById('prodPrice').value = '';
             document.getElementById('prodStock').value = '';
@@ -238,38 +237,45 @@
             }
         }
 
-        // --- 3. ระบบคูปองส่วนลด (ใหม่ 1%-100%) ---
+        // --- 3. ระบบคูปองส่วนลด (กำหนด % และอายุเป็นวัน) ---
         window.addCoupon = async () => {
             let code = document.getElementById('couponCode').value.trim().toUpperCase();
             let discount = parseInt(document.getElementById('couponDiscount').value);
+            let expireDays = parseInt(document.getElementById('couponExpireDays').value);
             
-            if (!code || isNaN(discount) || discount < 1 || discount > 100) {
-                alert('❌ กรุณากรอกรหัสโค้ด และส่วนลดระหว่าง 1 ถึง 100 เท่านั้น');
+            if (!code || isNaN(discount) || discount < 1 || discount > 100 || isNaN(expireDays) || expireDays < 1) {
+                alert('❌ กรุณากรอกข้อมูลให้ถูกต้อง (ส่วนลด 1-100% และอายุโค้ดอย่างน้อย 1 วัน)');
                 return;
             }
+
+            // คำนวณวันหมดอายุจากวันปัจจุบัน
+            let expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + expireDays);
 
             await addDoc(collection(db, "coupons"), {
                 code: code,
                 discount: discount,
-                status: 'ACTIVE',
-                createdDate: new Date().toLocaleString('th-TH')
+                expireDate: expireDate.toLocaleDateString('th-TH'),
+                createdDate: new Date().toLocaleDateString('th-TH')
             });
 
-            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}%)`);
+            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}%, อายุ ${expireDays} วัน)`);
             document.getElementById('couponCode').value = '';
             document.getElementById('couponDiscount').value = '';
-            alert(`✅ สร้างคูปอง ${code} ลด ${discount}% สำเร็จ!`);
+            document.getElementById('couponExpireDays').value = '';
+            alert(`✅ สร้างคูปอง ${code} สำเร็จ! (หมดอายุวันที่ ${expireDate.toLocaleDateString('th-TH')})`);
         }
 
         function renderCoupons(list) {
             const tbody = document.getElementById('couponTableBody');
-            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">ยังไม่มีคูปองส่วนลด</td></tr>` : '';
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">ยังไม่มีคูปองส่วนลด</td></tr>` : '';
             list.forEach(c => {
                 tbody.innerHTML += `
                     <tr>
                         <td><b style="color: #00AFFF; letter-spacing: 1px;">${c.code}</b></td>
                         <td><span style="background: rgba(245,158,11,0.15); color: #f59e0b; padding: 3px 8px; border-radius: 4px; font-weight: bold;">ลด ${c.discount}%</span></td>
-                        <td>${c.createdDate || '-'}</td>
+                        <td style="color: #94a3b8;">${c.createdDate || '-'}</td>
+                        <td style="color: #ef4444; font-weight: 650;">${c.expireDate || 'ไม่ระบุ'}</td>
                         <td><button class="btn btn-danger" onclick="window.deleteCoupon('${c.id}', '${c.code}')"><i class="fa-solid fa-trash"></i> ลบ</button></td>
                     </tr>`;
             });
@@ -315,7 +321,7 @@
             });
         }
 
-        // --- 6. บันทึกการทำงานแอดมิน (Audit Log) ---
+        // --- 6. บันทึกการทำงานแอดมิน ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -329,7 +335,6 @@
             });
         }
 
-        // Tab Switching Logic
         window.switchTab = (tabId, btnElement) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -406,14 +411,15 @@
 
         <!-- 3. TAB: คูปองส่วนลด -->
         <div id="tab-coupons" class="tab-content">
-            <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด (1% - 100%)</h3>
+            <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด (กำหนด % และวันหมดอายุ)</h3>
             <div class="form-grid">
-                <input type="text" id="couponCode" placeholder="ระบุชื่อโค้ด เช่น VORTEX50">
-                <input type="number" id="couponDiscount" min="1" max="100" placeholder="เปอร์เซ็นต์ส่วนลด (เช่น 10 หรือ 50)">
+                <input type="text" id="couponCode" placeholder="ชื่อโค้ด เช่น VORTEX50">
+                <input type="number" id="couponDiscount" min="1" max="100" placeholder="เปอร์เซ็นต์ส่วนลด (1 - 100)">
+                <input type="number" id="couponExpireDays" min="1" placeholder="อายุโค้ด (จำนวนวัน เช่น 7 หรือ 30)">
             </div>
             <button class="btn btn-primary" onclick="window.addCoupon()"><i class="fa-solid fa-circle-plus"></i> สร้างคูปองส่วนลด</button>
 
-            <h3 style="margin-top: 30px;"><i class="fa-solid fa-tags"></i> โค้ดส่วนลดทั้งหมดที่ใช้งานได้</h3>
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-tags"></i> โค้ดส่วนลดทั้งหมดในระบบ</h3>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
@@ -421,6 +427,7 @@
                             <th>โค้ดส่วนลด</th>
                             <th>อัตราส่วนลด</th>
                             <th>วันที่สร้าง</th>
+                            <th>วันหมดอายุ</th>
                             <th>จัดการ</th>
                         </tr>
                     </thead>
