@@ -447,6 +447,7 @@
             });
         }
 
+        // แก้ไขให้ switchTab ทำงานผ่าน window scope ได้ถูกต้อง
         window.switchTab = (tabId, btnElement) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -464,13 +465,13 @@
         
         <!-- Tab Navigation Menu -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
-            <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
-            <button class="tab-btn" onclick="switchTab('tab-banners', this)"><i class="fa-solid fa-image"></i> จัดการแบรนด์เนอร์</button>
-            <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
-            <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
-            <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
-            <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
+            <button class="tab-btn active" onclick="window.switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
+            <button class="tab-btn" onclick="window.switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
+            <button class="tab-btn" onclick="window.switchTab('tab-banners', this)"><i class="fa-solid fa-image"></i> จัดการแบรนด์เนอร์</button>
+            <button class="tab-btn" onclick="window.switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
+            <button class="tab-btn" onclick="window.switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ & แจ้งเตือน</button>
+            <button class="tab-btn" onclick="window.switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
+            <button class="tab-btn" onclick="window.switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
 
         <!-- 1. TAB: สมาชิก -->
