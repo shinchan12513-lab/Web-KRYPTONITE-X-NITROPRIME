@@ -149,84 +149,112 @@ body:has(.welcome-container) footer {
 }
 
 
-/* ================= SHOP PAGE (shop.html) - แถบเมนูด้านบนแบบมีกรอบลอย ================= */
+/* ================= SHOP PAGE (shop.html) - แถบเมนูด้านบนแบบกรอบลอยเดี่ยว (ปรับสัดส่วนเท่ากัน) ================= */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #121215 !important;
-    padding: 12px 24px;
-    border: 1px solid rgba(0, 175, 255, 0.25);
-    border-radius: 14px;
+    padding: 8px 16px;
+    border: 1px solid rgba(0, 175, 255, 0.3);
+    border-radius: 16px;
     margin: 20px auto;
     width: 100%;
     max-width: 1280px;
     position: sticky;
     top: 20px;
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 175, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 175, 255, 0.08);
 }
 
 .nav-left {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
 }
 
 .brand-logo {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #ffffff;
     text-decoration: none;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
 }
 
-.brand-logo .x-mark { color: #00AFFF; }
+.brand-logo .x-mark { 
+    color: #00AFFF; 
+}
 
 .nav-menu {
     display: flex;
-    gap: 10px;
+    gap: 6px;
+    align-items: center;
 }
 
-.nav-menu a {
+/* กำหนดความสูงและขนาดให้เมนูทุกตัวเท่ากันเป๊ะ */
+.nav-menu a, .nav-menu button {
     color: #94a3b8;
+    background: transparent;
+    border: none;
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 6px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 6px;
+    cursor: pointer;
+    box-sizing: border-box;
 }
 
-.nav-menu a:hover, .nav-menu a.active {
+.nav-menu a:hover, .nav-menu a.active,
+.nav-menu button:hover {
     color: #00AFFF;
     background-color: rgba(0, 175, 255, 0.1);
+}
+
+.nav-menu i {
+    color: #00AFFF;
+    font-size: 14px;
 }
 
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.nav-right a {
-    text-decoration: none;
+/* กำหนดความสูงและขนาดปุ่มฝั่งขวาให้เท่ากับเมนูด้านซ้าย */
+.btn-contact, .nav-right a, .nav-right button {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
-    padding: 7px 14px;
-    border-radius: 6px;
+    text-decoration: none;
     display: flex;
     align-items: center;
     gap: 6px;
+    box-sizing: border-box;
+    transition: all 0.2s;
 }
 
 .btn-contact {
     color: #cbd5e1;
-    background-color: #121212;
+    background-color: rgba(18, 18, 18, 0.8);
     border: 1px solid rgba(0, 175, 255, 0.2);
+}
+
+.btn-contact:hover {
+    border-color: #00AFFF;
+    color: #00AFFF;
 }
 
 .btn-login {
@@ -239,6 +267,7 @@ body:has(.welcome-container) footer {
     color: #ffffff;
     background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
     box-shadow: 0 0 15px rgba(0, 175, 255, 0.4);
+    border: none;
 }
 
 .main-container.full-width-layout {
@@ -758,7 +787,8 @@ body:has(.welcome-container) footer {
 /* ================= ปรับแต่งโทนสีโปรไฟล์ เมนู และปุ่มทั้งหมดให้เป็นสีฟ้า 100% ================= */
 .nav-right .user-profile-btn,
 .nav-right [class*="profile"],
-.nav-right [class*="user"] {
+.nav-right [class*="user"],
+.user-balance-box {
     border-color: rgba(0, 175, 255, 0.3) !important;
     background-color: rgba(0, 175, 255, 0.08) !important;
     color: #00AFFF !important;
@@ -775,6 +805,7 @@ body:has(.welcome-container) footer {
 
 .nav-right .avatar-box,
 .nav-right .profile-avatar,
+.user-avatar-img,
 .nav-right svg {
     border-color: #00AFFF !important;
     color: #00AFFF !important;
