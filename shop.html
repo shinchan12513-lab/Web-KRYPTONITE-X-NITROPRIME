@@ -385,7 +385,7 @@
             }
         });
 
-        // 2. โหลดแบรนด์เนอร์ที่ตั้งค่าตำแหน่งแล้ว พร้อมปุ่มลบสำหรับแอดมิน
+        // 2. โหลดแบรนด์เนอร์ที่ตั้งค่าตำแหน่งแล้ว พร้อมรองรับรูปทรง (รวมทรงวงกลม/วงรี) และปุ่มลบสำหรับแอดมิน
         onSnapshot(collection(db, "banners"), (snapshot) => {
             document.querySelectorAll('.dynamic-positioned-banner').forEach(el => el.remove());
 
@@ -402,6 +402,19 @@
                 bannerDiv.style.height = (b.height || 300) + 'px';
                 bannerDiv.style.zIndex = '999';
                 bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
+
+                // กำหนดขอบเขตความโค้งตาม shape ที่เลือก
+                let shape = b.shape || 'rectangle';
+                let borderRadiusStyle = '12px';
+                if (shape === 'circle') {
+                    borderRadiusStyle = '50%';
+                } else if (shape === 'rounded') {
+                    borderRadiusStyle = '25px';
+                } else if (shape === 'pill') {
+                    borderRadiusStyle = '999px';
+                } else if (shape === 'rectangle') {
+                    borderRadiusStyle = '4px';
+                }
                 
                 let deleteBtnHtml = isAdminUser ? `
                     <button class="delete-banner-btn" data-id="${docId}" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: transform 0.2s;" title="ลบแบรนด์เนอร์นี้">
@@ -410,7 +423,7 @@
                 ` : '';
 
                 bannerDiv.innerHTML = `
-                    <img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:12px; box-shadow:0 10px 25px rgba(0,175,255,0.2);" alt="Banner">
+                    <img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:${borderRadiusStyle}; box-shadow:0 10px 25px rgba(0,175,255,0.2);" alt="Banner">
                     ${deleteBtnHtml}
                 `;
 
@@ -457,22 +470,28 @@
                     <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; flex-direction: column; gap: 8px; width: 480px; max-width: 95vw;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> โหมดเลือกตำแหน่งแบรนด์เนอร์</div>
+                                <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> เลือกตำแหน่งและรูปทรงแบรนด์เนอร์</div>
                                 <div style="font-size: 11px; color: #94a3b8;">ขยับเมาส์เลือกตำแหน่ง | คลิกซ้ายเพื่อบันทึก</div>
                             </div>
                             <button id="cancelPositionBtn" style="background: #ef4444; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">ยกเลิก</button>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
-                                <span>ความกว้าง (<span id="valWidth">600</span> px):</span>
-                                <input type="range" id="rangeWidth" min="150" max="1400" value="600" style="width: 70%; cursor: pointer;">
+                                <span>รูปทรงแบรนด์เนอร์:</span>
+                                <select id="selectShape" style="width: 65%; background: #121215; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 6px; font-family: 'Prompt', sans-serif; cursor: pointer;">
+                                    <option value="rectangle">🔲 สี่เหลี่ยมผืนผ้า (มุมมนเล็ก)</option>
+                                    <option value="rounded">🔲 สี่เหลี่ยมมุมโค้งมน</option>
+                                    <option value="circle">⭕ วงกลม / วงรี (Circle/Oval)</option>
+                                    <option value="pill">💊 ทรงแคปซูล (Pill)</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                                <span>ความกว้าง (<span id="valWidth">300</span> px):</span>
+                                <input type="range" id="rangeWidth" min="80" max="1200" value="300" style="width: 65%; cursor: pointer;">
                             </div>
                             <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
                                 <span>ความสูง (<span id="valHeight">300</span> px):</span>
-                                <input type="range" id="rangeHeight" min="80" max="800" value="300" style="width: 70%; cursor: pointer;">
-                            </div>
-                            <div style="font-size: 11px; color: #64748b; text-align: center; margin-top: 2px;">
-                                ขนาดมาตรฐาน: 1200 x 600 พิกเซล (หรือสัดส่วน 2:1)
+                                <input type="range" id="rangeHeight" min="80" max="800" value="300" style="width: 65%; cursor: pointer;">
                             </div>
                         </div>
                     </div>
@@ -481,24 +500,40 @@
 
                 const ghostBanner = document.createElement('div');
                 ghostBanner.style.position = 'absolute';
-                ghostBanner.style.width = '600px';
+                ghostBanner.style.width = '300px';
                 ghostBanner.style.height = '300px';
                 ghostBanner.style.zIndex = '99999';
                 ghostBanner.style.pointerEvents = 'none';
                 ghostBanner.style.border = '2px dashed #00AFFF';
-                ghostBanner.style.borderRadius = '12px';
+                ghostBanner.style.borderRadius = '50%';
                 ghostBanner.style.overflow = 'hidden';
                 ghostBanner.style.boxShadow = '0 0 20px rgba(0,175,255,0.6)';
                 ghostBanner.innerHTML = `<img src="${bannerData.imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="Ghost">`;
                 document.body.appendChild(ghostBanner);
 
-                let currentWidth = 600;
+                let currentWidth = 300;
                 let currentHeight = 300;
+                let currentShape = 'circle';
 
                 const rangeW = document.getElementById('rangeWidth');
                 const rangeH = document.getElementById('rangeHeight');
                 const valW = document.getElementById('valWidth');
                 const valH = document.getElementById('valHeight');
+                const selectShape = document.getElementById('selectShape');
+                selectShape.value = 'circle';
+
+                selectShape.addEventListener('change', (e) => {
+                    currentShape = e.target.value;
+                    if (currentShape === 'circle') {
+                        ghostBanner.style.borderRadius = '50%';
+                    } else if (currentShape === 'rounded') {
+                        ghostBanner.style.borderRadius = '25px';
+                    } else if (currentShape === 'pill') {
+                        ghostBanner.style.borderRadius = '999px';
+                    } else {
+                        ghostBanner.style.borderRadius = '4px';
+                    }
+                });
 
                 rangeW.addEventListener('input', (e) => {
                     currentWidth = parseInt(e.target.value);
@@ -537,6 +572,7 @@
                             orientation: bannerData.orientation || 'horizontal',
                             clickable: !!bannerData.clickable,
                             linkUrl: bannerData.linkUrl || '',
+                            shape: currentShape,
                             posX: posX,
                             posY: posY,
                             width: currentWidth,
@@ -544,7 +580,7 @@
                             timestamp: new Date().toLocaleString('th-TH')
                         });
 
-                        alert('✅ บันทึกตำแหน่งและขนาดแบรนด์เนอร์ลงหน้าเว็บเรียบร้อย!');
+                        alert('✅ บันทึกตำแหน่งและรูปทรงแบรนด์เนอร์เรียบร้อย!');
                         localStorage.removeItem('temp_banner_data');
                         window.removeEventListener('click', clickHandler, true);
                         window.location.href = 'admin.html';
