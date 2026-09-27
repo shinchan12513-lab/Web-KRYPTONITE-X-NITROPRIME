@@ -166,26 +166,21 @@
             margin: 0 4px;
         }
 
-        /* ดีไซน์แถบประกาศคู่ด้านบนแบบเรฟ */
-        .announcements-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .announcement-capsule {
+        /* ช่องประกาศเดี่ยวแบบข้อความวิ่งยาว (Ticker) */
+        .announcement-single-capsule {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.25);
             border-radius: 12px;
             padding: 10px 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             overflow: hidden;
+            margin-bottom: 25px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .announcement-badge {
             background: rgba(0, 175, 255, 0.15);
@@ -209,19 +204,19 @@
             display: inline-block;
             font-size: 12px;
             color: #94a3b8;
-            animation: tickerScroll 20s linear infinite;
+            animation: tickerScroll 25s linear infinite;
         }
         @keyframes tickerScroll {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
 
-        /* แบนเนอร์หลักขนาดเท่าเดิมตอนที่มีรูปภาพฝั่งขวา (ใช้โครงสร้าง Grid 2 คอลัมน์ แต่ฝั่งขวาเว้นว่างไว้) */
+        /* แบนเนอร์หลักปรับให้สั้นลงนิดนึง */
         .main-hero-banner {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
             border-radius: 16px;
-            padding: 35px 40px;
+            padding: 24px 35px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
@@ -232,15 +227,15 @@
             margin-right: auto;
         }
         .hero-left-content h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: #ffffff;
             letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-shadow: 0 0 20px rgba(0, 175, 255, 0.4);
         }
         .hero-left-content p {
-            font-size: 13px;
+            font-size: 12px;
             color: #94a3b8;
             letter-spacing: 0.5px;
         }
@@ -357,7 +352,7 @@
         }
 
         @media (max-width: 900px) {
-            .announcements-grid, .stats-grid, .products-grid-preview, .main-hero-banner {
+            .stats-grid, .products-grid-preview, .main-hero-banner {
                 grid-template-columns: 1fr;
             }
         }
@@ -548,7 +543,7 @@
                 <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
 
-            <!-- ปุ่มแว่นขยายและช่องค้นหาสไลด์ -->
+            <!-- ปุ่มแว่นขยายและช่องค้นหาสไลด์ (ค้นหาสินค้า) -->
             <div class="search-container">
                 <div class="search-toggle-btn" id="searchToggleBtn" title="ค้นหาสินค้า">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -573,23 +568,15 @@
     <!-- ================= MAIN CONTENT ================= -->
     <main class="main-container full-width-layout">
         
-        <!-- แถบประกาศคู่ด้านบนแบบเรฟ -->
-        <div class="announcements-grid">
-            <div class="announcement-capsule">
-                <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
-                <div class="announcement-ticker">
-                    <span class="announcement-text" id="announcementText1">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1</span>
-                </div>
-            </div>
-            <div class="announcement-capsule">
-                <div class="announcement-badge"><i class="fa-solid fa-bolt"></i> ANNOUNCE</div>
-                <div class="announcement-ticker">
-                    <span class="announcement-text" id="announcementText2">โปรโมชั่นเติมเงินรับโบนัสพิเศษฟรีตลอด 24 ชั่วโมง!</span>
-                </div>
+        <!-- ช่องประกาศเดี่ยวแบบข้อความวิ่งยาว (Ticker) -->
+        <div class="announcement-single-capsule">
+            <div class="announcement-badge"><i class="fa-solid fa-bullhorn"></i> ประกาศ</div>
+            <div class="announcement-ticker">
+                <span class="announcement-text" id="announcementText">ยินดีต้อนรับสู่ KRYPTONITE X NITROPRIME แหล่งรวมบริการพรีเมียมอันดับ 1 — โปรโมชั่นเติมเงินรับโบนัสพิเศษฟรีตลอด 24 ชั่วโมง!</span>
             </div>
         </div>
 
-        <!-- แบนเนอร์หลักขนาดเท่าเดิม (โครงสร้าง Grid 2 คอลัมน์โดยเอารูปออก) -->
+        <!-- แบนเนอร์หลัก (ปรับความสูงให้สั้นลงนิดนึงและคงโครงสร้างเดิม) -->
         <div class="main-hero-banner">
             <div class="hero-left-content">
                 <span style="font-size: 11px; color: #00AFFF; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Official Store</span>
@@ -815,13 +802,11 @@
                 list.push(docSnap.data());
             });
             
-            const annText1 = document.getElementById('announcementText1');
-            const annText2 = document.getElementById('announcementText2');
+            const annText = document.getElementById('announcementText');
             if (list.length > 0) {
                 let latest = list[list.length - 1];
                 let msg = latest.content || latest.text || latest.message || 'ยินดีต้อนรับสู่ kryptonitexnitroprime';
-                if (annText1) annText1.innerText = msg;
-                if (annText2) annText2.innerText = msg;
+                if (annText) annText.innerText = msg;
             }
         });
 
