@@ -166,7 +166,7 @@
             margin: 0 4px;
         }
 
-        /* ช่องประกาศเดี่ยว ปรับความกว้างให้ยาวเท่ากับแบนเนอร์หลักที่ 1500px */
+        /* ช่องประกาศเดี่ยว ขยายความกว้างเต็ม 1500px เท่าแบนเนอร์หลัก */
         .announcement-single-capsule {
             background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
@@ -243,51 +243,6 @@
             letter-spacing: 0.6px;
         }
 
-        /* กล่องสถิติ 4 ช่อง */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 35px;
-            width: 100%;
-            max-width: 1500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .stat-card {
-            background: #0d0d12;
-            border: 1px solid rgba(0, 175, 255, 0.2);
-            border-radius: 14px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .stat-card:hover {
-            border-color: rgba(0, 175, 255, 0.5);
-            transform: translateY(-2px);
-        }
-        .stat-icon {
-            width: 45px; height: 45px;
-            background: rgba(0, 175, 255, 0.1);
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            color: #00AFFF;
-            font-size: 18px;
-        }
-        .stat-info .stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .stat-info .stat-label {
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
         /* ส่วนสินค้าแนะนำ */
         .section-title-bar {
             display: flex;
@@ -358,7 +313,7 @@
         }
 
         @media (max-width: 900px) {
-            .stats-grid, .products-grid-preview, .main-hero-banner {
+            .products-grid-preview, .main-hero-banner {
                 grid-template-columns: 1fr;
             }
         }
@@ -590,38 +545,6 @@
                 <p>EVERYTHING GAMERS NEED, ALL IN ONE SHOP — บริการพรีเมียม ปลอดภัย รวดเร็ว 100%</p>
             </div>
             <div class="hero-right-space"></div>
-        </div>
-
-        <!-- กล่องสถิติ 4 ช่อง -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-                <div class="stat-info">
-                    <div class="stat-value">95 คน</div>
-                    <div class="stat-label">ผู้ใช้งานออนไลน์</div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fa-solid fa-box-archive"></i></div>
-                <div class="stat-info">
-                    <div class="stat-value">17 รายการ</div>
-                    <div class="stat-label">สินค้าทั้งหมด</div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fa-solid fa-cubes"></i></div>
-                <div class="stat-info">
-                    <div class="stat-value">112 ชิ้น</div>
-                    <div class="stat-label">คลังสินค้า</div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fa-solid fa-bag-shopping"></i></div>
-                <div class="stat-info">
-                    <div class="stat-value">25 ชิ้น</div>
-                    <div class="stat-label">ขายแล้ววันนี้</div>
-                </div>
-            </div>
         </div>
 
         <!-- หมวดหมู่สินค้าแนะนำ -->
