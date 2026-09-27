@@ -69,9 +69,9 @@
         }
         .auth-brand {
             display: flex; align-items: center; gap: 6px;
-            font-weight: 600; font-size: 13px; margin-bottom: 12px;
-            letter-spacing: 0.5px;
-            color: #e2e8f0;
+            font-weight: 700; font-size: 14px; margin-bottom: 12px;
+            letter-spacing: 1px;
+            color: #00AFFF;
         }
         
         .auth-tabs {
@@ -210,7 +210,7 @@
             </div>
             <div class="news-ticker-container">
                 <div class="news-ticker-text">
-                    ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.
+                    ยินดีต้อนรับสู่ kryptonitexnitroprime แหล่งรวมบริการพรีเมียม ปลอดภัย 100% ดูแลระบบพร้อมให้บริการตลอด 24 ชม.[cite: 11]
                 </div>
             </div>
         </div>
@@ -260,7 +260,7 @@
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
             
             <div class="auth-brand">
-                <i class="fa-solid fa-gem" style="color: #00AFFF; font-size: 14px;"></i> kryptonitexnitroprime
+                KXN SYSTEM
             </div>
 
             <div class="auth-tabs" id="authTabsContainer">
@@ -376,11 +376,10 @@
 
         let loginWidgetId = null;
         let regWidgetId = null;
-        const siteKey = "0x4AAAAAAFFDJZV0J7eWABVq"; // Site key ของคุณ
+        const siteKey = "0x4AAAAAAFFDJZV0J7eWABVq";
 
         function renderTurnstiles() {
             if (window.turnstile) {
-                // Render Login Turnstile ถ้ายังไม่มี
                 const loginBox = document.getElementById('loginTurnstileBox');
                 if (loginBox && loginBox.childElementCount === 0) {
                     loginWidgetId = window.turnstile.render(loginBox, {
@@ -391,7 +390,6 @@
                     try { window.turnstile.reset(loginWidgetId); } catch(e){}
                 }
 
-                // Render Register Turnstile ถ้ายังไม่มี
                 const regBox = document.getElementById('regTurnstileBox');
                 if (regBox && regBox.childElementCount === 0) {
                     regWidgetId = window.turnstile.render(regBox, {
@@ -421,7 +419,6 @@
             if (e.target === modalOverlay) closeModal();
         });
 
-        // ฟังก์ชันสลับแท็บ และสั่งรีเซ็ต Turnstile ให้ต้องติ๊กใหม่ทุกครั้งที่กดสลับ
         window.switchAuthTab = function(tab) {
             const loginPanel = document.getElementById('loginPanel');
             const registerPanel = document.getElementById('registerPanel');
@@ -610,7 +607,7 @@
                             <div style="width: 42px; height: 42px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
                             <div>
                                 <div style="font-size: 14px; font-weight: 600;">${username}</div>
-                                <div style="font-size: 11px; color: ${isAdmin ? '#00AFFF' : '#00AFFF'}; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
+                                <div style="font-size: 11px; color: #00AFFF; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
                             </div>
                         </div>
 
