@@ -15,11 +15,10 @@
         h3 { color: #00AFFF; margin-top: 25px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
         
         .admin-badge { display: inline-block; background: rgba(0, 175, 255, 0.15); color: #00AFFF; padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid rgba(0, 175, 255, 0.3); margin-top: 5px; }
-        hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0; }
         
         /* Tabs Navigation */
-        .tab-nav { display: flex; gap: 10px; margin-top: 20px; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: 10px; flex-wrap: wrap; }
-        .tab-btn { background: #1a1a1a; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .tab-nav { display: flex; gap: 8px; margin-top: 20px; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: 10px; flex-wrap: wrap; }
+        .tab-btn { background: #1a1a1a; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 9px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
         .tab-btn.active, .tab-btn:hover { background: #00AFFF; color: #0B0B0B; border-color: #00AFFF; }
         
         .tab-content { display: none; margin-top: 20px; }
@@ -46,15 +45,17 @@
         .btn-danger:hover { background: #dc2626; }
         .btn-role { background: #8b5cf6; color: #fff; }
         .btn-role:hover { background: #7c3aed; }
+        .btn-ban { background: #64748b; color: #fff; }
+        .btn-ban:hover { background: #475569; }
         
         .back-link { display: inline-block; margin-top: 25px; color: #94a3b8; text-decoration: none; font-size: 13px; }
         .back-link:hover { color: #00AFFF; }
     </style>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK & Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
@@ -70,12 +71,12 @@
         const db = getFirestore(app);
 
         let membersList = [];
-        let currentAdminName = localStorage.getItem('username') || 'Admin';
+        let currentAdminName = localStorage.getItem('username') || 'AdminOwner';
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('adminName').innerText = currentAdminName;
 
-            // โหลดข้อมูล Real-time จาก Firebase
+            // Real-time Listeners
             onSnapshot(collection(db, "members"), (snapshot) => {
                 membersList = [];
                 snapshot.forEach(docSnap => membersList.push({ id: docSnap.id, ...docSnap.data() }));
@@ -100,6 +101,12 @@
                 renderAnnouncements(list);
             });
 
+            onSnapshot(collection(db, "coupons"), (snapshot) => {
+                let list = [];
+                snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                renderCoupons(list);
+            });
+
             onSnapshot(collection(db, "admin_logs"), (snapshot) => {
                 let list = [];
                 snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
@@ -107,7 +114,7 @@
             });
         });
 
-        // ฟังก์ชันบันทึก Log การทำงานแอดมิน
+        // ฟังก์ชันบันทึก Log แอดมินลง Firebase จริง
         async function logAction(actionText) {
             try {
                 await addDoc(collection(db, "admin_logs"), {
@@ -118,26 +125,32 @@
             } catch (e) { console.error("Log error:", e); }
         }
 
-        // --- 1. จัดการสมาชิก ---
+        // --- 1. จัดการสมาชิก & ระบบแบน ---
         function renderMembers(data) {
             const tbody = document.getElementById('memberTableBody');
             tbody.innerHTML = data.length === 0 ? `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">ไม่พบข้อมูลสมาชิก</td></tr>` : '';
             data.forEach((m) => {
-                let badgeColor = m.role === 'ADMIN' ? 'rgba(0,175,255,0.2); color:#00AFFF' : (m.role === 'VIP' ? 'rgba(245,158,11,0.2); color:#f59e0b' : 'rgba(255,255,255,0.05); color:#94a3b8');
+                let role = m.role || 'MEMBER';
+                let badgeColor = role === 'ADMIN' ? 'rgba(0,175,255,0.2); color:#00AFFF' : (role === 'VIP' ? 'rgba(245,158,11,0.2); color:#f59e0b' : (role === 'BANNED' ? 'rgba(239,68,68,0.2); color:#ef4444' : 'rgba(255,255,255,0.05); color:#94a3b8'));
                 let balance = parseFloat(m.balance) || 0;
+                
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 600; color: #fff;"><i class="fa-solid fa-user" style="color: #00AFFF; margin-right: 6px;"></i> ${m.username}</td>
-                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${m.role || 'MEMBER'}</span></td>
-                        <td style="color: #94a3b8;">${m.registerDate || 'ไม่ระบุ'}</td>
+                        <td><span style="font-size:11px; padding: 3px 8px; border-radius: 4px; background: ${badgeColor}; font-weight: bold;">${role}</span></td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${balance.toFixed(2)}</td>
                         <td>
-                            <button class="btn btn-primary" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'add')"><i class="fa-solid fa-plus"></i> เพิ่ม</button>
-                            <button class="btn btn-warning" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'sub')"><i class="fa-solid fa-minus"></i> หัก</button>
+                            <button class="btn btn-primary" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'add')"><i class="fa-solid fa-plus"></i></button>
+                            <button class="btn btn-warning" onclick="window.updateCredit('${m.id}', '${m.username}', ${balance}, 'sub')"><i class="fa-solid fa-minus"></i></button>
                         </td>
                         <td>
-                            <button class="btn btn-role" onclick="window.updateRole('${m.id}', '${m.username}', '${m.role || 'MEMBER'}')"><i class="fa-solid fa-user-gear"></i> สิทธิ์</button>
-                            <button class="btn btn-danger" onclick="window.removeUser('${m.id}', '${m.username}')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                            <button class="btn btn-role" onclick="window.updateRole('${m.id}', '${m.username}', '${role}')"><i class="fa-solid fa-user-gear"></i> สิทธิ์</button>
+                            <button class="btn ${role === 'BANNED' ? 'btn-primary' : 'btn-ban'}" onclick="window.toggleBan('${m.id}', '${m.username}', '${role}')">
+                                <i class="fa-solid ${role === 'BANNED' ? 'fa-unlock' : 'fa-ban'}"></i> ${role === 'BANNED' ? 'ปลดแบน' : 'แบน'}
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="window.removeUser('${m.id}', '${m.username}')"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>`;
             });
@@ -149,18 +162,18 @@
         }
 
         window.updateCredit = async (id, uname, oldBal, mode) => {
-            let amt = parseFloat(prompt(`ระบุจำนวนเครดิตที่ต้องการ${mode === 'add' ? 'เพิ่มให้' : 'หักออกจาก'} ${uname}:`, "100"));
+            let amt = parseFloat(prompt(`ระบุจำนวนเครดิตที่ต้องการ${mode === 'add' ? 'เพิ่ม' : 'หัก'}ของ ${uname}:`, "100"));
             if (!isNaN(amt) && amt > 0) {
                 let newBal = mode === 'add' ? oldBal + amt : oldBal - amt;
-                if (newBal < min = 0 && newBal < 0) { alert('❌ ยอดเงินติดลบไม่ได้'); return; }
+                if (newBal < 0) { alert('❌ ยอดเครดิตติดลบไม่ได้'); return; }
                 await updateDoc(doc(db, "members", id), { balance: newBal });
-                logAction(`${mode === 'add' ? 'เพิ่ม' : 'หัก'}เครดิต ${amt} บาท ให้ยูสเซอร์ ${uname}`);
-                alert(`✅ สำเร็จ! คงเหลือ ฿${newBal.toFixed(2)}`);
+                logAction(`${mode === 'add' ? 'เพิ่ม' : 'หัก'}เครดิต ${amt} บาท ให้ ${uname}`);
+                alert(`✅ สำเร็จ! ยอดคงเหลือ: ฿${newBal.toFixed(2)}`);
             }
         }
 
         window.updateRole = async (id, uname, curRole) => {
-            let r = prompt(`เปลี่ยนสถานะ ${uname} (MEMBER, VIP, ADMIN):`, curRole);
+            let r = prompt(`เปลี่ยนสถานะสิทธิ์ ${uname} (พิมพ์: MEMBER, VIP, ADMIN):`, curRole);
             if (r && ['MEMBER', 'VIP', 'ADMIN'].includes(r.trim().toUpperCase())) {
                 let upper = r.trim().toUpperCase();
                 await updateDoc(doc(db, "members", id), { role: upper });
@@ -169,28 +182,38 @@
             }
         }
 
+        window.toggleBan = async (id, uname, curRole) => {
+            let newRole = curRole === 'BANNED' ? 'MEMBER' : 'BANNED';
+            let actionName = curRole === 'BANNED' ? 'ปลดแบน' : 'แบนบัญชี';
+            if (confirm(`⚠️ ยืนยันต้องการ${actionName}ผู้ใช้ ${uname} หรือไม่?`)) {
+                await updateDoc(doc(db, "members", id), { role: newRole });
+                logAction(`${actionName} ผู้ใช้งาน: ${uname}`);
+                alert(`✅ ดำเนินการ${actionName}สำเร็จ`);
+            }
+        }
+
         window.removeUser = async (id, uname) => {
-            if (confirm(`⚠️ ยืนยันลบบัญชี ${uname}?`)) {
+            if (confirm(`⚠️ คำเตือน: ยืนยันลบบัญชีถาวรของ ${uname}?`)) {
                 await deleteDoc(doc(db, "members", id));
-                logAction(`ลบบัญชีผู้ใช้: ${uname}`);
-                alert(`🗑️ ลบสำเร็จ`);
+                logAction(`ลบบัญชีถาวร: ${uname}`);
+                alert(`🗑️ ลบข้อมูลเรียบร้อย`);
             }
         }
 
         // --- 2. จัดการสินค้าและสต็อก ---
         window.addProduct = async () => {
-            let name = document.getElementById('prodName').value;
+            let name = document.getElementById('prodName').value.trim();
             let price = parseFloat(document.getElementById('prodPrice').value);
-            let stock = document.getElementById('prodStock').value; // คั่นด้วยขึ้นบรรทัดใหม่
-            if (!name || isNaN(price)) { alert('กรุณากรอกข้อมูลสินค้าให้ครบถ้วน'); return; }
+            let stock = document.getElementById('prodStock').value;
+            if (!name || isNaN(price)) { alert('กรุณากรอกชื่อและราคาสินค้าให้ถูกต้อง'); return; }
             
             let stockArray = stock ? stock.split('\n').map(s => s.trim()).filter(s => s !== '') : [];
             await addDoc(collection(db, "products"), { name, price, stock: stockArray });
-            logAction(`เพิ่มสินค้าใหม่: ${name}`);
+            logAction(`เพิ่มสินค้าใหม่: ${name} (ราคา ฿${price})`);
             document.getElementById('prodName').value = '';
             document.getElementById('prodPrice').value = '';
             document.getElementById('prodStock').value = '';
-            alert('✅ เพิ่มสินค้าเรียบร้อย');
+            alert('✅ เพิ่มสินค้าเข้าระบบสำเร็จ');
         }
 
         function renderProducts(list) {
@@ -201,7 +224,7 @@
                 tbody.innerHTML += `
                     <tr>
                         <td><b>${p.name}</b></td>
-                        <td style="color: #00AFFF;">฿${p.price.toFixed(2)}</td>
+                        <td style="color: #00AFFF;">฿${parseFloat(p.price).toFixed(2)}</td>
                         <td><span style="background: rgba(0,175,255,0.1); color: #00AFFF; padding: 2px 8px; border-radius: 4px;">${stockCount} ชิ้น</span></td>
                         <td><button class="btn btn-danger" onclick="window.deleteProduct('${p.id}', '${p.name}')"><i class="fa-solid fa-trash"></i> ลบ</button></td>
                     </tr>`;
@@ -215,14 +238,58 @@
             }
         }
 
-        // --- 3. ประวัติการทำรายการ ---
+        // --- 3. ระบบคูปองส่วนลด (ใหม่ 1%-100%) ---
+        window.addCoupon = async () => {
+            let code = document.getElementById('couponCode').value.trim().toUpperCase();
+            let discount = parseInt(document.getElementById('couponDiscount').value);
+            
+            if (!code || isNaN(discount) || discount < 1 || discount > 100) {
+                alert('❌ กรุณากรอกรหัสโค้ด และส่วนลดระหว่าง 1 ถึง 100 เท่านั้น');
+                return;
+            }
+
+            await addDoc(collection(db, "coupons"), {
+                code: code,
+                discount: discount,
+                status: 'ACTIVE',
+                createdDate: new Date().toLocaleString('th-TH')
+            });
+
+            logAction(`สร้างโค้ดส่วนลด: ${code} (${discount}%)`);
+            document.getElementById('couponCode').value = '';
+            document.getElementById('couponDiscount').value = '';
+            alert(`✅ สร้างคูปอง ${code} ลด ${discount}% สำเร็จ!`);
+        }
+
+        function renderCoupons(list) {
+            const tbody = document.getElementById('couponTableBody');
+            tbody.innerHTML = list.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">ยังไม่มีคูปองส่วนลด</td></tr>` : '';
+            list.forEach(c => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b style="color: #00AFFF; letter-spacing: 1px;">${c.code}</b></td>
+                        <td><span style="background: rgba(245,158,11,0.15); color: #f59e0b; padding: 3px 8px; border-radius: 4px; font-weight: bold;">ลด ${c.discount}%</span></td>
+                        <td>${c.createdDate || '-'}</td>
+                        <td><button class="btn btn-danger" onclick="window.deleteCoupon('${c.id}', '${c.code}')"><i class="fa-solid fa-trash"></i> ลบ</button></td>
+                    </tr>`;
+            });
+        }
+
+        window.deleteCoupon = async (id, code) => {
+            if (confirm(`ยืนยันลบคูปอง ${code}?`)) {
+                await deleteDoc(doc(db, "coupons", id));
+                logAction(`ลบคูปองส่วนลด: ${code}`);
+            }
+        }
+
+        // --- 4. ประวัติการทำรายการ ---
         function renderTransactions(list) {
             const tbody = document.getElementById('trxTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">ยังไม่มีประวัติการทำรายการ</td></tr>` : '';
             list.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(t => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${t.timestamp || '-'}</td>
+                        <td style="color: #94a3b8; font-size: 12px;">${t.timestamp || '-'}</td>
                         <td><b>${t.username || 'ไม่ระบุ'}</b></td>
                         <td>${t.detail || '-'}</td>
                         <td style="color: #00AFFF; font-weight: bold;">฿${parseFloat(t.amount || 0).toFixed(2)}</td>
@@ -230,14 +297,14 @@
             });
         }
 
-        // --- 4. ระบบประกาศหน้าเว็บ ---
+        // --- 5. ระบบประกาศหน้าเว็บ ---
         window.saveAnnouncement = async () => {
-            let content = document.getElementById('announcementText').value;
+            let content = document.getElementById('announcementText').value.trim();
             if (!content) return;
             await addDoc(collection(db, "announcements"), { content, timestamp: new Date().toLocaleString('th-TH') });
-            logAction(`อัปเดตประกาศหน้าเว็บ`);
+            logAction(`โพสต์ประกาศหน้าเว็บใหม่`);
             document.getElementById('announcementText').value = '';
-            alert('📢 ประกาศถูกเผยแพร่แล้ว');
+            alert('📢 เผยแพร่ประกาศเรียบร้อย');
         }
 
         function renderAnnouncements(list) {
@@ -248,7 +315,7 @@
             });
         }
 
-        // --- 5. บันทึกการทำงานของแอดมิน (Audit Log) ---
+        // --- 6. บันทึกการทำงานแอดมิน (Audit Log) ---
         function renderLogs(list) {
             const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = list.length === 0 ? `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">ไม่มีประวัติการทำงาน</td></tr>` : '';
@@ -262,7 +329,7 @@
             });
         }
 
-        // Switch Tabs Script
+        // Tab Switching Logic
         window.switchTab = (tabId, btnElement) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -275,34 +342,35 @@
 
     <div class="container">
         <h2><i class="fa-solid fa-shield-halved"></i> แผงควบคุมผู้ดูแลระบบ - Vortex Official</h2>
-        <p>ยินดีต้อนรับคุณ <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span> (ผู้ดูแลระบบสูงสุด)</p>
-        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบจัดการหลังบ้านครบวงจร (Real-time Firebase)</div>
+        <p>ผู้ดูแลระบบปัจจุบัน: <span id="adminName" style="color: #00AFFF; font-weight: bold;"></span></p>
+        <div class="admin-badge"><i class="fa-solid fa-circle-check"></i> ระบบเชื่อมต่อ Firebase Real-time พร้อมใช้งานจริง 100%</div>
         
-        <!-- เมนูแท็บสลับหน้าจอ -->
+        <!-- Tab Navigation Menu -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก</button>
+            <button class="tab-btn active" onclick="switchTab('tab-members', this)"><i class="fa-solid fa-users"></i> จัดการสมาชิก & แบน</button>
             <button class="tab-btn" onclick="switchTab('tab-products', this)"><i class="fa-solid fa-box-archive"></i> จัดการสินค้า & สต็อก</button>
+            <button class="tab-btn" onclick="switchTab('tab-coupons', this)"><i class="fa-solid fa-ticket"></i> สร้างคูปองส่วนลด</button>
             <button class="tab-btn" onclick="switchTab('tab-transactions', this)"><i class="fa-solid fa-receipt"></i> ประวัติทำรายการ</button>
-            <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ระบบประกาศ</button>
+            <button class="tab-btn" onclick="switchTab('tab-announcement', this)"><i class="fa-solid fa-bullhorn"></i> ประกาศหน้าเว็บ</button>
             <button class="tab-btn" onclick="switchTab('tab-logs', this)"><i class="fa-solid fa-clipboard-list"></i> บันทึกแอดมิน (Log)</button>
         </div>
 
-        <!-- 1. TAB: จัดการสมาชิก -->
+        <!-- 1. TAB: สมาชิก & แบน -->
         <div id="tab-members" class="tab-content active">
-            <h3><i class="fa-solid fa-users"></i> รายชื่อสมาชิกและเครดิต</h3>
+            <h3><i class="fa-solid fa-users"></i> รายชื่อสมาชิก, เครดิต และระบบระงับผู้ใช้ (Ban)</h3>
             <div style="margin-bottom: 15px;">
-                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อยูสเซอร์ลูกค้าเพื่อค้นหา..." onkeyup="filterTable()">
+                <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อยูสเซอร์ลูกค้า..." onkeyup="filterTable()">
             </div>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <th>สถานะสิทธิ์</th>
-                            <th>วันที่สมัคร</th>
+                            <th>สถานะ</th>
                             <th>ยอดเครดิต</th>
-                            <th>จัดการเครดิต</th>
-                            <th>การจัดการ</th>
+                            <th>ปรับเครดิต</th>
+                            <th>จัดการสิทธิ์ / แบน</th>
+                            <th>ลบ</th>
                         </tr>
                     </thead>
                     <tbody id="memberTableBody"></tbody>
@@ -310,17 +378,17 @@
             </div>
         </div>
 
-        <!-- 2. TAB: จัดการสินค้าและสต็อก -->
+        <!-- 2. TAB: สินค้าและสต็อก -->
         <div id="tab-products" class="tab-content">
-            <h3><i class="fa-solid fa-box-archive"></i> เพิ่มสินค้าใหม่</h3>
+            <h3><i class="fa-solid fa-box-archive"></i> เพิ่มสินค้าและคีย์สต็อกอัตโนมัติ</h3>
             <div class="form-grid">
-                <input type="text" id="prodName" placeholder="ชื่อสินค้า/บริการ">
-                <input type="number" id="prodPrice" placeholder="ราคา (บาท)">
+                <input type="text" id="prodName" placeholder="ชื่อสินค้าหรือบริการ">
+                <input type="number" id="prodPrice" placeholder="ราคาสินค้า (บาท)">
             </div>
-            <textarea id="prodStock" rows="3" placeholder="ใส่รหัสสินค้า/ลิงก์ (บรรทัดละ 1 ชิ้น สำหรับระบบตัดสต็อกอัตโนมัติ)"></textarea>
-            <button class="btn btn-primary" style="margin-top: 10px;" onclick="window.addProduct()"><i class="fa-solid fa-plus"></i> เพิ่มสินค้าเข้าสู่ระบบ</button>
+            <textarea id="prodStock" rows="3" placeholder="ใส่รหัสซีเรียล / ลิงก์ดาวน์โหลด (บรรทัดละ 1 ชิ้น เพื่อตัดสต็อกออโต้)"></textarea>
+            <button class="btn btn-primary" style="margin-top: 10px;" onclick="window.addProduct()"><i class="fa-solid fa-plus"></i> บันทึกสินค้าใหม่</button>
 
-            <h3 style="margin-top: 30px;"><i class="fa-solid fa-list"></i> รายการสินค้าทั้งหมด</h3>
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-list"></i> รายการสินค้าทั้งหมดในระบบ</h3>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
@@ -336,16 +404,41 @@
             </div>
         </div>
 
-        <!-- 3. TAB: ประวัติการทำรายการ -->
+        <!-- 3. TAB: คูปองส่วนลด -->
+        <div id="tab-coupons" class="tab-content">
+            <h3><i class="fa-solid fa-ticket"></i> สร้างโค้ดส่วนลด (1% - 100%)</h3>
+            <div class="form-grid">
+                <input type="text" id="couponCode" placeholder="ระบุชื่อโค้ด เช่น VORTEX50">
+                <input type="number" id="couponDiscount" min="1" max="100" placeholder="เปอร์เซ็นต์ส่วนลด (เช่น 10 หรือ 50)">
+            </div>
+            <button class="btn btn-primary" onclick="window.addCoupon()"><i class="fa-solid fa-circle-plus"></i> สร้างคูปองส่วนลด</button>
+
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-tags"></i> โค้ดส่วนลดทั้งหมดที่ใช้งานได้</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>โค้ดส่วนลด</th>
+                            <th>อัตราส่วนลด</th>
+                            <th>วันที่สร้าง</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="couponTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. TAB: ประวัติทำรายการ -->
         <div id="tab-transactions" class="tab-content">
-            <h3><i class="fa-solid fa-receipt"></i> ประวัติการซื้อสินค้า / เติมเงิน</h3>
+            <h3><i class="fa-solid fa-receipt"></i> ประวัติการซื้อและการเติมเงินของลูกค้า</h3>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
                             <th>วันเวลา</th>
                             <th>ยูสเซอร์</th>
-                            <th>รายการ</th>
+                            <th>รายละเอียดรายการ</th>
                             <th>จำนวนเงิน</th>
                         </tr>
                     </thead>
@@ -354,26 +447,26 @@
             </div>
         </div>
 
-        <!-- 4. TAB: ระบบประกาศหน้าเว็บ -->
+        <!-- 5. TAB: ประกาศหน้าเว็บ -->
         <div id="tab-announcement" class="tab-content">
-            <h3><i class="fa-solid fa-bullhorn"></i> สร้างประกาศหน้าเว็บไซต์</h3>
-            <textarea id="announcementText" rows="3" placeholder="พิมพ์ข้อความประกาศโปรโมชั่น หรือแจ้งเตือนลูกค้าที่หน้าเว็บ..."></textarea>
+            <h3><i class="fa-solid fa-bullhorn"></i> ตั้งค่าประกาศหน้าเว็บไซต์</h3>
+            <textarea id="announcementText" rows="3" placeholder="พิมพ์ข้อความประกาศแจ้งเตือนโปรโมชั่น..."></textarea>
             <button class="btn btn-primary" style="margin-top: 10px;" onclick="window.saveAnnouncement()"><i class="fa-solid fa-paper-plane"></i> เผยแพร่ประกาศ</button>
             
-            <h3 style="margin-top: 30px;"><i class="fa-solid fa-clock-rotate-left"></i> ประกาศล่าสุด</h3>
+            <h3 style="margin-top: 30px;"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติประกาศล่าสุด</h3>
             <div id="announcementList"></div>
         </div>
 
-        <!-- 5. TAB: บันทึกการทำงานของแอดมิน -->
+        <!-- 6. TAB: บันทึกแอดมิน -->
         <div id="tab-logs" class="tab-content">
-            <h3><i class="fa-solid fa-clipboard-list"></i> บันทึกประวัติการทำงานของแอดมิน (Audit Log)</h3>
+            <h3><i class="fa-solid fa-clipboard-list"></i> ตรวจสอบการทำงานของแอดมิน (Audit Log)</h3>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
                             <th>วันเวลา</th>
                             <th>ผู้ดูแลระบบ</th>
-                            <th>การกระทำ / รายละเอียด</th>
+                            <th>กิจกรรม / การกระทำ</th>
                         </tr>
                     </thead>
                     <tbody id="logTableBody"></tbody>
