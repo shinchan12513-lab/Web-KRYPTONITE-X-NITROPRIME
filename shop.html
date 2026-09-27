@@ -393,8 +393,8 @@
                 bannerDiv.style.position = 'absolute';
                 bannerDiv.style.left = (b.posX || 0) + 'px';
                 bannerDiv.style.top = (b.posY || 0) + 'px';
-                bannerDiv.style.width = (b.width || 350) + 'px';
-                bannerDiv.style.height = (b.height || 180) + 'px';
+                bannerDiv.style.width = (b.width || 600) + 'px';
+                bannerDiv.style.height = (b.height || 300) + 'px';
                 bannerDiv.style.zIndex = '999';
                 bannerDiv.style.cursor = b.clickable ? 'pointer' : 'default';
                 
@@ -419,26 +419,35 @@
 
                 const controlBar = document.createElement('div');
                 controlBar.innerHTML = `
-                    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; align-items: center; gap: 15px;">
-                        <div>
-                            <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> โหมดเลือกตำแหน่งแบรนด์เนอร์</div>
-                            <div style="font-size: 11px; color: #94a3b8;">ขยับเมาส์เลือกตำแหน่ง | ปรับขนาดด้านข้าง | คลิกซ้ายเพื่อบันทึก</div>
+                    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #09090b; border: 2px solid #00AFFF; padding: 12px 25px; border-radius: 12px; z-index: 100000; color: #fff; box-shadow: 0 10px 30px rgba(0,175,255,0.4); display: flex; flex-direction: column; gap: 8px; width: 480px; max-width: 95vw;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; color: #00AFFF; font-size: 14px;"><i class="fa-solid fa-crosshairs"></i> โหมดเลือกตำแหน่งแบรนด์เนอร์</div>
+                                <div style="font-size: 11px; color: #94a3b8;">ขยับเมาส์เลือกตำแหน่ง | คลิกซ้ายเพื่อบันทึก</div>
+                            </div>
+                            <button id="cancelPositionBtn" style="background: #ef4444; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">ยกเลิก</button>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <label style="font-size: 12px;">กว้าง:</label>
-                            <input type="range" id="rangeWidth" min="150" max="800" value="350" style="cursor: pointer;">
-                            <label style="font-size: 12px;">สูง:</label>
-                            <input type="range" id="rangeHeight" min="80" max="500" value="180" style="cursor: pointer;">
+                        <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                                <span>ความกว้าง (<span id="valWidth">600</span> px):</span>
+                                <input type="range" id="rangeWidth" min="150" max="1400" value="600" style="width: 70%; cursor: pointer;">
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+                                <span>ความสูง (<span id="valHeight">300</span> px):</span>
+                                <input type="range" id="rangeHeight" min="80" max="800" value="300" style="width: 70%; cursor: pointer;">
+                            </div>
+                            <div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 2px;">
+                                ขนาดมาตรฐาน: 1200 x 600 พิกเซล (หรือสัดส่วน 2:1)
+                            </div>
                         </div>
-                        <button id="cancelPositionBtn" style="background: #ef4444; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">ยกเลิก</button>
                     </div>
                 `;
                 document.body.appendChild(controlBar);
 
                 const ghostBanner = document.createElement('div');
                 ghostBanner.style.position = 'absolute';
-                ghostBanner.style.width = '350px';
-                ghostBanner.style.height = '180px';
+                ghostBanner.style.width = '600px';
+                ghostBanner.style.height = '300px';
                 ghostBanner.style.zIndex = '99999';
                 ghostBanner.style.pointerEvents = 'none';
                 ghostBanner.style.border = '2px dashed #00AFFF';
@@ -448,16 +457,24 @@
                 ghostBanner.innerHTML = `<img src="${bannerData.imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="Ghost">`;
                 document.body.appendChild(ghostBanner);
 
-                let currentWidth = 350;
-                let currentHeight = 180;
+                let currentWidth = 600;
+                let currentHeight = 300;
 
-                document.getElementById('rangeWidth').addEventListener('input', (e) => {
+                const rangeW = document.getElementById('rangeWidth');
+                const rangeH = document.getElementById('rangeHeight');
+                const valW = document.getElementById('valWidth');
+                const valH = document.getElementById('valHeight');
+
+                rangeW.addEventListener('input', (e) => {
                     currentWidth = parseInt(e.target.value);
                     ghostBanner.style.width = currentWidth + 'px';
+                    valW.innerText = currentWidth;
                 });
-                document.getElementById('rangeHeight').addEventListener('input', (e) => {
+                
+                rangeH.addEventListener('input', (e) => {
                     currentHeight = parseInt(e.target.value);
                     ghostBanner.style.height = currentHeight + 'px';
+                    valH.innerText = currentHeight;
                 });
 
                 window.addEventListener('mousemove', (e) => {
