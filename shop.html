@@ -488,7 +488,7 @@
                     window.location.href = 'admin.html';
                 });
 
-                // ปรับปรุงการดักคลิกซ้ายให้แม่นยำและไม่ชนกับปุ่มควบคุม
+                // ปรับปรุงการดักคลิกซ้าย ป้องกัน undefined และบันทึกข้อมูลอย่างปลอดภัย
                 const clickHandler = async function(e) {
                     if (e.target.closest('#bannerControlPanel')) return;
                     
@@ -500,10 +500,10 @@
 
                     try {
                         await addDoc(collection(db, "banners"), {
-                            imageUrl: bannerData.imageUrl,
-                            orientation: bannerData.orientation,
-                            clickable: bannerData.clickable,
-                            linkUrl: bannerData.linkUrl,
+                            imageUrl: bannerData.imageUrl || '',
+                            orientation: bannerData.orientation || 'horizontal', // ป้องกันค่า undefined
+                            clickable: !!bannerData.clickable,
+                            linkUrl: bannerData.linkUrl || '',
                             posX: posX,
                             posY: posY,
                             width: currentWidth,
