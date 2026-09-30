@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cloudflare Turnstile Official Script -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-    <!-- QRCode JS สำหรับสร้าง QR Code แบบ DataURL -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
@@ -382,7 +380,7 @@
             <div class="topup-methods">
                 <div class="topup-method-btn active" id="methodPromptpay" onclick="switchTopupMethod('promptpay')">
                     <i class="fa-solid fa-qrcode"></i>
-                    <div><b>PromptPay</b><br><small style="color: #94a3b8; font-size: 11px;">โอนผ่านธนาคาร / วอลเล็ต (สร้าง QR ตามยอด)</small></div>
+                    <div><b>PromptPay</b><br><small style="color: #94a3b8; font-size: 11px;">รองรับทุกธนาคาร / สร้าง QR ตามยอด</small></div>
                 </div>
                 <div class="topup-method-btn" id="methodTruemoney" onclick="switchTopupMethod('truemoney')">
                     <i class="fa-solid fa-ticket"></i>
@@ -397,13 +395,13 @@
 
             <button class="topup-submit-btn" id="topupSubmitBtn"><i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน</button>
 
-            <!-- กล่องแสดง QR Code พร้อมเพย์ (เปลี่ยนมาใช้ tag img) -->
+            <!-- กล่องแสดง QR Code พร้อมเพย์ -->
             <div id="qrResultSection">
                 <div class="qr-amount-text" id="displayAmount">ยอดชำระ: ฿0.00</div>
                 <div class="qr-box">
                     <img id="qrImage" alt="PromptPay QR Code">
                 </div>
-                <div class="qr-instruction">เปิดแอปพลิเคชันธนาคารเพื่อสแกน QR Code นี้</div>
+                <div class="qr-instruction">เปิดแอปธนาคารใดก็ได้เพื่อสแกน QR Code นี้ (ยอดเงินจะถูกตั้งให้อัตโนมัติ)</div>
             </div>
         </div>
     </main>
@@ -508,45 +506,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- ฟังก์ชันสร้าง PromptPay Payload และ CRC-16 ---
-        function formatField(id, value) {
-            const len = String(value.length).padStart(2, '0');
-            return id + len + value;
-        }
-
-        function crc16(payload) {
-            let crc = 0xFFFF;
-            for (let i = 0; i < payload.length; i++) {
-                let x = ((crc >> 8) ^ payload.charCodeAt(i)) & 0xFF;
-                x ^= x >> 4;
-                crc = ((crc << 8) ^ (x << 12) ^ (x << 5) ^ x) & 0xFFFF;
-            }
-            let hex = crc.toString(16).toUpperCase();
-            while (hex.length < 4) hex = '0' + hex;
-            return hex;
-        }
-
-        function generatePromptPayPayload(mobileNumber, amount) {
-            let cleaned = mobileNumber.replace(/[^0-9]/g, '');
-            if (cleaned.startsWith('0')) {
-                cleaned = '66' + cleaned.substring(1);
-            }
-            
-            const merchantAccount = formatField('00', 'A000000677010111') + formatField('01', cleaned);
-            let data = formatField('00', '01') + 
-                       formatField('01', '12') + 
-                       formatField('29', merchantAccount) + 
-                       formatField('58', 'TH') + 
-                       formatField('53', '764');
-
-            if (amount && amount > 0) {
-                data += formatField('54', amount.toFixed(2));
-            }
-
-            const payloadWithoutCRC = data + '6304';
-            return payloadWithoutCRC + crc16(payloadWithoutCRC);
-        }
-
         // สลับประเภทช่องทางการเติมเงิน
         let currentMethod = 'promptpay';
         window.switchTopupMethod = function(method) {
@@ -577,7 +536,7 @@
             }
         }
 
-        // ปุ่มกดสร้าง QR Code
+        // ปุ่มกดสร้าง QR Code รองรับทุกธนาคาร
         const promptpayNumber = "0933998364";
         document.getElementById('topupSubmitBtn').addEventListener('click', function() {
             const val = document.getElementById('topupInput').value.trim();
@@ -590,20 +549,18 @@
                 }
 
                 try {
-                    const payload = generatePromptPayPayload(promptpayNumber, amount);
+                    // เรียกใช้งาน PromptPay API มาตรฐานสากล รองรับทุกธนาคารในไทย
+                    const qrApiUrl = `https://promptpay.io/${promptpayNumber}/${amount.toFixed(2)}.png`;
                     
-                    // ใช้ toDataURL แปลงเป็นรูปภาพ Base64 เพื่อป้องกันปัญหา Canvas จอพับซ่อน
-                    QRCode.toDataURL(payload, { width: 200, margin: 2 }, function (error, url) {
-                        if (error) {
-                            console.error(error);
-                            alert('❌ เกิดข้อผิดพลาดในการสร้าง QR Code');
-                            return;
-                        }
-                        
-                        document.getElementById('qrImage').src = url;
-                        document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
-                        document.getElementById('qrResultSection').style.display = 'block';
-                    });
+                    const qrImg = document.getElementById('qrImage');
+                    qrImg.src = qrApiUrl;
+                    
+                    qrImg.onerror = function() {
+                        alert('❌ ไม่สามารถโหลด QR Code ได้ กรุณาลองใหม่อีกครั้ง');
+                    };
+
+                    document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
+                    document.getElementById('qrResultSection').style.display = 'block';
                 } catch (err) {
                     alert('❌ เกิดข้อผิดพลาดในการประมวลผล');
                     console.error(err);
