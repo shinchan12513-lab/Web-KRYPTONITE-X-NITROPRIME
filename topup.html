@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kryptonitexnitroprime - เติมเงิน</title>
+    <title>kryptonitexnitroprime - Next-Gen Topup</title>
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cloudflare Turnstile Official Script -->
@@ -16,81 +16,83 @@
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
         body {
-            background-color: #060608;
+            background-color: #030305;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 175, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(0, 100, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 50% 30%, rgba(0, 175, 255, 0.04) 0%, transparent 60%);
+                radial-gradient(circle at 10% 10%, rgba(0, 190, 255, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(0, 110, 255, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(0, 150, 255, 0.04) 0%, transparent 70%);
             color: #fff;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
-        /* Navbar Rectangle Layout */
+        /* Navbar สไตล์ล้ำๆ แบบ Floating Capsule */
         .navbar {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #0d0d12 !important;
-            padding: 9px 16px;
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 14px;
+            background: rgba(8, 8, 12, 0.75) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 8px 16px;
+            border: 1px solid rgba(0, 190, 255, 0.25);
+            border-radius: 99px;
             margin: 25px auto;
             width: fit-content;
             max-width: 95vw;
             position: sticky;
             top: 20px;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 175, 255, 0.06);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 190, 255, 0.08);
         }
         .nav-inner {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
+            gap: 4px;
         }
         .nav-menu a {
             color: #94a3b8;
             background: transparent;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            height: 40px;
-            padding: 0 16px;
-            border-radius: 10px;
-            transition: all 0.2s ease;
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 99px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
         }
         .nav-menu a:hover, .nav-menu a.active {
-            color: #00AFFF;
-            background-color: rgba(0, 175, 255, 0.12);
+            color: #00b4ff;
+            background: rgba(0, 180, 255, 0.12);
+            box-shadow: 0 0 15px rgba(0, 180, 255, 0.2);
         }
         .nav-menu i {
-            color: #00AFFF;
-            font-size: 15px;
+            color: #00b4ff;
+            font-size: 14px;
         }
 
-        /* ปุ่มค้นหาและช่องค้นหาสไลด์ */
         .search-container {
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .search-toggle-btn {
-            background: rgba(0, 175, 255, 0.1);
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            color: #00AFFF;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            background: rgba(0, 180, 255, 0.08);
+            border: 1px solid rgba(0, 180, 255, 0.25);
+            color: #00b4ff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -98,8 +100,9 @@
             transition: all 0.2s ease;
         }
         .search-toggle-btn:hover {
-            background: rgba(0, 175, 255, 0.2);
+            background: rgba(0, 180, 255, 0.2);
             color: #ffffff;
+            box-shadow: 0 0 12px rgba(0, 180, 255, 0.4);
         }
         .search-input-wrapper {
             display: flex;
@@ -108,49 +111,36 @@
             opacity: 0;
             overflow: hidden;
             transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            background: #121215;
-            border: 1px solid rgba(0, 175, 255, 0.4);
-            border-radius: 10px;
+            background: rgba(12, 12, 18, 0.9);
+            border: 1px solid rgba(0, 180, 255, 0.4);
+            border-radius: 99px;
             padding: 0;
         }
         .search-input-wrapper.active {
-            width: 240px;
+            width: 220px;
             opacity: 1;
-            padding: 0 10px;
+            padding: 0 12px;
         }
-        .search-input-wrapper i {
-            color: #00AFFF;
-            font-size: 14px;
-            margin-right: 8px;
-        }
+        .search-input-wrapper i { color: #00b4ff; font-size: 13px; margin-right: 8px; }
         .search-input-wrapper input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-size: 13px;
-            width: 100%;
-            height: 38px;
-            font-family: 'Prompt', sans-serif;
+            background: transparent; border: none; outline: none; color: #fff; font-size: 13px; width: 100%; height: 36px;
         }
-        .search-input-wrapper input::placeholder {
-            color: #64748b;
-        }
+        .search-input-wrapper input::placeholder { color: #64748b; }
 
         .nav-right-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             white-space: nowrap;
         }
         .nav-right-actions .btn-login-capsule {
             color: #ffffff;
-            background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
-            box-shadow: 0 0 15px rgba(0, 175, 255, 0.4);
+            background: linear-gradient(135deg, #0066ff 0%, #00b4ff 100%);
+            box-shadow: 0 0 20px rgba(0, 180, 255, 0.4);
             border: none;
             padding: 8px 18px;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 99px;
+            font-size: 13px;
             font-weight: 600;
             text-decoration: none;
             display: flex;
@@ -160,271 +150,273 @@
             transition: all 0.2s;
         }
         .nav-right-actions .btn-login-capsule:hover {
-            opacity: 0.9;
+            filter: brightness(1.1);
             transform: translateY(-1px);
         }
         .nav-divider {
-            width: 1px;
-            height: 22px;
-            background: rgba(255, 255, 255, 0.15);
-            margin: 0 4px;
+            width: 1px; height: 20px; background: rgba(255, 255, 255, 0.15); margin: 0 2px;
         }
 
         .main-container {
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 20px 60px 20px;
+            padding: 10px 20px 60px 20px;
         }
 
-        /* Header หน้าเติมเงิน */
-        .topup-header-section {
+        /* Futuristic Header Banner */
+        .futuristic-hero-banner {
+            background: linear-gradient(135deg, rgba(10, 12, 20, 0.8) 0%, rgba(5, 5, 8, 0.9) 100%);
+            border: 1px solid rgba(0, 180, 255, 0.2);
+            border-radius: 24px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 20px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
-        .topup-main-title {
-            font-size: 26px;
-            font-weight: 700;
+        .futuristic-hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: linear-gradient(to bottom, #00b4ff, transparent);
+            box-shadow: 0 0 15px #00b4ff;
+        }
+        .hero-title-group h1 {
+            font-size: 28px;
+            font-weight: 800;
             color: #fff;
-            margin-bottom: 6px;
+            margin: 0 0 6px 0;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 30%, #00b4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .topup-subtitle {
+        .hero-title-group p {
             font-size: 13px;
             color: #94a3b8;
+            margin: 0;
         }
 
-        /* กล่องแสดงยอดเงินคงเหลือขวาบน */
-        .balance-badge-box {
-            background: #0d0d12;
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            padding: 10px 18px;
-            border-radius: 12px;
+        .balance-holo-card {
+            background: rgba(0, 180, 255, 0.04);
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            padding: 14px 24px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: inset 0 0 15px rgba(0, 175, 255, 0.05);
+            gap: 16px;
+            box-shadow: inset 0 0 20px rgba(0, 180, 255, 0.08), 0 0 30px rgba(0, 180, 255, 0.05);
         }
-        .balance-badge-box i { color: #00AFFF; font-size: 18px; }
-        .balance-badge-box .title { font-size: 11px; color: #94a3b8; }
-        .balance-badge-box .amount { font-size: 16px; font-weight: 700; color: #00AFFF; }
+        .balance-holo-card i {
+            font-size: 22px;
+            color: #00b4ff;
+            filter: drop-shadow(0 0 10px rgba(0, 180, 255, 0.6));
+        }
+        .balance-holo-card .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-holo-card .amount { font-size: 20px; font-weight: 800; color: #00b4ff; text-shadow: 0 0 15px rgba(0, 180, 255, 0.4); }
 
-        /* แถบเลือกวิธีเติมเงินแบบปุ่มแท็บเล็ก */
-        .topup-method-tabs {
+        /* Method Switcher Tabs แบบไฮเทค */
+        .method-selector-wrapper {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 25px;
         }
-        .method-tab-btn {
-            background: #0d0d12;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 500;
+        .method-select-chip {
+            flex: 1;
+            background: rgba(10, 10, 15, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px 20px;
+            border-radius: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            gap: 14px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .method-tab-btn.active {
-            background: rgba(0, 175, 255, 0.12);
-            border-color: #00AFFF;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(0, 175, 255, 0.15);
+        .method-select-chip.active {
+            background: rgba(0, 180, 255, 0.08);
+            border-color: #00b4ff;
+            box-shadow: 0 0 25px rgba(0, 180, 255, 0.2), inset 0 0 15px rgba(0, 180, 255, 0.1);
         }
-        .method-tab-btn i { color: #00AFFF; }
-
-        /* โครงสร้างหลักแบบ 2 คอลัมน์ (ซ้ายคำแนะนำ, ขวาฟอร์ม) */
-        .topup-grid-layout {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 25px;
-            align-items: start;
-        }
-
-        /* คอลัมน์ซ้าย: ข้อมูล/ขั้นตอน */
-        .topup-info-card {
-            background: #0d0d12;
-            border: 1px solid rgba(0, 175, 255, 0.2);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .info-card-icon {
-            width: 42px;
-            height: 42px;
-            background: rgba(0, 175, 255, 0.1);
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00AFFF;
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-        .info-card-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-        .info-card-desc { font-size: 12px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
-        
-        .steps-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .step-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: #cbd5e1; line-height: 1.4; }
-        .step-num {
-            background: rgba(0, 175, 255, 0.15);
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            color: #00AFFF;
-            width: 20px; height: 20px;
-            border-radius: 50%;
+        .method-icon-box {
+            width: 42px; height: 42px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: 700; flex-shrink: 0;
+            color: #94a3b8; font-size: 18px;
+            transition: all 0.3s;
         }
+        .method-select-chip.active .method-icon-box {
+            background: rgba(0, 180, 255, 0.15);
+            border-color: #00b4ff;
+            color: #00b4ff;
+            box-shadow: 0 0 15px rgba(0, 180, 255, 0.4);
+        }
+        .method-info .title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .method-info .desc { font-size: 11px; color: #94a3b8; }
 
-        .side-menu-links { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .side-link-item {
+        /* Main Glass Card Panel */
+        .cyber-card {
+            background: rgba(8, 8, 12, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 180, 255, 0.25);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 180, 255, 0.04);
+            position: relative;
+        }
+        .cyber-card-header {
             display: flex; justify-content: space-between; align-items: center;
-            color: #94a3b8; text-decoration: none; font-size: 12px; padding: 6px 0;
-            transition: color 0.2s;
+            margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 15px;
         }
-        .side-link-item:hover { color: #00AFFF; }
-        .side-link-item i { font-size: 10px; color: #00AFFF; }
-
-        /* คอลัมน์ขวา: กล่องทำรายการเติมเงิน */
-        .topup-action-card {
-            background: #0d0d12;
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 175, 255, 0.03);
-        }
-        .action-card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 12px;
-        }
-        .action-card-header span { font-size: 15px; font-weight: 600; color: #fff; }
-        .fee-badge { font-size: 11px; color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 6px; }
-
-        .instruction-banner {
-            font-size: 12px; color: #94a3b8; margin-bottom: 20px; background: #121215;
-            padding: 10px 14px; border-radius: 8px; border-left: 3px solid #00AFFF;
+        .cyber-card-header span { font-size: 16px; font-weight: 700; color: #fff; }
+        .secure-badge {
+            font-size: 11px; color: #00b4ff; background: rgba(0, 180, 255, 0.1);
+            border: 1px solid rgba(0, 180, 255, 0.3); padding: 4px 12px; border-radius: 99px;
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 0 10px rgba(0, 180, 255, 0.2);
         }
 
-        .form-group-custom { margin-bottom: 20px; }
-        .form-group-custom label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
-        
-        .input-with-currency {
+        .form-group-cyber { margin-bottom: 25px; }
+        .form-group-cyber label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; }
+
+        .input-glow-wrapper {
             position: relative; display: flex; align-items: center;
         }
-        .input-with-currency span {
-            position: absolute; left: 16px; color: #00AFFF; font-weight: 700; font-size: 15px;
+        .input-glow-wrapper span {
+            position: absolute; left: 18px; color: #00b4ff; font-weight: 800; font-size: 18px;
         }
-        .topup-main-input {
-            width: 100%; background: #121215; border: 1px solid rgba(0, 175, 255, 0.25);
-            border-radius: 12px; padding: 14px 16px 14px 38px; color: #fff; font-size: 16px;
-            font-weight: 600; outline: none; font-family: 'Prompt', sans-serif;
-            transition: all 0.2s;
+        .cyber-input {
+            width: 100%; background: rgba(4, 4, 8, 0.9); border: 1px solid rgba(0, 180, 255, 0.3);
+            border-radius: 14px; padding: 16px 20px 16px 42px; color: #fff; font-size: 18px;
+            font-weight: 700; outline: none; font-family: 'Prompt', sans-serif;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
         }
-        .topup-main-input:focus {
-            border-color: #00AFFF; box-shadow: 0 0 15px rgba(0, 175, 255, 0.2);
-        }
-
-        /* ปุ่มเลือกจำนวนเงินด่วนแบบ Grid */
-        .quick-amount-grid {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px;
-        }
-        .quick-amt-btn {
-            background: #121215; border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #cbd5e1; padding: 8px 0; border-radius: 8px; font-size: 12px; font-weight: 600;
-            cursor: pointer; text-align: center; transition: all 0.2s;
-        }
-        .quick-amt-btn:hover {
-            border-color: #00AFFF; background: rgba(0, 175, 255, 0.1); color: #00AFFF;
+        .cyber-input:focus {
+            border-color: #00b4ff; box-shadow: 0 0 25px rgba(0, 180, 255, 0.3), inset 0 0 10px rgba(0, 180, 255, 0.1);
         }
 
-        .submit-action-btn {
-            width: 100%; background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
-            border: none; color: #fff; padding: 14px; border-radius: 12px; font-size: 15px;
-            font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 175, 255, 0.4);
-            transition: opacity 0.2s; margin-top: 5px;
+        /* ปุ่มจำนวนเงินด่วนแบบ Hologram Buttons */
+        .quick-grid-cyber {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 12px;
         }
-        .submit-action-btn:hover { opacity: 0.9; }
+        .quick-chip {
+            background: rgba(12, 12, 18, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #cbd5e1; padding: 12px 0; border-radius: 12px; font-size: 13px; font-weight: 700;
+            cursor: pointer; text-align: center; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .quick-chip:hover {
+            border-color: #00b4ff; background: rgba(0, 180, 255, 0.12); color: #00b4ff;
+            box-shadow: 0 0 15px rgba(0, 180, 255, 0.25); transform: translateY(-2px);
+        }
 
-        .limit-hint { text-align: center; font-size: 11px; color: #64748b; margin-top: 12px; }
+        .submit-cyber-btn {
+            width: 100%; background: linear-gradient(135deg, #0055ff 0%, #00b4ff 100%);
+            border: none; color: #fff; padding: 16px; border-radius: 14px; font-size: 16px;
+            font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px rgba(0, 180, 255, 0.4);
+            transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
+            letter-spacing: 0.5px;
+        }
+        .submit-cyber-btn:hover {
+            filter: brightness(1.1); transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 180, 255, 0.6);
+        }
 
-        /* ส่วนแสดง QR Code หลังกดสร้าง */
+        .hint-text { text-align: center; font-size: 11px; color: #64748b; margin-top: 15px; letter-spacing: 0.3px; }
+
+        /* ส่วนแสดง QR Code สไตล์ Hologram Result */
         #qrResultSection {
-            display: none; margin-top: 25px; text-align: center; background: #121215;
-            border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 14px; padding: 20px;
+            display: none; margin-top: 30px; text-align: center; background: rgba(4, 4, 8, 0.95);
+            border: 1px solid rgba(0, 180, 255, 0.4); border-radius: 20px; padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(0, 180, 255, 0.1);
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .qr-box {
-            background: #fff; padding: 15px; border-radius: 10px; display: inline-block; margin: 15px 0 10px 0;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
-        }
-        .qr-box img { display: block; width: 210px; height: 210px; }
-        .qr-amount-text { font-size: 18px; font-weight: 700; color: #00AFFF; }
-        .qr-sub-text { font-size: 12px; color: #94a3b8; margin-bottom: 5px; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
         
-        .cancel-qr-btn {
-            background: transparent; border: 1px solid rgba(255, 77, 77, 0.3); color: #ff4d4d;
-            padding: 8px 20px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+        .qr-hologram-frame {
+            background: #fff; padding: 18px; border-radius: 16px; display: inline-block; margin: 20px 0 15px 0;
+            box-shadow: 0 0 40px rgba(0, 180, 255, 0.3); position: relative;
+        }
+        .qr-hologram-frame img { display: block; width: 220px; height: 220px; }
+        .qr-amount-display { font-size: 22px; font-weight: 800; color: #00b4ff; text-shadow: 0 0 15px rgba(0, 180, 255, 0.5); }
+        .qr-instruction-title { font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
+        
+        .cancel-cyber-btn {
+            background: transparent; border: 1px solid rgba(255, 77, 77, 0.35); color: #ff4d4d;
+            padding: 10px 24px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer;
             margin-top: 15px; transition: all 0.2s;
         }
-        .cancel-qr-btn:hover { background: rgba(255, 77, 77, 0.1); border-color: #ff4d4d; }
+        .cancel-cyber-btn:hover { background: rgba(255, 77, 77, 0.12); border-color: #ff4d4d; box-shadow: 0 0 15px rgba(255, 77, 77, 0.2); }
 
         /* Modal & Auth Styles */
         .auth-modal-overlay {
             display: flex; opacity: 0; visibility: hidden;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+            background: rgba(3, 3, 5, 0.85); backdrop-filter: blur(16px);
             z-index: 99999; justify-content: center; align-items: center;
             transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
         }
         .auth-modal-overlay.active { opacity: 1; visibility: visible; }
         .auth-modal-box {
-            background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 100%; max-width: 400px; border-radius: 20px; padding: 16px 22px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9); position: relative; color: #fff;
-            transform: scale(0.92) translateY(10px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(8, 8, 12, 0.95); border: 1px solid rgba(0, 180, 255, 0.3);
+            width: 100%; max-width: 420px; border-radius: 24px; padding: 25px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), inset 0 0 25px rgba(0, 180, 255, 0.05);
+            position: relative; color: #fff;
+            transform: scale(0.92) translateY(15px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .auth-modal-overlay.active .auth-modal-box { transform: scale(1) translateY(0); }
         .auth-close-btn {
-            position: absolute; top: 14px; right: 16px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; width: 28px; height: 28px;
+            position: absolute; top: 18px; right: 20px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; width: 32px; height: 32px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+            transition: all 0.2s;
         }
-        .auth-brand { font-weight: 700; font-size: 14px; margin-bottom: 12px; color: #00AFFF; }
-        .auth-tabs { display: flex; background: #121215; border-radius: 10px; padding: 3px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.04); position: relative; }
-        .auth-tab { flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; color: #64748b; cursor: pointer; border-radius: 8px; z-index: 2; }
+        .auth-close-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+        .auth-brand { font-weight: 800; font-size: 15px; margin-bottom: 16px; color: #00b4ff; letter-spacing: 1px; }
+        .auth-tabs { display: flex; background: rgba(4, 4, 8, 0.9); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); position: relative; }
+        .auth-tab { flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; border-radius: 10px; z-index: 2; transition: color 0.2s; }
         .auth-tab.active { color: #ffffff; }
         .auth-tab-indicator {
-            position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px);
-            background: #000000; border-radius: 7px; border: 1px solid rgba(255, 255, 255, 0.06);
+            position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.3), rgba(0, 180, 255, 0.3));
+            border-radius: 9px; border: 1px solid rgba(0, 180, 255, 0.4);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1;
         }
         .auth-tabs.register-mode .auth-tab-indicator { transform: translateX(100%); }
         .auth-form-panel { display: none; }
         .auth-form-panel.active { display: block; }
-        .auth-form-group { margin-bottom: 8px; }
-        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; }
+        .auth-form-group { margin-bottom: 14px; }
+        .auth-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 6px; font-weight: 600; }
         .auth-input-wrap { position: relative; display: flex; align-items: center; }
-        .auth-input-wrap > i:first-child { position: absolute; left: 12px; color: #64748b; font-size: 12px; }
+        .auth-input-wrap > i:first-child { position: absolute; left: 14px; color: #64748b; font-size: 13px; }
         .auth-input-wrap input {
-            width: 100%; background: #121215; border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px; padding: 8px 12px 8px 36px; color: #fff; font-size: 12px; outline: none;
+            width: 100%; background: rgba(4, 4, 8, 0.9); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px; padding: 11px 14px 11px 40px; color: #fff; font-size: 13px; outline: none;
+            transition: border-color 0.2s;
         }
-        .password-toggle { position: absolute; right: 12px; color: #64748b; font-size: 12px; cursor: pointer; }
-        .turnstile-container { display: flex; justify-content: center; margin-bottom: 8px; transform: scale(0.92); min-height: 65px; }
+        .auth-input-wrap input:focus { border-color: #00b4ff; box-shadow: 0 0 12px rgba(0, 180, 255, 0.2); }
+        .password-toggle { position: absolute; right: 14px; color: #64748b; font-size: 13px; cursor: pointer; }
+        .turnstile-container { display: flex; justify-content: center; margin: 15px 0; transform: scale(0.95); min-height: 65px; }
         .auth-submit-btn {
-            width: 100%; background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%);
-            border: none; color: #fff; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer;
+            width: 100%; background: linear-gradient(135deg, #0055ff 0%, #00b4ff 100%);
+            border: none; color: #fff; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 180, 255, 0.3); transition: all 0.2s;
         }
-        .auth-switch-text { text-align: center; font-size: 11px; color: #64748b; margin-top: 10px; }
-        .auth-switch-text span { color: #00AFFF; cursor: pointer; font-weight: 600; }
+        .auth-submit-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .auth-switch-text { text-align: center; font-size: 12px; color: #64748b; margin-top: 15px; }
+        .auth-switch-text span { color: #00b4ff; cursor: pointer; font-weight: 600; }
 
         .footer-bar { text-align: center; padding: 30px 0; color: #64748b; font-size: 12px; }
+
+        @media (max-width: 768px) {
+            .quick-grid-cyber { grid-template-columns: repeat(3, 1fr); }
+            .futuristic-hero-banner { flex-direction: column; align-items: flex-start; gap: 15px; padding: 25px; }
+            .method-selector-wrapper { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -436,8 +428,8 @@
                 <a href="shop.html"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
                 <a href="fivem-project.html"><i class="fa-solid fa-store"></i> ร้านค้า</a>
                 <a href="topup.html" class="active"><i class="fa-solid fa-wallet"></i> เติมเงิน</a>
-                <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการสั่งซื้อ</a>
-                <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
+                <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติ</a>
+                <a href="#"><i class="fa-solid fa-key"></i> HWID</a>
             </nav>
 
             <div class="search-container">
@@ -446,13 +438,13 @@
                 </div>
                 <div class="search-input-wrapper" id="searchInputWrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInputField" placeholder="ค้นหาสินค้า">
+                    <input type="text" id="searchInputField" placeholder="ค้นหาสินค้า...">
                 </div>
             </div>
 
             <div class="nav-right-actions" id="navRightSection">
                 <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #94a3b8; padding: 0 4px;">
-                    <i class="fa-solid fa-globe" style="color: #00AFFF;"></i> TH
+                    <i class="fa-solid fa-globe" style="color: #00b4ff;"></i> TH
                 </div>
                 <div class="nav-divider"></div>
                 <a href="#" id="openRegisterModal" style="color: #cbd5e1; text-decoration: none; font-size: 13px; font-weight: 500; padding: 0 6px;">สมัครสมาชิก</a>
@@ -464,96 +456,78 @@
     <!-- ================= CONTENT หน้าเติมเงิน ================= -->
     <main class="main-container">
         
-        <!-- Header ส่วนบน -->
-        <div class="topup-header-section">
-            <div>
-                <div class="topup-main-title">เติมเงินเข้ากระเป๋า</div>
-                <div class="topup-subtitle">เลือกวิธีที่สะดวก แล้วเติมยอดให้พร้อมสำหรับสินค้าที่คุณต้องการ</div>
+        <!-- Hero Banner ล้ำๆ -->
+        <div class="futuristic-hero-banner">
+            <div class="hero-title-group">
+                <h1>เติมเงินเข้ากระเป๋า</h1>
+                <p>ระบบเติมเงินอัตโนมัติความเร็วสูง ปลอดภัย แม่นยำ ตลอด 24 ชั่วโมง</p>
             </div>
-            <div class="balance-badge-box">
+            <div class="balance-holo-card">
                 <i class="fa-solid fa-wallet"></i>
                 <div>
-                    <div class="title">ยอดเงินคงเหลือ</div>
+                    <div class="label">ยอดเงินคงเหลือ</div>
                     <div class="amount" id="headerBalanceDisplay">฿0.00</div>
                 </div>
             </div>
         </div>
 
         <!-- แถบเลือกวิธีเติมเงิน -->
-        <div class="topup-method-tabs">
-            <button class="method-tab-btn active" id="methodPromptpay" onclick="switchTopupMethod('promptpay')">
-                <i class="fa-solid fa-qrcode"></i> พร้อมเพย์อัตโนมัติ
-            </button>
-            <button class="method-tab-btn" id="methodTruemoney" onclick="switchTopupMethod('truemoney')">
-                <i class="fa-solid fa-ticket"></i> TrueMoney Gift
-            </button>
+        <div class="method-selector-wrapper">
+            <div class="method-select-chip active" id="methodChipPromptpay" onclick="switchTopupMethod('promptpay')">
+                <div class="method-icon-box"><i class="fa-solid fa-qrcode"></i></div>
+                <div class="method-info">
+                    <div class="title">พร้อมเพย์อัตโนมัติ</div>
+                    <div class="desc">สแกน QR รับยอดทันที ไม่ต้องแนบสลิป</div>
+                </div>
+            </div>
+            <div class="method-select-chip" id="methodChipTruemoney" onclick="switchTopupMethod('truemoney')">
+                <div class="method-icon-box"><i class="fa-solid fa-ticket"></i></div>
+                <div class="method-info">
+                    <div class="title">TrueMoney Gift</div>
+                    <div class="desc">เติมเงินผ่านซองของขวัญอั่งเปา</div>
+                </div>
+            </div>
         </div>
 
-        <!-- โครงสร้าง 2 คอลัมน์ -->
-        <div class="topup-grid-layout">
-            
-            <!-- คอลัมน์ซ้าย: คำแนะนำขั้นตอน -->
-            <div class="topup-info-card">
-                <div class="info-card-icon" id="infoCardIcon"><i class="fa-solid fa-qrcode"></i></div>
-                <div class="info-card-title" id="infoCardTitle">พร้อมเพย์อัตโนมัติ</div>
-                <div class="info-card-desc" id="infoCardDesc">สแกน QR และรับยอดอัตโนมัติทันที ไม่ต้องแนบสลิป</div>
+        <!-- กล่องทำรายการหลัก -->
+        <div class="cyber-card">
+            <div class="cyber-card-header">
+                <span id="cardMainTitle">พร้อมเพย์ QR Code อัตโนมัติ</span>
+                <div class="secure-badge"><i class="fa-solid fa-shield-halved"></i> ระบบเข้ารหัสปลอดภัย 100%</div>
+            </div>
 
-                <div class="steps-list">
-                    <div class="step-item"><div class="step-num">1</div><span>ระบุจำนวนเงินที่ต้องการเติมในช่องทำรายการ</span></div>
-                    <div class="step-item"><div class="step-num">2</div><span>สแกน QR และชำระให้ตรงยอดรวมสตางค์</span></div>
-                    <div class="step-item"><div class="step-num">3</div><span>รอระบบยืนยันยอดอัตโนมัติทันทีโดยไม่ต้องแนบสลิป</span></div>
+            <div class="form-group-cyber">
+                <label id="inputLabelTitle">ระบุจำนวนเงินที่ต้องการเติม (บาท)</label>
+                <div class="input-glow-wrapper" id="inputWrapperBox">
+                    <span>฿</span>
+                    <input type="number" id="topupInput" class="cyber-input" value="100" min="1" step="any">
                 </div>
-
-                <div class="side-menu-links">
-                    <a href="#" class="side-link-item"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติเติมเงิน <i class="fa-solid fa-chevron-right"></i></a>
-                    <a href="#" class="side-link-item"><i class="fa-solid fa-headset"></i> ติดต่อแอดมิน <i class="fa-solid fa-chevron-right"></i></a>
+                <!-- ปุ่มด่วน -->
+                <div class="quick-grid-cyber" id="quickAmountGrid">
+                    <button type="button" class="quick-chip" onclick="setAmount(20)">20</button>
+                    <button type="button" class="quick-chip" onclick="setAmount(50)">50</button>
+                    <button type="button" class="quick-chip" onclick="setAmount(100)">100</button>
+                    <button type="button" class="quick-chip" onclick="setAmount(200)">200</button>
+                    <button type="button" class="quick-chip" onclick="setAmount(500)">500</button>
+                    <button type="button" class="quick-chip" onclick="setAmount(1000)">1,000</button>
                 </div>
             </div>
 
-            <!-- คอลัมน์ขวา: ฟอร์มทำรายการ -->
-            <div class="topup-action-card">
-                <div class="action-card-header">
-                    <span id="actionCardTitle">ทำรายการเติมเงิน</span>
-                    <span class="fee-badge"><i class="fa-solid fa-check"></i> ค่าธรรมเนียม 0%</span>
+            <button class="submit-cyber-btn" id="topupSubmitBtn">
+                <i class="fa-solid fa-bolt"></i> สร้างคิวอาร์โค้ดชำระเงิน
+            </button>
+            <div class="hint-text" id="bottomHintText">ขั้นต่ำ 1 บาท • สูงสุด 999,999 บาท • ระบบตรวจสอบยอดอัตโนมัติ</div>
+
+            <!-- ผลลัพธ์ QR Code -->
+            <div id="qrResultSection">
+                <div class="qr-instruction-title">สแกนด้วยแอปธนาคารใดก็ได้ (โอนให้ตรงยอดรวมสตางค์)</div>
+                <div class="qr-amount-display" id="displayAmount">฿0.00 บาท</div>
+                <div class="qr-hologram-frame">
+                    <img id="qrImage" alt="PromptPay QR Code">
                 </div>
-
-                <div class="instruction-banner" id="instructionBanner">
-                    ชำระตามยอด QR รวมสตางค์ ระบบจะตรวจสอบและเติมยอดให้อัตโนมัติทันที
-                </div>
-
-                <div class="form-group-custom">
-                    <label id="inputLabel">จำนวนเงินที่ต้องการเติม (บาท)</label>
-                    <div class="input-with-currency" id="currencyInputWrapper">
-                        <span>฿</span>
-                        <input type="number" id="topupInput" class="topup-main-input" value="100" min="1" step="any">
-                    </div>
-                    <!-- ปุ่มเลือกจำนวนเงินด่วน -->
-                    <div class="quick-amount-grid" id="quickAmountGrid">
-                        <button type="button" class="quick-amt-btn" onclick="setAmount(10)">10</button>
-                        <button type="button" class="quick-amt-btn" onclick="setAmount(50)">50</button>
-                        <button type="button" class="quick-amt-btn" onclick="setAmount(100)">100</button>
-                        <button type="button" class="quick-amt-btn" onclick="setAmount(200)">200</button>
-                        <button type="button" class="quick-amt-btn" onclick="setAmount(500)">500</button>
-                        <button type="button" class="quick-amt-btn" onclick="setAmount(1000)">1k</button>
-                    </div>
-                </div>
-
-                <button class="submit-action-btn" id="topupSubmitBtn"><i class="fa-solid fa-qrcode"></i> สร้าง QR พร้อมเพย์</button>
-                <div class="limit-hint" id="limitHint">ขั้นต่ำ 1 บาท • สูงสุด 999,999 บาท • ชำระตามยอดที่ระบุใน QR</div>
-
-                <!-- กล่องแสดงผล QR Code พร้อมเพย์ -->
-                <div id="qrResultSection">
-                    <div class="qr-sub-text">ยอดชำระที่ต้องโอนให้ตรงเป๊ะ</div>
-                    <div class="qr-amount-text" id="displayAmount">฿0.00 บาท</div>
-                    <div class="qr-box">
-                        <img id="qrImage" alt="PromptPay QR Code">
-                    </div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">เปิดแอปธนาคารใดก็ได้สแกนจ่ายได้ทันที</div>
-                    <button type="button" class="cancel-qr-btn" onclick="cancelQrSession()">ยกเลิกรายการ</button>
-                </div>
-
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">ระบบจะทำการเติมเงินเข้าไอดีให้อัตโนมัติหลังชำระเสร็จ</div>
+                <button type="button" class="cancel-cyber-btn" onclick="cancelQrSession()">ยกเลิกรายการนี้</button>
             </div>
-
         </div>
     </main>
 
@@ -561,7 +535,7 @@
     <div id="authModalOverlay" class="auth-modal-overlay">
         <div class="auth-modal-box">
             <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
-            <div class="auth-brand">FIVEM PREMIUM</div>
+            <div class="auth-brand">KRYPTONITE X SYSTEM</div>
 
             <div class="auth-tabs" id="authTabsContainer">
                 <div class="auth-tab-indicator"></div>
@@ -573,40 +547,40 @@
                 <div id="loginPanel" class="auth-form-panel">
                     <form onsubmit="handleLoginSubmit(event)">
                         <div class="auth-form-group">
-                            <label>ชื่อผู้ใช้</label>
+                            <label>ชื่อผู้ใช้งาน</label>
                             <div class="auth-input-wrap">
                                 <i class="fa-solid fa-user"></i>
-                                <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้" required>
+                                <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้" required>
                             </div>
                         </div>
                         <div class="auth-form-group">
                             <label>รหัสผ่าน</label>
                             <div class="auth-input-wrap">
                                 <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+                                <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน" required>
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                             </div>
                         </div>
                         <div class="turnstile-container" id="loginTurnstileBox"></div>
                         <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
-                    <div class="auth-switch-text">ยังไม่มีบัญชี? <span onclick="switchAuthTab('register')">สมัครสมาชิก</span></div>
+                    <div class="auth-switch-text">ยังไม่มีบัญชีใช่ไหม? <span onclick="switchAuthTab('register')">สมัครสมาชิกที่นี่</span></div>
                 </div>
 
                 <div id="registerPanel" class="auth-form-panel">
                     <form onsubmit="handleRegisterSubmit(event)">
                         <div class="auth-form-group">
-                            <label>ชื่อผู้ใช้</label>
+                            <label>ชื่อผู้ใช้งาน</label>
                             <div class="auth-input-wrap">
                                 <i class="fa-solid fa-user"></i>
-                                <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้" required>
+                                <input type="text" id="regUsername" placeholder="ตั้งชื่อผู้ใช้" required>
                             </div>
                         </div>
                         <div class="auth-form-group">
                             <label>อีเมล (ถ้ามี)</label>
                             <div class="auth-input-wrap">
                                 <i class="fa-solid fa-envelope"></i>
-                                <input type="email" id="regEmail" placeholder="name@example.com (ไม่บังคับ)">
+                                <input type="email" id="regEmail" placeholder="name@example.com">
                             </div>
                         </div>
                         <div class="auth-form-group">
@@ -621,12 +595,12 @@
                             <label>ยืนยันรหัสผ่าน</label>
                             <div class="auth-input-wrap">
                                 <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+                                <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่านอีกครั้ง" required>
                                 <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
                             </div>
                         </div>
                         <div class="turnstile-container" id="regTurnstileBox"></div>
-                        <button type="submit" class="auth-submit-btn">สร้างบัญชี <i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="submit" class="auth-submit-btn">ยืนยันการสมัคร <i class="fa-solid fa-arrow-right"></i></button>
                     </form>
                     <div class="auth-switch-text">มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span></div>
                 </div>
@@ -659,62 +633,48 @@
 
         let currentMethod = 'promptpay';
 
-        // ฟังก์ชันกดเลือกปุ่มยอดเงินด่วน
         window.setAmount = function(amount) {
             document.getElementById('topupInput').value = amount;
         }
 
-        // สลับประเภทช่องทางการเติมเงิน
         window.switchTopupMethod = function(method) {
             currentMethod = method;
-            const btnPp = document.getElementById('methodPromptpay');
-            const btnTm = document.getElementById('methodTruemoney');
-            const infoIcon = document.getElementById('infoCardIcon');
-            const infoTitle = document.getElementById('infoCardTitle');
-            const infoDesc = document.getElementById('infoCardDesc');
-            const actionTitle = document.getElementById('actionCardTitle');
-            const banner = document.getElementById('instructionBanner');
-            const inputLabel = document.getElementById('inputLabel');
-            const currencyWrap = document.getElementById('currencyInputWrapper');
+            const chipPp = document.getElementById('methodChipPromptpay');
+            const chipTm = document.getElementById('methodChipTruemoney');
+            const mainTitle = document.getElementById('cardMainTitle');
+            const labelTitle = document.getElementById('inputLabelTitle');
+            const inputWrap = document.getElementById('inputWrapperBox');
             const topupInput = document.getElementById('topupInput');
             const quickGrid = document.getElementById('quickAmountGrid');
             const submitBtn = document.getElementById('topupSubmitBtn');
-            const limitHint = document.getElementById('limitHint');
+            const hintText = document.getElementById('bottomHintText');
             const qrSection = document.getElementById('qrResultSection');
 
             qrSection.style.display = 'none';
 
             if (method === 'promptpay') {
-                btnPp.classList.add('active');
-                btnTm.classList.remove('active');
-                infoIcon.innerHTML = '<i class="fa-solid fa-qrcode"></i>';
-                infoTitle.innerText = "พร้อมเพย์อัตโนมัติ";
-                infoDesc.innerText = "สแกน QR และรับยอดอัตโนมัติทันที ไม่ต้องแนบสลิป";
-                actionTitle.innerText = "ทำรายการเติมเงิน";
-                banner.innerText = "ชำระตามยอด QR รวมสตางค์ ระบบจะตรวจสอบและเติมยอดให้อัตโนมัติทันที";
-                inputLabel.innerText = "จำนวนเงินที่ต้องการเติม (บาท)";
-                currencyWrap.style.display = 'flex';
+                chipPp.classList.add('active');
+                chipTm.classList.remove('active');
+                mainTitle.innerText = "พร้อมเพย์ QR Code อัตโนมัติ";
+                labelTitle.innerText = "ระบุจำนวนเงินที่ต้องการเติม (บาท)";
+                inputWrap.style.display = 'flex';
                 topupInput.type = "number";
                 topupInput.value = "100";
                 quickGrid.style.display = 'grid';
-                submitBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i> สร้าง QR พร้อมเพย์';
-                limitHint.style.display = 'block';
+                submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> สร้างคิวอาร์โค้ดชำระเงิน';
+                hintText.style.display = 'block';
             } else {
-                btnTm.classList.add('active');
-                btnPp.classList.remove('active');
-                infoIcon.innerHTML = '<i class="fa-solid fa-ticket"></i> TrueMoney Gift';
-                infoTitle.innerText = "ซองของขวัญ TrueMoney";
-                infoDesc.innerText = "เติมเงินผ่านลิงก์ซองอั่งเปา สะดวกรวดเร็วตลอด 24 ชม.";
-                actionTitle.innerText = "เติมเงินด้วยซองของขวัญ";
-                banner.innerText = "นำลิงก์ซองของขวัญที่สร้างจากแอป TrueMoney Wallet มากรอกด้านล่างนี้";
-                inputLabel.innerText = "ลิงก์ซองของขวัญ TrueMoney";
-                currencyWrap.style.display = 'none';
+                chipTm.classList.add('active');
+                chipPp.classList.remove('active');
+                mainTitle.innerText = "เติมเงินด้วย TrueMoney ซองของขวัญ";
+                labelTitle.innerText = "ลิงก์ซองของขวัญ TrueMoney Wallet";
+                inputWrap.style.display = 'none';
                 topupInput.type = "text";
                 topupInput.value = "";
                 topupInput.placeholder = "https://gift.truemoney.com/campaign/?v=...";
                 quickGrid.style.display = 'none';
                 submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ยืนยันซองอั่งเปา';
-                limitHint.style.display = 'none';
+                hintText.style.display = 'none';
             }
         }
 
@@ -722,7 +682,6 @@
             document.getElementById('qrResultSection').style.display = 'none';
         }
 
-        // ปุ่มกดสร้าง QR Code รองรับทุกธนาคาร
         const promptpayNumber = "0933998364";
         document.getElementById('topupSubmitBtn').addEventListener('click', function() {
             const val = document.getElementById('topupInput').value.trim();
@@ -735,9 +694,7 @@
                 }
 
                 try {
-                    // เรียกใช้งาน PromptPay API มาตรฐานสากล รองรับทุกธนาคารในไทย
                     const qrApiUrl = `https://promptpay.io/${promptpayNumber}/${amount.toFixed(2)}.png`;
-                    
                     const qrImg = document.getElementById('qrImage');
                     qrImg.src = qrApiUrl;
                     
@@ -756,11 +713,11 @@
                     alert('❌ กรุณากรอกลิงก์ซองของขวัญ TrueMoney');
                     return;
                 }
-                alert('ระบบ TrueMoney ซองอั่งเปากำลังประมวลผล...');
+                alert('ระบบซองของขวัญกำลังตรวจสอบข้อมูล...');
             }
         });
 
-        // ค้นหาร้านค้าแถบบน
+        // Search Slide Toggle
         const searchToggleBtn = document.getElementById('searchToggleBtn');
         const searchInputWrapper = document.getElementById('searchInputWrapper');
         const searchInputField = document.getElementById('searchInputField');
@@ -771,7 +728,7 @@
             if (searchInputWrapper.classList.contains('active')) searchInputField.focus();
         });
 
-        // Modal ล็อกอิน
+        // Auth Modal Handlers
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
         const openRegisterBtn = document.getElementById('openRegisterModal');
@@ -885,7 +842,6 @@
             }
         }
 
-        // ตรวจสอบสถานะล็อกอินแสดง Navbar
         window.addEventListener('DOMContentLoaded', async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
@@ -916,30 +872,30 @@
             const navRight = document.getElementById('navRightSection');
             navRight.innerHTML = `
                 <div style="position: relative; display: inline-block;">
-                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #1a1a20; border: 1px solid rgba(0, 175, 255, 0.3); padding: 5px 12px; border-radius: 10px;">
-                        <div style="width: 28px; height: 28px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00AFFF;">
-                            <i class="fa-solid fa-user" style="font-size: 12px;"></i>
+                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: rgba(12,12,18,0.9); border: 1px solid rgba(0, 180, 255, 0.3); padding: 5px 12px; border-radius: 99px;">
+                        <div style="width: 28px; height: 28px; background: rgba(0, 180, 255, 0.15); border: 1px solid #00b4ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00b4ff;">
+                            <i class="fa-solid fa-user" style="font-size: 11px;"></i>
                         </div>
                         <span style="font-size: 13px; font-weight: 600; color: #fff;">${username}</span>
-                        <span style="font-size: 12px; color: #00AFFF; font-weight: 700;">฿${userBalance}</span>
+                        <span style="font-size: 12px; color: #00b4ff; font-weight: 700;">฿${userBalance}</span>
                     </div>
-                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 280px; background: #09090b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; color: #fff; text-align: left;">
-                        <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="width: 38px; height: 38px; background: #0a1f2c; border: 1px solid #00AFFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #00AFFF; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 48px; width: 280px; background: rgba(8,8,12,0.95); border: 1px solid rgba(0, 180, 255, 0.3); border-radius: 16px; padding: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); z-index: 9999; color: #fff; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <div style="width: 38px; height: 38px; background: rgba(0, 180, 255, 0.15); border: 1px solid #00b4ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #00b4ff; font-weight: 700;">${username.substring(0, 2).toUpperCase()}</div>
                             <div>
-                                <div style="font-size: 13px; font-weight: 600;">${username}</div>
-                                <div style="font-size: 10px; color: #00AFFF; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
+                                <div style="font-size: 13px; font-weight: 700;">${username}</div>
+                                <div style="font-size: 10px; color: #00b4ff; background: rgba(0, 180, 255, 0.1); padding: 2px 8px; border-radius: 99px; display: inline-block; margin-top: 2px;">${isAdmin ? 'ADMINISTRATOR' : 'MEMBER'}</div>
                             </div>
                         </div>
-                        <div style="background: #121215; border: 1px solid rgba(0, 175, 255, 0.2); border-radius: 8px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="background: rgba(4,4,8,0.9); border: 1px solid rgba(0, 180, 255, 0.2); border-radius: 12px; padding: 12px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <div style="font-size: 10px; color: #94a3b8;">ยอดเงินคงเหลือ</div>
-                                <div style="font-size: 14px; font-weight: 700; color: #00AFFF;">฿${userBalance} บาท</div>
+                                <div style="font-size: 15px; font-weight: 800; color: #00b4ff;">฿${userBalance} บาท</div>
                             </div>
-                            <button onclick="window.location.href='topup.html'" style="background: linear-gradient(135deg, #4dd2ff 0%, #0088cc 100%); border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;">เติมเงิน</button>
+                            <button onclick="window.location.href='topup.html'" style="background: linear-gradient(135deg, #0055ff 0%, #00b4ff 100%); border: none; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;">เติมเงิน</button>
                         </div>
                         <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
-                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 6px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
+                            <a href="#" id="logoutBtn" style="color: #ff4d4d; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 8px; transition: background 0.2s;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
                         </div>
                     </div>
                 </div>
