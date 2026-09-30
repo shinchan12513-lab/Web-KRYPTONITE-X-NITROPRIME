@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cloudflare Turnstile Official Script -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-    <!-- QRCode JS สำหรับวาด QR Code -->
+    <!-- QRCode JS สำหรับสร้าง QR Code แบบ DataURL -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     
     <style>
@@ -283,7 +283,7 @@
             display: inline-block;
             margin: 15px 0 10px 0;
         }
-        .qr-box canvas { display: block; }
+        .qr-box img { display: block; width: 200px; height: 200px; }
         .qr-amount-text { font-size: 17px; font-weight: 700; color: #00AFFF; }
         .qr-instruction { font-size: 12px; color: #94a3b8; }
 
@@ -397,11 +397,11 @@
 
             <button class="topup-submit-btn" id="topupSubmitBtn"><i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน</button>
 
-            <!-- กล่องแสดง QR Code พร้อมเพย์ -->
+            <!-- กล่องแสดง QR Code พร้อมเพย์ (เปลี่ยนมาใช้ tag img) -->
             <div id="qrResultSection">
                 <div class="qr-amount-text" id="displayAmount">ยอดชำระ: ฿0.00</div>
                 <div class="qr-box">
-                    <canvas id="qrCanvas"></canvas>
+                    <img id="qrImage" alt="PromptPay QR Code">
                 </div>
                 <div class="qr-instruction">เปิดแอปพลิเคชันธนาคารเพื่อสแกน QR Code นี้</div>
             </div>
@@ -508,7 +508,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- ฟังก์ชันสร้าง PromptPay Payload และ CRC-16 ในตัว ---
+        // --- ฟังก์ชันสร้าง PromptPay Payload และ CRC-16 ---
         function formatField(id, value) {
             const len = String(value.length).padStart(2, '0');
             return id + len + value;
@@ -527,7 +527,6 @@
         }
 
         function generatePromptPayPayload(mobileNumber, amount) {
-            // จัดการเบอร์โทร (แปลง 0xxxxxxxxx เป็นรูปแบบสากล 0066xxxxxxxxx)
             let cleaned = mobileNumber.replace(/[^0-9]/g, '');
             if (cleaned.startsWith('0')) {
                 cleaned = '66' + cleaned.substring(1);
@@ -548,7 +547,7 @@
             return payloadWithoutCRC + crc16(payloadWithoutCRC);
         }
 
-        // สลับประเภทช่องทางการเติมเงินระหว่าง PromptPay และ TrueMoney
+        // สลับประเภทช่องทางการเติมเงิน
         let currentMethod = 'promptpay';
         window.switchTopupMethod = function(method) {
             currentMethod = method;
@@ -578,7 +577,7 @@
             }
         }
 
-        // จัดการกดปุ่มสร้าง QR Code หรือยืนยัน
+        // ปุ่มกดสร้าง QR Code
         const promptpayNumber = "0933998364";
         document.getElementById('topupSubmitBtn').addEventListener('click', function() {
             const val = document.getElementById('topupInput').value.trim();
@@ -592,19 +591,21 @@
 
                 try {
                     const payload = generatePromptPayPayload(promptpayNumber, amount);
-                    const resultSection = document.getElementById('qrResultSection');
-                    resultSection.style.display = 'block';
-                    document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
-
-                    const canvas = document.getElementById('qrCanvas');
-                    QRCode.toCanvas(canvas, payload, { width: 200, margin: 2 }, function (error) {
+                    
+                    // ใช้ toDataURL แปลงเป็นรูปภาพ Base64 เพื่อป้องกันปัญหา Canvas จอพับซ่อน
+                    QRCode.toDataURL(payload, { width: 200, margin: 2 }, function (error, url) {
                         if (error) {
                             console.error(error);
-                            alert('❌ เกิดข้อผิดพลาดในการวาด QR Code');
+                            alert('❌ เกิดข้อผิดพลาดในการสร้าง QR Code');
+                            return;
                         }
+                        
+                        document.getElementById('qrImage').src = url;
+                        document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
+                        document.getElementById('qrResultSection').style.display = 'block';
                     });
                 } catch (err) {
-                    alert('❌ เกิดข้อผิดพลาดในการสร้าง PromptPay Payload');
+                    alert('❌ เกิดข้อผิดพลาดในการประมวลผล');
                     console.error(err);
                 }
             } else {
@@ -627,7 +628,7 @@
             if (searchInputWrapper.classList.contains('active')) searchInputField.focus();
         });
 
-        // จัดการ Modal ล็อกอิน
+        // Modal ล็อกอิน
         const modalOverlay = document.getElementById('authModalOverlay');
         const openLoginBtn = document.getElementById('openLoginModal');
         const openRegisterBtn = document.getElementById('openRegisterModal');
@@ -741,7 +742,7 @@
             }
         }
 
-        // ตรวจสอบสถานะล็อกอินเพื่อแสดงยอดเงินและชื่อผู้ใช้บน Navbar
+        // ตรวจสอบสถานะล็อกอินแสดง Navbar
         window.addEventListener('DOMContentLoaded', async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
