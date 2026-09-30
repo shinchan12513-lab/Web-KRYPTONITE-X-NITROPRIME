@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kryptonitexnitroprime - Exclusive Topup Center</title>
+    <title>kryptonitexnitroprime - Topup Center</title>
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -168,7 +168,7 @@
             padding: 10px 20px 60px 20px;
         }
 
-        /* Hero Banner สุดหรูหรามีมิติ */
+        /* Hero Banner */
         .futuristic-hero-banner {
             background: linear-gradient(135deg, rgba(12, 14, 24, 0.9) 0%, rgba(6, 7, 12, 0.95) 100%);
             border: 1px solid rgba(0, 210, 255, 0.3);
@@ -283,7 +283,7 @@
         .method-info .title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
         .method-info .desc { font-size: 12px; color: #94a3b8; }
 
-        /* Main Glass Card Panel */
+        /* Cyber Card */
         .cyber-card {
             background: rgba(8, 9, 15, 0.9);
             backdrop-filter: blur(25px);
@@ -361,6 +361,7 @@
 
         .hint-text { text-align: center; font-size: 12px; color: #64748b; margin-top: 18px; letter-spacing: 0.3px; }
 
+        /* QR Code Result Section */
         #qrResultSection {
             display: none; margin-top: 35px; text-align: center; background: rgba(3, 4, 8, 0.98);
             border: 1px solid rgba(0, 210, 255, 0.5); border-radius: 24px; padding: 35px;
@@ -369,8 +370,22 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
+        .timer-box {
+            background-color: rgba(255, 152, 0, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #ffb74d;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+        .timer-box span {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
         .qr-hologram-frame {
-            background: #ffffff; padding: 22px; border-radius: 20px; display: inline-block; margin: 22px 0 15px 0;
+            background: #ffffff; padding: 22px; border-radius: 20px; display: inline-block; margin: 15px 0 15px 0;
             box-shadow: 0 0 50px rgba(0, 210, 255, 0.45); position: relative;
         }
         .qr-hologram-frame img { display: block; width: 230px; height: 230px; }
@@ -382,7 +397,77 @@
             padding: 11px 28px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer;
             margin-top: 18px; transition: all 0.25s;
         }
-        .cancel-cyber-btn:hover { background: rgba(255, 77, 77, 0.15); border-color: #ff5c5c; box-shadow: 0 0 20px rgba(255, 77, 77, 0.3); }
+        .cancel-cyber-btn:hover:not(:disabled) { background: rgba(255, 77, 77, 0.15); border-color: #ff5c5c; box-shadow: 0 0 20px rgba(255, 77, 77, 0.3); }
+        .cancel-cyber-btn:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .cancel-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        /* ส่วนแสดงธนาคารรองรับแบบเลื่อนได้ (Infinite Marquee)[cite: 5, 6] */
+        .bank-support-section {
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 25px;
+        }
+
+        .bank-support-title {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .marquee-container {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 20px;
+            animation: scrollMarquee 20s linear infinite;
+            white-space: nowrap;
+            align-items: center;
+        }
+
+        .bank-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        @keyframes scrollMarquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
 
         /* Modal & Auth Styles */
         .auth-modal-overlay {
@@ -490,11 +575,11 @@
     <!-- ================= CONTENT หน้าเติมเงิน ================= -->
     <main class="main-container">
         
-        <!-- Hero Banner สุดล้ำหรูหรา -->
+        <!-- Hero Banner (นำคำว่า EXECUTIVE TOPUP CENTER ออกแล้ว) -->
         <div class="futuristic-hero-banner">
             <div class="hero-title-group">
-                <h1>EXECUTIVE TOPUP CENTER</h1>
-                <p>ระบบเติมเงินออโต้ความเร็วสูงระดับพรีเมียม ปลอดภัย มั่นใจได้ 24 ชั่วโมง</p>
+                <h1 style="font-size: 26px;">ระบบเติมเงินออโต้ความเร็วสูง</h1>
+                <p>เติมเงินสะดวกรวดเร็ว ปลอดภัย ตรวจสอบยอดเงินอัตโนมัติ 24 ชั่วโมง</p>
             </div>
             <div class="balance-holo-card">
                 <i class="fa-solid fa-wallet"></i>
@@ -552,17 +637,56 @@
             </button>
             <div class="hint-text" id="bottomHintText">ขั้นต่ำ 1 บาท • สูงสุด 999,999 บาท • ระบบตรวจสอบสถานะเรียลไทม์</div>
 
-            <!-- ผลลัพธ์ QR Code -->
+            <!-- ผลลัพธ์ QR Code (พร้อมระบบนับเวลา 10 นาที และปุ่มยกเลิก 30 วินาทีแรก) -->
             <div id="qrResultSection">
                 <div class="qr-instruction-title">สแกนด้วยแอปธนาคารใดก็ได้ (กรุณาโอนให้ตรงยอดรวมเศษสตางค์)</div>
+                
+                <!-- ตัวจับเวลาสแกน 10 นาที -->
+                <div class="timer-box">
+                    กรุณาสแกนและชำระเงินภายใน: <span id="payment-timer">10:00</span>
+                </div>
+
                 <div class="qr-amount-display" id="displayAmount">฿0.00 บาท</div>
                 <div class="qr-hologram-frame">
                     <img id="qrImage" alt="PromptPay QR Code">
                 </div>
                 <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">ระบบจะทำการเติมเงินเข้าไอดีให้อัตโนมัติภายใน 5-10 วินาที</div>
-                <button type="button" class="cancel-cyber-btn" onclick="cancelQrSession()">ยกเลิกรายการนี้</button>
+                
+                <div>
+                    <button type="button" id="cancel-btn" class="cancel-cyber-btn" disabled>ยกเลิกรายการ (30s)</button>
+                    <div id="cancel-note" class="cancel-note">สามารถยกเลิกรายการได้เฉพาะภายใน 30 วินาทีแรกเท่านั้น</div>
+                </div>
             </div>
         </div>
+
+        <!-- ส่วนแสดงธนาคารรองรับแบบเลื่อนได้อัตโนมัติ (Infinite Marquee)[cite: 5, 6] -->
+        <div class="bank-support-section">
+            <div class="bank-support-title">รองรับทุกธนาคารชั้นนำของประเทศไทย[cite: 6]</div>
+            <div class="marquee-container">
+                <div class="marquee-track">
+                    <!-- ชุดที่ 1 -->
+                    <div class="bank-logo" style="background-color: #003b70;">KTB</div>
+                    <div class="bank-logo" style="background-color: #00a550;">KBANK</div>
+                    <div class="bank-logo" style="background-color: #1ba5e0;">BAY</div>
+                    <div class="bank-logo" style="background-color: #e0002b;">SCB</div>
+                    <div class="bank-logo" style="background-color: #005696;">TTB</div>
+                    <div class="bank-logo" style="background-color: #7b1d41;">GSB</div>
+                    <div class="bank-logo" style="background-color: #002d62;">UOB</div>
+                    <div class="bank-logo" style="background-color: #003399;">BBL</div>
+                    
+                    <!-- ชุดที่ 2 (สำหรับลูปเลื่อนวนต่อเนื่อง) -->
+                    <div class="bank-logo" style="background-color: #003b70;">KTB</div>
+                    <div class="bank-logo" style="background-color: #00a550;">KBANK</div>
+                    <div class="bank-logo" style="background-color: #1ba5e0;">BAY</div>
+                    <div class="bank-logo" style="background-color: #e0002b;">SCB</div>
+                    <div class="bank-logo" style="background-color: #005696;">TTB</div>
+                    <div class="bank-logo" style="background-color: #7b1d41;">GSB</div>
+                    <div class="bank-logo" style="background-color: #002d62;">UOB</div>
+                    <div class="bank-logo" style="background-color: #003399;">BBL</div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- ================= AUTH MODAL POPUP ================= -->
@@ -666,6 +790,8 @@
         const db = getFirestore(app);
 
         let currentMethod = 'promptpay';
+        let paymentCountdown = null;
+        let cancelCountdown = null;
 
         window.setAmount = function(amount) {
             document.getElementById('topupInput').value = amount;
@@ -685,6 +811,7 @@
             const qrSection = document.getElementById('qrResultSection');
 
             qrSection.style.display = 'none';
+            clearIntervalTimers();
 
             if (method === 'promptpay') {
                 chipPp.classList.add('active');
@@ -712,8 +839,14 @@
             }
         }
 
+        function clearIntervalTimers() {
+            if (paymentCountdown) clearInterval(paymentCountdown);
+            if (cancelCountdown) clearInterval(cancelCountdown);
+        }
+
         window.cancelQrSession = function() {
             document.getElementById('qrResultSection').style.display = 'none';
+            clearIntervalTimers();
         }
 
         const promptpayNumber = "0933998364";
@@ -738,6 +871,49 @@
 
                     document.getElementById('displayAmount').innerText = `฿${amount.toFixed(2)} บาท`;
                     document.getElementById('qrResultSection').style.display = 'block';
+
+                    // เริ่มต้นระบบนับเวลาสแกน 10 นาที (600 วินาที)
+                    clearIntervalTimers();
+                    let paymentTimeLeft = 600;
+                    const paymentTimerElement = document.getElementById('payment-timer');
+                    
+                    paymentCountdown = setInterval(() => {
+                        let minutes = Math.floor(paymentTimeLeft / 60);
+                        let seconds = paymentTimeLeft % 60;
+                        minutes = minutes < 10 ? '0' + minutes : minutes;
+                        seconds = seconds < 10 ? '0' + seconds : seconds;
+                        paymentTimerElement.textContent = `${minutes}:${seconds}`;
+                        
+                        if (paymentTimeLeft <= 0) {
+                            clearInterval(paymentCountdown);
+                            paymentTimerElement.textContent = "หมดเวลา";
+                            alert("หมดเวลาชำระเงิน กรุณาสร้างรายการใหม่อีกครั้ง");
+                            document.getElementById('qrResultSection').style.display = 'none';
+                        }
+                        paymentTimeLeft--;
+                    }, 1000);
+
+                    // เริ่มต้นระบบจำกัดเวลายกเลิก 30 วินาทีแรกเท่านั้น
+                    let cancelTimeLeft = 30;
+                    const cancelBtn = document.getElementById('cancel-btn');
+                    const cancelNote = document.getElementById('cancel-note');
+                    
+                    cancelBtn.disabled = false;
+                    cancelBtn.textContent = `ยกเลิกรายการ (${cancelTimeLeft}s)`;
+                    cancelNote.style.color = "#888";
+
+                    cancelCountdown = setInterval(() => {
+                        cancelTimeLeft--;
+                        if (cancelTimeLeft > 0) {
+                            cancelBtn.textContent = `ยกเลิกรายการ (${cancelTimeLeft}s)`;
+                        } else {
+                            clearInterval(cancelCountdown);
+                            cancelBtn.disabled = true;
+                            cancelBtn.textContent = "หมดเวลา 30 วิ (ไม่สามารถยกเลิกได้)";
+                            cancelNote.style.color = "#555";
+                        }
+                    }, 1000);
+
                 } catch (err) {
                     alert('❌ เกิดข้อผิดพลาดในการประมวลผล');
                     console.error(err);
@@ -748,6 +924,17 @@
                     return;
                 }
                 alert('ระบบซองของขวัญกำลังตรวจสอบข้อมูล...');
+            }
+        });
+
+        // Event ปุ่มยกเลิก
+        document.getElementById('cancel-btn').addEventListener('click', () => {
+            const cancelBtn = document.getElementById('cancel-btn');
+            if (!cancelBtn.disabled) {
+                if (confirm("คุณต้องการยกเลิกรายการนี้ใช่หรือไม่?")) {
+                    window.cancelQrSession();
+                    alert("ยกเลิกรายการสำเร็จ");
+                }
             }
         });
 
