@@ -404,15 +404,15 @@
 
             <button class="topup-submit-btn" id="topupSubmitBtn"><i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน</button>
 
-            <!-- กล่องแสดง QR Code และระบบอัปโหลดสลิปตรวจสอบอัตโนมัติ -->
+            <!-- กล่องแสดง QR Code ด้วยแท็ก <img> ร่วมกับ QRCode.toDataURL -->
             <div id="qrResultSection">
                 <div class="qr-amount-text" id="displayAmount">ยอดชำระ: ฿0.00</div>
                 <div class="qr-box">
-                    <img id="qrImage" alt="PromptPay QR Code">
+                    <img id="qrImage" alt="PromptPay QR Code" style="display: block; width: 220px; height: 220px;">
                 </div>
                 <div class="qr-instruction" style="margin-bottom: 15px;">สแกน QR Code ด้วยแอปพลิเคชันธนาคาร (เบอร์: 0933998364)</div>
                 
-                <!-- ปุ่มสำหรับมือถือ: บันทึกรูป QR หรือคัดลอกข้อมูล -->
+                <!-- ปุ่มเสริมสำหรับมือถือ: บันทึกรูป QR และคัดลอกเบอร์พร้อมเพย์ -->
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <button type="button" id="downloadQrBtn" class="topup-submit-btn" style="background: #1a1a20; border: 1px solid rgba(0,175,255,0.4); font-size: 13px; padding: 10px;">
                         <i class="fa-solid fa-download"></i> บันทึกรูป QR
@@ -583,7 +583,6 @@
 
         let requestedAmount = 0;
         let currentMethod = 'promptpay';
-        let currentQrDataUrl = '';
 
         window.switchTopupMethod = function(method) {
             currentMethod = method;
@@ -628,7 +627,8 @@
 
                 try {
                     const payload = generatePromptPayPayload(promptpayNumber, requestedAmount);
-                    // ขยาย errorCorrectionLevel เป็น 'M' หรือ 'Q' และเพิ่มความกว้างเป็น 300px เพื่อให้แอปธนาคารสแกนได้แม่นยำ 100%
+                    
+                    // ใช้ QRCode.toDataURL แปลงเป็น Data URI แล้วกำหนดค่าให้กับแท็ก <img> โดยตรง
                     QRCode.toDataURL(payload, { width: 300, margin: 4, errorCorrectionLevel: 'M' }, function (error, url) {
                         if (error) {
                             console.error(error);
@@ -636,7 +636,6 @@
                             return;
                         }
                         
-                        currentQrDataUrl = url;
                         document.getElementById('qrImage').src = url;
                         document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${requestedAmount.toFixed(2)} บาท`;
                         document.getElementById('qrResultSection').style.display = 'block';
@@ -654,11 +653,12 @@
             }
         });
 
-        // ปุ่มดาวน์โหลดรูป QR Code (แก้ปัญหาเปิดเว็บในมือถือแล้วสแกนกล้องไม่ได้)
+        // ปุ่มดาวน์โหลดรูป QR Code จากแท็ก <img> โดยตรง
         document.getElementById('downloadQrBtn').addEventListener('click', function() {
-            if (!currentQrDataUrl) return;
+            const qrImg = document.getElementById('qrImage');
+            const imageUri = qrImg.src;
             const a = document.createElement('a');
-            a.href = currentQrDataUrl;
+            a.href = imageUri;
             a.download = `PromptPay-${requestedAmount}THB.png`;
             document.body.appendChild(a);
             a.click();
