@@ -283,7 +283,7 @@
             display: inline-block;
             margin: 15px 0 10px 0;
         }
-        .qr-box img { display: block; width: 200px; height: 200px; }
+        .qr-box img { display: block; width: 220px; height: 220px; }
         .qr-amount-text { font-size: 17px; font-weight: 700; color: #00AFFF; }
         .qr-instruction { font-size: 12px; color: #94a3b8; }
 
@@ -410,8 +410,18 @@
                 <div class="qr-box">
                     <img id="qrImage" alt="PromptPay QR Code">
                 </div>
-                <div class="qr-instruction">สแกน QR Code ด้วยแอปพลิเคชันธนาคารเพื่อชำระเงิน (เบอร์: 0933998364)</div>
+                <div class="qr-instruction" style="margin-bottom: 15px;">สแกน QR Code ด้วยแอปพลิเคชันธนาคาร (เบอร์: 0933998364)</div>
                 
+                <!-- ปุ่มสำหรับมือถือ: บันทึกรูป QR หรือคัดลอกข้อมูล -->
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button type="button" id="downloadQrBtn" class="topup-submit-btn" style="background: #1a1a20; border: 1px solid rgba(0,175,255,0.4); font-size: 13px; padding: 10px;">
+                        <i class="fa-solid fa-download"></i> บันทึกรูป QR
+                    </button>
+                    <button type="button" id="copyPromptpayBtn" class="topup-submit-btn" style="background: #1a1a20; border: 1px solid rgba(0,175,255,0.4); font-size: 13px; padding: 10px;">
+                        <i class="fa-solid fa-copy"></i> คัดลอกเบอร์พร้อมเพย์
+                    </button>
+                </div>
+
                 <!-- ส่วนอัปโหลดสลิปตรวจสอบ -->
                 <div class="slip-upload-section">
                     <label style="display: block; font-size: 13px; color: #fff; margin-bottom: 8px;">
@@ -555,14 +565,13 @@
                 cleaned = '66' + cleaned.substring(1);
             }
             
-            // โครงสร้าง AID เบอร์โทรศัพท์พร้อมเพย์ที่ถูกต้องตามมาตรฐานธนาคาร
             const targetAccount = formatField('00', 'A000000677010111') + formatField('01', cleaned);
             
-            let data = formatField('00', '01') + // Payload Format Indicator
-                       formatField('01', '12') + // Initiation Method (12 = Dynamic QR)
+            let data = formatField('00', '01') + 
+                       formatField('01', '12') + 
                        formatField('29', targetAccount) + 
                        formatField('58', 'TH') + 
-                       formatField('53', '764'); // Currency THB
+                       formatField('53', '764'); 
 
             if (amount && amount > 0) {
                 data += formatField('54', amount.toFixed(2));
@@ -574,6 +583,7 @@
 
         let requestedAmount = 0;
         let currentMethod = 'promptpay';
+        let currentQrDataUrl = '';
 
         window.switchTopupMethod = function(method) {
             currentMethod = method;
@@ -618,14 +628,15 @@
 
                 try {
                     const payload = generatePromptPayPayload(promptpayNumber, requestedAmount);
-                    // เพิ่ม margin เป็น 4 และความกว้าง 250 เพื่อให้กล้องมือถือทุกรุ่นสแกนติดง่ายและแม่นยำขึ้น
-                    QRCode.toDataURL(payload, { width: 250, margin: 4 }, function (error, url) {
+                    // ขยาย errorCorrectionLevel เป็น 'M' หรือ 'Q' และเพิ่มความกว้างเป็น 300px เพื่อให้แอปธนาคารสแกนได้แม่นยำ 100%
+                    QRCode.toDataURL(payload, { width: 300, margin: 4, errorCorrectionLevel: 'M' }, function (error, url) {
                         if (error) {
                             console.error(error);
                             alert('❌ เกิดข้อผิดพลาดในการสร้าง QR Code');
                             return;
                         }
                         
+                        currentQrDataUrl = url;
                         document.getElementById('qrImage').src = url;
                         document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${requestedAmount.toFixed(2)} บาท`;
                         document.getElementById('qrResultSection').style.display = 'block';
@@ -641,6 +652,26 @@
                 }
                 alert('ระบบ TrueMoney ซองอั่งเปากำลังประมวลผล...');
             }
+        });
+
+        // ปุ่มดาวน์โหลดรูป QR Code (แก้ปัญหาเปิดเว็บในมือถือแล้วสแกนกล้องไม่ได้)
+        document.getElementById('downloadQrBtn').addEventListener('click', function() {
+            if (!currentQrDataUrl) return;
+            const a = document.createElement('a');
+            a.href = currentQrDataUrl;
+            a.download = `PromptPay-${requestedAmount}THB.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+
+        // ปุ่มคัดลอกเบอร์พร้อมเพย์
+        document.getElementById('copyPromptpayBtn').addEventListener('click', function() {
+            navigator.clipboard.writeText(promptpayNumber).then(() => {
+                alert('✅ คัดลอกเบอร์ PromptPay เรียบร้อยแล้ว: ' + promptpayNumber);
+            }).catch(() => {
+                alert('❌ ไม่สามารถคัดลอกได้อัตโนมัติ เบอร์คือ: ' + promptpayNumber);
+            });
         });
 
         document.getElementById('verifySlipBtn').addEventListener('click', async function() {
