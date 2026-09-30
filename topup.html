@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cloudflare Turnstile Official Script -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-    <!-- ไลบรารีสร้าง PromptPay QR Code และ QRCode JS -->
-    <script src="https://cdn.jsdelivr.net/npm/promptpay-qr@0.6.0/lib/index.js"></script>
+    <!-- QRCode JS สำหรับวาด QR Code -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     
     <style>
@@ -509,6 +508,46 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- ฟังก์ชันสร้าง PromptPay Payload และ CRC-16 ในตัว ---
+        function formatField(id, value) {
+            const len = String(value.length).padStart(2, '0');
+            return id + len + value;
+        }
+
+        function crc16(payload) {
+            let crc = 0xFFFF;
+            for (let i = 0; i < payload.length; i++) {
+                let x = ((crc >> 8) ^ payload.charCodeAt(i)) & 0xFF;
+                x ^= x >> 4;
+                crc = ((crc << 8) ^ (x << 12) ^ (x << 5) ^ x) & 0xFFFF;
+            }
+            let hex = crc.toString(16).toUpperCase();
+            while (hex.length < 4) hex = '0' + hex;
+            return hex;
+        }
+
+        function generatePromptPayPayload(mobileNumber, amount) {
+            // จัดการเบอร์โทร (แปลง 0xxxxxxxxx เป็นรูปแบบสากล 0066xxxxxxxxx)
+            let cleaned = mobileNumber.replace(/[^0-9]/g, '');
+            if (cleaned.startsWith('0')) {
+                cleaned = '66' + cleaned.substring(1);
+            }
+            
+            const merchantAccount = formatField('00', 'A000000677010111') + formatField('01', cleaned);
+            let data = formatField('00', '01') + 
+                       formatField('01', '12') + 
+                       formatField('29', merchantAccount) + 
+                       formatField('58', 'TH') + 
+                       formatField('53', '764');
+
+            if (amount && amount > 0) {
+                data += formatField('54', amount.toFixed(2));
+            }
+
+            const payloadWithoutCRC = data + '6304';
+            return payloadWithoutCRC + crc16(payloadWithoutCRC);
+        }
+
         // สลับประเภทช่องทางการเติมเงินระหว่าง PromptPay และ TrueMoney
         let currentMethod = 'promptpay';
         window.switchTopupMethod = function(method) {
@@ -552,20 +591,20 @@
                 }
 
                 try {
-                    // แก้ไขจุดเรียกใช้งานไลบรารี promptpay-qr ผ่าน CDN 
-                    const payGen = window.generatePayload || window.default;
-                    const payload = payGen(promptpayNumber, { amount: amount });
-                    
+                    const payload = generatePromptPayPayload(promptpayNumber, amount);
                     const resultSection = document.getElementById('qrResultSection');
                     resultSection.style.display = 'block';
                     document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
 
                     const canvas = document.getElementById('qrCanvas');
                     QRCode.toCanvas(canvas, payload, { width: 200, margin: 2 }, function (error) {
-                        if (error) console.error(error);
+                        if (error) {
+                            console.error(error);
+                            alert('❌ เกิดข้อผิดพลาดในการวาด QR Code');
+                        }
                     });
                 } catch (err) {
-                    alert('❌ เกิดข้อผิดพลาดในการสร้าง QR Code');
+                    alert('❌ เกิดข้อผิดพลาดในการสร้าง PromptPay Payload');
                     console.error(err);
                 }
             } else {
@@ -773,3 +812,5 @@
             });
         }
     </script>
+</body>
+</html>
