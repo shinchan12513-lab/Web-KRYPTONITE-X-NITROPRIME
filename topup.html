@@ -171,119 +171,208 @@
         }
 
         .main-container {
-            max-width: 1540px;
+            max-width: 1300px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px 20px 60px 20px;
         }
 
-        /* ส่วนเนื้อหาหน้าเติมเงิน (Topup Content Box) */
-        .topup-card {
-            background: #0d0d12;
-            border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 18px;
-            padding: 40px;
-            max-width: 800px;
-            margin: 40px auto;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 175, 255, 0.04);
+        /* Header หน้าเติมเงิน */
+        .topup-header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 20px;
         }
-        .topup-title {
-            font-size: 22px;
+        .topup-main-title {
+            font-size: 26px;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-bottom: 6px;
         }
-        .topup-title i { color: #00AFFF; }
-        
-        .topup-methods {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .topup-method-btn {
-            background: #121215;
-            border: 1px solid rgba(0, 175, 255, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            color: #cbd5e1;
-        }
-        .topup-method-btn:hover, .topup-method-btn.active {
-            border-color: #00AFFF;
-            background: rgba(0, 175, 255, 0.08);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-        .topup-method-btn i {
-            font-size: 28px;
-            color: #00AFFF;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .topup-form-group {
-            margin-bottom: 20px;
-        }
-        .topup-form-group label {
-            display: block;
+        .topup-subtitle {
             font-size: 13px;
             color: #94a3b8;
-            margin-bottom: 8px;
         }
-        .topup-input {
-            width: 100%;
-            background: #121215;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            font-family: 'Prompt', sans-serif;
-        }
-        .topup-input:focus {
-            border-color: #00AFFF;
-            box-shadow: 0 0 12px rgba(0, 175, 255, 0.2);
-        }
-        .topup-submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
-            border: none;
-            color: #fff;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 175, 255, 0.4);
-            transition: opacity 0.2s;
-        }
-        .topup-submit-btn:hover { opacity: 0.9; }
 
-        /* ส่วนแสดงผล QR Code */
-        #qrResultSection {
-            display: none;
-            margin-top: 25px;
-            text-align: center;
-            background: #121215;
+        /* กล่องแสดงยอดเงินคงเหลือขวาบน */
+        .balance-badge-box {
+            background: #0d0d12;
             border: 1px solid rgba(0, 175, 255, 0.3);
-            border-radius: 14px;
-            padding: 20px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: inset 0 0 15px rgba(0, 175, 255, 0.05);
+        }
+        .balance-badge-box i { color: #00AFFF; font-size: 18px; }
+        .balance-badge-box .title { font-size: 11px; color: #94a3b8; }
+        .balance-badge-box .amount { font-size: 16px; font-weight: 700; color: #00AFFF; }
+
+        /* แถบเลือกวิธีเติมเงินแบบปุ่มแท็บเล็ก */
+        .topup-method-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .method-tab-btn {
+            background: #0d0d12;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .method-tab-btn.active {
+            background: rgba(0, 175, 255, 0.12);
+            border-color: #00AFFF;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 175, 255, 0.15);
+        }
+        .method-tab-btn i { color: #00AFFF; }
+
+        /* โครงสร้างหลักแบบ 2 คอลัมน์ (ซ้ายคำแนะนำ, ขวาฟอร์ม) */
+        .topup-grid-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* คอลัมน์ซ้าย: ข้อมูล/ขั้นตอน */
+        .topup-info-card {
+            background: #0d0d12;
+            border: 1px solid rgba(0, 175, 255, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .info-card-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(0, 175, 255, 0.1);
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00AFFF;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .info-card-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .info-card-desc { font-size: 12px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+        
+        .steps-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .step-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: #cbd5e1; line-height: 1.4; }
+        .step-num {
+            background: rgba(0, 175, 255, 0.15);
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            color: #00AFFF;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 700; flex-shrink: 0;
+        }
+
+        .side-menu-links { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .side-link-item {
+            display: flex; justify-content: space-between; align-items: center;
+            color: #94a3b8; text-decoration: none; font-size: 12px; padding: 6px 0;
+            transition: color 0.2s;
+        }
+        .side-link-item:hover { color: #00AFFF; }
+        .side-link-item i { font-size: 10px; color: #00AFFF; }
+
+        /* คอลัมน์ขวา: กล่องทำรายการเติมเงิน */
+        .topup-action-card {
+            background: #0d0d12;
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 175, 255, 0.03);
+        }
+        .action-card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 12px;
+        }
+        .action-card-header span { font-size: 15px; font-weight: 600; color: #fff; }
+        .fee-badge { font-size: 11px; color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 6px; }
+
+        .instruction-banner {
+            font-size: 12px; color: #94a3b8; margin-bottom: 20px; background: #121215;
+            padding: 10px 14px; border-radius: 8px; border-left: 3px solid #00AFFF;
+        }
+
+        .form-group-custom { margin-bottom: 20px; }
+        .form-group-custom label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
+        
+        .input-with-currency {
+            position: relative; display: flex; align-items: center;
+        }
+        .input-with-currency span {
+            position: absolute; left: 16px; color: #00AFFF; font-weight: 700; font-size: 15px;
+        }
+        .topup-main-input {
+            width: 100%; background: #121215; border: 1px solid rgba(0, 175, 255, 0.25);
+            border-radius: 12px; padding: 14px 16px 14px 38px; color: #fff; font-size: 16px;
+            font-weight: 600; outline: none; font-family: 'Prompt', sans-serif;
+            transition: all 0.2s;
+        }
+        .topup-main-input:focus {
+            border-color: #00AFFF; box-shadow: 0 0 15px rgba(0, 175, 255, 0.2);
+        }
+
+        /* ปุ่มเลือกจำนวนเงินด่วนแบบ Grid */
+        .quick-amount-grid {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px;
+        }
+        .quick-amt-btn {
+            background: #121215; border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #cbd5e1; padding: 8px 0; border-radius: 8px; font-size: 12px; font-weight: 600;
+            cursor: pointer; text-align: center; transition: all 0.2s;
+        }
+        .quick-amt-btn:hover {
+            border-color: #00AFFF; background: rgba(0, 175, 255, 0.1); color: #00AFFF;
+        }
+
+        .submit-action-btn {
+            width: 100%; background: linear-gradient(135deg, #0055ff 0%, #00AFFF 100%);
+            border: none; color: #fff; padding: 14px; border-radius: 12px; font-size: 15px;
+            font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 175, 255, 0.4);
+            transition: opacity 0.2s; margin-top: 5px;
+        }
+        .submit-action-btn:hover { opacity: 0.9; }
+
+        .limit-hint { text-align: center; font-size: 11px; color: #64748b; margin-top: 12px; }
+
+        /* ส่วนแสดง QR Code หลังกดสร้าง */
+        #qrResultSection {
+            display: none; margin-top: 25px; text-align: center; background: #121215;
+            border: 1px solid rgba(0, 175, 255, 0.3); border-radius: 14px; padding: 20px;
         }
         .qr-box {
-            background: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            display: inline-block;
-            margin: 15px 0 10px 0;
+            background: #fff; padding: 15px; border-radius: 10px; display: inline-block; margin: 15px 0 10px 0;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
-        .qr-box img { display: block; width: 200px; height: 200px; }
-        .qr-amount-text { font-size: 17px; font-weight: 700; color: #00AFFF; }
-        .qr-instruction { font-size: 12px; color: #94a3b8; }
+        .qr-box img { display: block; width: 210px; height: 210px; }
+        .qr-amount-text { font-size: 18px; font-weight: 700; color: #00AFFF; }
+        .qr-sub-text { font-size: 12px; color: #94a3b8; margin-bottom: 5px; }
+        
+        .cancel-qr-btn {
+            background: transparent; border: 1px solid rgba(255, 77, 77, 0.3); color: #ff4d4d;
+            padding: 8px 20px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+            margin-top: 15px; transition: all 0.2s;
+        }
+        .cancel-qr-btn:hover { background: rgba(255, 77, 77, 0.1); border-color: #ff4d4d; }
 
         /* Modal & Auth Styles */
         .auth-modal-overlay {
@@ -374,35 +463,97 @@
 
     <!-- ================= CONTENT หน้าเติมเงิน ================= -->
     <main class="main-container">
-        <div class="topup-card">
-            <div class="topup-title"><i class="fa-solid fa-wallet"></i> ช่องทางการเติมเงิน</div>
+        
+        <!-- Header ส่วนบน -->
+        <div class="topup-header-section">
+            <div>
+                <div class="topup-main-title">เติมเงินเข้ากระเป๋า</div>
+                <div class="topup-subtitle">เลือกวิธีที่สะดวก แล้วเติมยอดให้พร้อมสำหรับสินค้าที่คุณต้องการ</div>
+            </div>
+            <div class="balance-badge-box">
+                <i class="fa-solid fa-wallet"></i>
+                <div>
+                    <div class="title">ยอดเงินคงเหลือ</div>
+                    <div class="amount" id="headerBalanceDisplay">฿0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- แถบเลือกวิธีเติมเงิน -->
+        <div class="topup-method-tabs">
+            <button class="method-tab-btn active" id="methodPromptpay" onclick="switchTopupMethod('promptpay')">
+                <i class="fa-solid fa-qrcode"></i> พร้อมเพย์อัตโนมัติ
+            </button>
+            <button class="method-tab-btn" id="methodTruemoney" onclick="switchTopupMethod('truemoney')">
+                <i class="fa-solid fa-ticket"></i> TrueMoney Gift
+            </button>
+        </div>
+
+        <!-- โครงสร้าง 2 คอลัมน์ -->
+        <div class="topup-grid-layout">
             
-            <div class="topup-methods">
-                <div class="topup-method-btn active" id="methodPromptpay" onclick="switchTopupMethod('promptpay')">
-                    <i class="fa-solid fa-qrcode"></i>
-                    <div><b>PromptPay</b><br><small style="color: #94a3b8; font-size: 11px;">รองรับทุกธนาคาร / สร้าง QR ตามยอด</small></div>
+            <!-- คอลัมน์ซ้าย: คำแนะนำขั้นตอน -->
+            <div class="topup-info-card">
+                <div class="info-card-icon" id="infoCardIcon"><i class="fa-solid fa-qrcode"></i></div>
+                <div class="info-card-title" id="infoCardTitle">พร้อมเพย์อัตโนมัติ</div>
+                <div class="info-card-desc" id="infoCardDesc">สแกน QR และรับยอดอัตโนมัติทันที ไม่ต้องแนบสลิป</div>
+
+                <div class="steps-list">
+                    <div class="step-item"><div class="step-num">1</div><span>ระบุจำนวนเงินที่ต้องการเติมในช่องทำรายการ</span></div>
+                    <div class="step-item"><div class="step-num">2</div><span>สแกน QR และชำระให้ตรงยอดรวมสตางค์</span></div>
+                    <div class="step-item"><div class="step-num">3</div><span>รอระบบยืนยันยอดอัตโนมัติทันทีโดยไม่ต้องแนบสลิป</span></div>
                 </div>
-                <div class="topup-method-btn" id="methodTruemoney" onclick="switchTopupMethod('truemoney')">
-                    <i class="fa-solid fa-ticket"></i>
-                    <div><b>TrueMoney</b><br><small style="color: #94a3b8; font-size: 11px;">ซองอั่งเปา (มีค่าธรรมเนียม)</small></div>
+
+                <div class="side-menu-links">
+                    <a href="#" class="side-link-item"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติเติมเงิน <i class="fa-solid fa-chevron-right"></i></a>
+                    <a href="#" class="side-link-item"><i class="fa-solid fa-headset"></i> ติดต่อแอดมิน <i class="fa-solid fa-chevron-right"></i></a>
                 </div>
             </div>
 
-            <div class="topup-form-group">
-                <label id="inputLabel">ระบุจำนวนเงินที่ต้องการเติม (บาท)</label>
-                <input type="number" id="topupInput" class="topup-input" placeholder="ตัวอย่าง 50, 100, 300" min="1" step="any">
-            </div>
-
-            <button class="topup-submit-btn" id="topupSubmitBtn"><i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน</button>
-
-            <!-- กล่องแสดง QR Code พร้อมเพย์ -->
-            <div id="qrResultSection">
-                <div class="qr-amount-text" id="displayAmount">ยอดชำระ: ฿0.00</div>
-                <div class="qr-box">
-                    <img id="qrImage" alt="PromptPay QR Code">
+            <!-- คอลัมน์ขวา: ฟอร์มทำรายการ -->
+            <div class="topup-action-card">
+                <div class="action-card-header">
+                    <span id="actionCardTitle">ทำรายการเติมเงิน</span>
+                    <span class="fee-badge"><i class="fa-solid fa-check"></i> ค่าธรรมเนียม 0%</span>
                 </div>
-                <div class="qr-instruction">เปิดแอปธนาคารใดก็ได้เพื่อสแกน QR Code นี้ (ยอดเงินจะถูกตั้งให้อัตโนมัติ)</div>
+
+                <div class="instruction-banner" id="instructionBanner">
+                    ชำระตามยอด QR รวมสตางค์ ระบบจะตรวจสอบและเติมยอดให้อัตโนมัติทันที
+                </div>
+
+                <div class="form-group-custom">
+                    <label id="inputLabel">จำนวนเงินที่ต้องการเติม (บาท)</label>
+                    <div class="input-with-currency" id="currencyInputWrapper">
+                        <span>฿</span>
+                        <input type="number" id="topupInput" class="topup-main-input" value="100" min="1" step="any">
+                    </div>
+                    <!-- ปุ่มเลือกจำนวนเงินด่วน -->
+                    <div class="quick-amount-grid" id="quickAmountGrid">
+                        <button type="button" class="quick-amt-btn" onclick="setAmount(10)">10</button>
+                        <button type="button" class="quick-amt-btn" onclick="setAmount(50)">50</button>
+                        <button type="button" class="quick-amt-btn" onclick="setAmount(100)">100</button>
+                        <button type="button" class="quick-amt-btn" onclick="setAmount(200)">200</button>
+                        <button type="button" class="quick-amt-btn" onclick="setAmount(500)">500</button>
+                        <button type="button" class="quick-amt-btn" onclick="setAmount(1000)">1k</button>
+                    </div>
+                </div>
+
+                <button class="submit-action-btn" id="topupSubmitBtn"><i class="fa-solid fa-qrcode"></i> สร้าง QR พร้อมเพย์</button>
+                <div class="limit-hint" id="limitHint">ขั้นต่ำ 1 บาท • สูงสุด 999,999 บาท • ชำระตามยอดที่ระบุใน QR</div>
+
+                <!-- กล่องแสดงผล QR Code พร้อมเพย์ -->
+                <div id="qrResultSection">
+                    <div class="qr-sub-text">ยอดชำระที่ต้องโอนให้ตรงเป๊ะ</div>
+                    <div class="qr-amount-text" id="displayAmount">฿0.00 บาท</div>
+                    <div class="qr-box">
+                        <img id="qrImage" alt="PromptPay QR Code">
+                    </div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">เปิดแอปธนาคารใดก็ได้สแกนจ่ายได้ทันที</div>
+                    <button type="button" class="cancel-qr-btn" onclick="cancelQrSession()">ยกเลิกรายการ</button>
+                </div>
+
             </div>
+
         </div>
     </main>
 
@@ -506,15 +657,29 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // สลับประเภทช่องทางการเติมเงิน
         let currentMethod = 'promptpay';
+
+        // ฟังก์ชันกดเลือกปุ่มยอดเงินด่วน
+        window.setAmount = function(amount) {
+            document.getElementById('topupInput').value = amount;
+        }
+
+        // สลับประเภทช่องทางการเติมเงิน
         window.switchTopupMethod = function(method) {
             currentMethod = method;
             const btnPp = document.getElementById('methodPromptpay');
             const btnTm = document.getElementById('methodTruemoney');
+            const infoIcon = document.getElementById('infoCardIcon');
+            const infoTitle = document.getElementById('infoCardTitle');
+            const infoDesc = document.getElementById('infoCardDesc');
+            const actionTitle = document.getElementById('actionCardTitle');
+            const banner = document.getElementById('instructionBanner');
             const inputLabel = document.getElementById('inputLabel');
+            const currencyWrap = document.getElementById('currencyInputWrapper');
             const topupInput = document.getElementById('topupInput');
+            const quickGrid = document.getElementById('quickAmountGrid');
             const submitBtn = document.getElementById('topupSubmitBtn');
+            const limitHint = document.getElementById('limitHint');
             const qrSection = document.getElementById('qrResultSection');
 
             qrSection.style.display = 'none';
@@ -522,18 +687,39 @@
             if (method === 'promptpay') {
                 btnPp.classList.add('active');
                 btnTm.classList.remove('active');
-                inputLabel.innerText = "ระบุจำนวนเงินที่ต้องการเติม (บาท)";
+                infoIcon.innerHTML = '<i class="fa-solid fa-qrcode"></i>';
+                infoTitle.innerText = "พร้อมเพย์อัตโนมัติ";
+                infoDesc.innerText = "สแกน QR และรับยอดอัตโนมัติทันที ไม่ต้องแนบสลิป";
+                actionTitle.innerText = "ทำรายการเติมเงิน";
+                banner.innerText = "ชำระตามยอด QR รวมสตางค์ ระบบจะตรวจสอบและเติมยอดให้อัตโนมัติทันที";
+                inputLabel.innerText = "จำนวนเงินที่ต้องการเติม (บาท)";
+                currencyWrap.style.display = 'flex';
                 topupInput.type = "number";
-                topupInput.placeholder = "ตัวอย่าง 50, 100, 300";
-                submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน';
+                topupInput.value = "100";
+                quickGrid.style.display = 'grid';
+                submitBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i> สร้าง QR พร้อมเพย์';
+                limitHint.style.display = 'block';
             } else {
                 btnTm.classList.add('active');
                 btnPp.classList.remove('active');
-                inputLabel.innerText = "ลิงก์ซองของขวัญ TrueMoney Wallet";
+                infoIcon.innerHTML = '<i class="fa-solid fa-ticket"></i> TrueMoney Gift';
+                infoTitle.innerText = "ซองของขวัญ TrueMoney";
+                infoDesc.innerText = "เติมเงินผ่านลิงก์ซองอั่งเปา สะดวกรวดเร็วตลอด 24 ชม.";
+                actionTitle.innerText = "เติมเงินด้วยซองของขวัญ";
+                banner.innerText = "นำลิงก์ซองของขวัญที่สร้างจากแอป TrueMoney Wallet มากรอกด้านล่างนี้";
+                inputLabel.innerText = "ลิงก์ซองของขวัญ TrueMoney";
+                currencyWrap.style.display = 'none';
                 topupInput.type = "text";
+                topupInput.value = "";
                 topupInput.placeholder = "https://gift.truemoney.com/campaign/?v=...";
+                quickGrid.style.display = 'none';
                 submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ยืนยันซองอั่งเปา';
+                limitHint.style.display = 'none';
             }
+        }
+
+        window.cancelQrSession = function() {
+            document.getElementById('qrResultSection').style.display = 'none';
         }
 
         // ปุ่มกดสร้าง QR Code รองรับทุกธนาคาร
@@ -559,7 +745,7 @@
                         alert('❌ ไม่สามารถโหลด QR Code ได้ กรุณาลองใหม่อีกครั้ง');
                     };
 
-                    document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
+                    document.getElementById('displayAmount').innerText = `฿${amount.toFixed(2)} บาท`;
                     document.getElementById('qrResultSection').style.display = 'block';
                 } catch (err) {
                     alert('❌ เกิดข้อผิดพลาดในการประมวลผล');
@@ -715,7 +901,9 @@
                     if (!querySnapshot.empty) {
                         let userData = null;
                         querySnapshot.forEach(docSnap => userData = docSnap.data());
-                        renderNavbar(username, (parseFloat(userData.balance) || 0).toFixed(2), userData.role === 'ADMIN');
+                        const bal = (parseFloat(userData.balance) || 0).toFixed(2);
+                        renderNavbar(username, bal, userData.role === 'ADMIN');
+                        document.getElementById('headerBalanceDisplay').innerText = `฿${bal}`;
                     }
                 } catch (error) {
                     console.error(error);
@@ -724,6 +912,7 @@
         });
 
         function renderNavbar(username, userBalance, isAdmin) {
+            document.getElementById('headerBalanceDisplay').innerText = `฿${userBalance}`;
             const navRight = document.getElementById('navRightSection');
             navRight.innerHTML = `
                 <div style="position: relative; display: inline-block;">
@@ -758,16 +947,21 @@
 
             const toggleBtn = document.getElementById('profileToggleBtn');
             const dropdown = document.getElementById('profileDropdown');
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
-            window.addEventListener('click', () => dropdown.style.display = 'none');
-            document.getElementById('logoutBtn').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.clear();
-                location.reload();
-            });
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                });
+            }
+            window.addEventListener('click', () => { if(dropdown) dropdown.style.display = 'none'; });
+            const logoutBtn = document.getElementById('logoutBtn');
+            if(logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.clear();
+                    location.reload();
+                });
+            }
         }
     </script>
 </body>
