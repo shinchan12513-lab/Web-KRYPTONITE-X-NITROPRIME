@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cloudflare Turnstile Official Script -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <!-- ไลบรารีสร้าง PromptPay QR Code และ QRCode JS -->
+    <script src="https://cdn.jsdelivr.net/npm/promptpay-qr@0.6.0/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
@@ -263,7 +267,28 @@
         }
         .topup-submit-btn:hover { opacity: 0.9; }
 
-        /* Modal & Auth Styles ยืมมาจากหน้าหลักเพื่อให้เปิดกล่องล็อกอินได้ปกติ */
+        /* ส่วนแสดงผล QR Code */
+        #qrResultSection {
+            display: none;
+            margin-top: 25px;
+            text-align: center;
+            background: #121215;
+            border: 1px solid rgba(0, 175, 255, 0.3);
+            border-radius: 14px;
+            padding: 20px;
+        }
+        .qr-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 15px 0 10px 0;
+        }
+        .qr-box canvas { display: block; }
+        .qr-amount-text { font-size: 17px; font-weight: 700; color: #00AFFF; }
+        .qr-instruction { font-size: 12px; color: #94a3b8; }
+
+        /* Modal & Auth Styles */
         .auth-modal-overlay {
             display: flex; opacity: 0; visibility: hidden;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -318,7 +343,7 @@
 </head>
 <body>
 
-    <!-- ================= NAVBAR (เหมือนหน้าหลักทุกประการ) ================= -->
+    <!-- ================= NAVBAR ================= -->
     <header class="navbar">
         <div class="nav-inner">
             <nav class="nav-menu">
@@ -356,22 +381,31 @@
             <div class="topup-title"><i class="fa-solid fa-wallet"></i> ช่องทางการเติมเงิน</div>
             
             <div class="topup-methods">
-                <div class="topup-method-btn active">
+                <div class="topup-method-btn active" id="methodPromptpay" onclick="switchTopupMethod('promptpay')">
                     <i class="fa-solid fa-qrcode"></i>
-                    <div><b>PromptPay</b><br><small style="color: #94a3b8; font-size: 11px;">โอนผ่านธนาคาร / วอลเล็ต (อัตโนมัติ)</small></div>
+                    <div><b>PromptPay</b><br><small style="color: #94a3b8; font-size: 11px;">โอนผ่านธนาคาร / วอลเล็ต (สร้าง QR ตามยอด)</small></div>
                 </div>
-                <div class="topup-method-btn">
+                <div class="topup-method-btn" id="methodTruemoney" onclick="switchTopupMethod('truemoney')">
                     <i class="fa-solid fa-ticket"></i>
                     <div><b>TrueMoney</b><br><small style="color: #94a3b8; font-size: 11px;">ซองอั่งเปา (มีค่าธรรมเนียม)</small></div>
                 </div>
             </div>
 
             <div class="topup-form-group">
-                <label>ระบุจำนวนเงิน หรือลิงก์ซองของขวัญ</label>
-                <input type="text" class="topup-input" placeholder="กรอกข้อมูลการเติมเงิน...">
+                <label id="inputLabel">ระบุจำนวนเงินที่ต้องการเติม (บาท)</label>
+                <input type="number" id="topupInput" class="topup-input" placeholder="ตัวอย่าง 50, 100, 300" min="1" step="any">
             </div>
 
-            <button class="topup-submit-btn"><i class="fa-solid fa-circle-check"></i> ยืนยันการเติมเงิน</button>
+            <button class="topup-submit-btn" id="topupSubmitBtn"><i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน</button>
+
+            <!-- กล่องแสดง QR Code พร้อมเพย์ -->
+            <div id="qrResultSection">
+                <div class="qr-amount-text" id="displayAmount">ยอดชำระ: ฿0.00</div>
+                <div class="qr-box">
+                    <canvas id="qrCanvas"></canvas>
+                </div>
+                <div class="qr-instruction">เปิดแอปพลิเคชันธนาคารเพื่อสแกน QR Code นี้</div>
+            </div>
         </div>
     </main>
 
@@ -457,7 +491,7 @@
         <p>&copy; 2026 kryptonitexnitroprime — All rights reserved.</p>
     </footer>
 
-    <!-- ================= SCRIPT (จัดการระบบล็อกอินและแสดงข้อมูลสมาชิกต่อเนื่องกัน) ================= -->
+    <!-- ================= SCRIPT ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -475,7 +509,72 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ค้นหาแถบบน
+        // สลับประเภทช่องทางการเติมเงินระหว่าง PromptPay และ TrueMoney
+        let currentMethod = 'promptpay';
+        window.switchTopupMethod = function(method) {
+            currentMethod = method;
+            const btnPp = document.getElementById('methodPromptpay');
+            const btnTm = document.getElementById('methodTruemoney');
+            const inputLabel = document.getElementById('inputLabel');
+            const topupInput = document.getElementById('topupInput');
+            const submitBtn = document.getElementById('topupSubmitBtn');
+            const qrSection = document.getElementById('qrResultSection');
+
+            qrSection.style.display = 'none';
+
+            if (method === 'promptpay') {
+                btnPp.classList.add('active');
+                btnTm.classList.remove('active');
+                inputLabel.innerText = "ระบุจำนวนเงินที่ต้องการเติม (บาท)";
+                topupInput.type = "number";
+                topupInput.placeholder = "ตัวอย่าง 50, 100, 300";
+                submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> สร้าง QR Code โอนเงิน';
+            } else {
+                btnTm.classList.add('active');
+                btnPp.classList.remove('active');
+                inputLabel.innerText = "ลิงก์ซองของขวัญ TrueMoney Wallet";
+                topupInput.type = "text";
+                topupInput.placeholder = "https://gift.truemoney.com/campaign/?v=...";
+                submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ยืนยันซองอั่งเปา';
+            }
+        }
+
+        // จัดการกดปุ่มสร้าง QR Code หรือยืนยัน
+        const promptpayNumber = "0933998364";
+        document.getElementById('topupSubmitBtn').addEventListener('click', function() {
+            const val = document.getElementById('topupInput').value.trim();
+
+            if (currentMethod === 'promptpay') {
+                const amount = parseFloat(val);
+                if (!amount || amount <= 0) {
+                    alert('❌ กรุณาระบุจำนวนเงินให้ถูกต้อง');
+                    return;
+                }
+
+                try {
+                    const payload = generatePayload(promptpayNumber, { amount: amount });
+                    const resultSection = document.getElementById('qrResultSection');
+                    resultSection.style.display = 'block';
+                    document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
+
+                    const canvas = document.getElementById('qrCanvas');
+                    QRCode.toCanvas(canvas, payload, { width: 200, margin: 2 }, function (error) {
+                        if (error) console.error(error);
+                    });
+                } catch (err) {
+                    alert('❌ เกิดข้อผิดพลาดในการสร้าง QR Code');
+                    console.error(err);
+                }
+            } else {
+                if (!val) {
+                    alert('❌ กรุณากรอกลิงก์ซองของขวัญ TrueMoney');
+                    return;
+                }
+                alert('ระบบ TrueMoney ซองอั่งเปากำลังประมวลผล...');
+            }
+        });
+
+        // ค้นหาร้านค้าแถบบน
         const searchToggleBtn = document.getElementById('searchToggleBtn');
         const searchInputWrapper = document.getElementById('searchInputWrapper');
         const searchInputField = document.getElementById('searchInputField');
@@ -600,7 +699,7 @@
             }
         }
 
-        // ตรวจสอบสถานะล็อกอินเพื่อแสดงยอดเงินและชื่อผู้ใช้บน Navbar ทันที
+        // ตรวจสอบสถานะล็อกอินเพื่อแสดงยอดเงินและชื่อผู้ใช้บน Navbar
         window.addEventListener('DOMContentLoaded', async () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
