@@ -552,7 +552,10 @@
                 }
 
                 try {
-                    const payload = generatePayload(promptpayNumber, { amount: amount });
+                    // แก้ไขจุดเรียกใช้งานไลบรารี promptpay-qr ผ่าน CDN 
+                    const payGen = window.generatePayload || window.default;
+                    const payload = payGen(promptpayNumber, { amount: amount });
+                    
                     const resultSection = document.getElementById('qrResultSection');
                     resultSection.style.display = 'block';
                     document.getElementById('displayAmount').innerText = `ยอดชำระ: ฿${amount.toFixed(2)} บาท`;
@@ -770,5 +773,3 @@
             });
         }
     </script>
-</body>
-</html>
