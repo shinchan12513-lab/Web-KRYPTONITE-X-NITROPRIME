@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kryptonitexnitroprime - Exclusive Topup Center</title>
+    <title>kryptonitexnitroprime - Topup Center</title>
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -16,38 +16,31 @@
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
         
         body {
-            background-color: #020204;
-            background-image: 
-                radial-gradient(circle at 15% 10%, rgba(0, 180, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 85% 90%, rgba(0, 100, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(20, 20, 35, 0.8) 0%, transparent 90%),
-                linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            background-color: #0b0c10;
             color: #fff;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
         }
 
-        /* Navbar สไตล์แคปซูลลอยตัวหรูหรา */
+        /* Navbar สไตล์แคปซูลลอยตัว */
         .navbar {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(6, 6, 10, 0.85) !important;
+            background: rgba(11, 12, 16, 0.9) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             padding: 10px 20px;
-            border: 1px solid rgba(0, 180, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 99px;
-            margin: 25px auto;
+            margin: 20px auto;
             width: fit-content;
             max-width: 95vw;
             position: sticky;
-            top: 20px;
+            top: 15px;
             z-index: 1000;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(0, 180, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
         .nav-inner {
             display: flex;
@@ -57,7 +50,7 @@
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
         .nav-menu a {
             color: #94a3b8;
@@ -65,23 +58,21 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
-            height: 40px;
-            padding: 0 16px;
+            height: 38px;
+            padding: 0 14px;
             border-radius: 99px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
         }
         .nav-menu a:hover, .nav-menu a.active {
-            color: #00d2ff;
-            background: rgba(0, 210, 255, 0.12);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.25);
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
         }
         .nav-menu i {
-            color: #00d2ff;
+            color: #ff3344;
             font-size: 14px;
         }
 
@@ -91,11 +82,11 @@
             gap: 8px;
         }
         .search-toggle-btn {
-            background: rgba(0, 210, 255, 0.08);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            color: #00d2ff;
-            width: 38px;
-            height: 38px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -104,9 +95,8 @@
             transition: all 0.3s ease;
         }
         .search-toggle-btn:hover {
-            background: rgba(0, 210, 255, 0.25);
+            background: rgba(255, 255, 255, 0.15);
             color: #ffffff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
         }
         .search-input-wrapper {
             display: flex;
@@ -114,20 +104,20 @@
             width: 0;
             opacity: 0;
             overflow: hidden;
-            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            background: rgba(10, 10, 15, 0.95);
-            border: 1px solid rgba(0, 210, 255, 0.5);
+            transition: width 0.3s ease, opacity 0.3s ease;
+            background: #141620;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 99px;
             padding: 0;
         }
         .search-input-wrapper.active {
-            width: 230px;
+            width: 220px;
             opacity: 1;
             padding: 0 14px;
         }
-        .search-input-wrapper i { color: #00d2ff; font-size: 13px; margin-right: 8px; }
+        .search-input-wrapper i { color: #94a3b8; font-size: 13px; margin-right: 8px; }
         .search-input-wrapper input {
-            background: transparent; border: none; outline: none; color: #fff; font-size: 13px; width: 100%; height: 38px;
+            background: transparent; border: none; outline: none; color: #fff; font-size: 13px; width: 100%; height: 36px;
         }
         .search-input-wrapper input::placeholder { color: #64748b; }
 
@@ -137,30 +127,19 @@
             gap: 12px;
             white-space: nowrap;
         }
-        .nav-right-actions .btn-login-capsule {
-            color: #ffffff;
-            background: linear-gradient(135deg, #0052d4 0%, #4364f7 50%, #6fb1fc 100%);
-            box-shadow: 0 0 25px rgba(0, 140, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 9px 20px;
-            border-radius: 99px;
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: none;
+        .balance-badge-nav {
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
         }
-        .nav-right-actions .btn-login-capsule:hover {
-            filter: brightness(1.15);
-            transform: translateY(-1px);
-            box-shadow: 0 0 35px rgba(0, 180, 255, 0.8);
-        }
-        .nav-divider {
-            width: 1px; height: 22px; background: rgba(255, 255, 255, 0.15); margin: 0 2px;
-        }
+        .balance-badge-nav i { color: #ff3344; }
 
         .main-container {
             max-width: 1200px;
@@ -168,290 +147,285 @@
             padding: 10px 20px 60px 20px;
         }
 
-        /* Hero Banner สุดหรูหรามีมิติ */
-        .futuristic-hero-banner {
-            background: linear-gradient(135deg, rgba(12, 14, 24, 0.9) 0%, rgba(6, 7, 12, 0.95) 100%);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            border-radius: 28px;
-            padding: 35px 45px;
-            margin-bottom: 35px;
+        /* Breadcrumb & Header */
+        .breadcrumb {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 20px;
             display: flex;
-            justify-content: space-between;
+            gap: 8px;
             align-items: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 210, 255, 0.05);
         }
-        .futuristic-hero-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 5px; height: 100%;
-            background: linear-gradient(to bottom, #00d2ff, #0052d4, transparent);
-            box-shadow: 0 0 20px #00d2ff;
+        .breadcrumb span { color: #94a3b8; }
+
+        .page-title-section {
+            margin-bottom: 25px;
         }
-        .futuristic-hero-banner::after {
-            content: '';
-            position: absolute;
-            top: -50%; right: -20%; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, transparent 70%);
-            transform: rotate(45deg);
-            pointer-events: none;
-        }
-        
-        .hero-title-group h1 {
-            font-size: 32px;
-            font-weight: 900;
+        .page-title-section h1 {
+            font-size: 26px;
+            font-weight: 800;
             color: #fff;
-            margin: 0 0 8px 0;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffffff 20%, #8ae9ff 60%, #00d2ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
+            margin: 0 0 6px 0;
         }
-        .hero-title-group p {
+        .page-title-section p {
             font-size: 13px;
-            color: #94a3b8;
+            color: #64748b;
             margin: 0;
         }
 
-        .balance-holo-card {
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(0, 80, 200, 0.04) 100%);
-            border: 1px solid rgba(0, 210, 255, 0.4);
-            padding: 16px 28px;
-            border-radius: 20px;
+        /* Method Tabs (TrueMoney vs PromptPay) */
+        .topup-method-tabs {
             display: flex;
-            align-items: center;
-            gap: 18px;
-            box-shadow: inset 0 0 25px rgba(0, 210, 255, 0.12), 0 10px 30px rgba(0, 0, 0, 0.5);
-            position: relative;
-            z-index: 2;
-        }
-        .balance-holo-card i {
-            font-size: 26px;
-            color: #00d2ff;
-            filter: drop-shadow(0 0 12px rgba(0, 210, 255, 0.8));
-        }
-        .balance-holo-card .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
-        .balance-holo-card .amount { font-size: 24px; font-weight: 900; color: #00d2ff; text-shadow: 0 0 20px rgba(0, 210, 255, 0.6); }
-
-        /* Method Switcher Tabs หรูหรามีมิติ */
-        .method-selector-wrapper {
-            display: flex;
-            gap: 18px;
+            gap: 10px;
             margin-bottom: 30px;
         }
-        .method-select-chip {
-            flex: 1;
-            background: rgba(10, 11, 18, 0.75);
+        .method-tab-btn {
+            background: #141620;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 20px 24px;
-            border-radius: 20px;
+            color: #94a3b8;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 16px;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            gap: 8px;
+            transition: all 0.25s;
+        }
+        .method-tab-btn.active {
+            background: rgba(255, 51, 68, 0.1);
+            border-color: #ff3344;
+            color: #fff;
+        }
+        .method-tab-btn i { font-size: 14px; color: #ff3344; }
+
+        /* Content Layout: 2 Columns */
+        .topup-grid-layout {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* ฝั่งซ้าย: ข้อมูล/ขั้นตอน */
+        .info-card-left {
+            background: #141620;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
             position: relative;
             overflow: hidden;
         }
-        .method-select-chip:hover {
-            border-color: rgba(0, 210, 255, 0.4);
-            background: rgba(14, 16, 26, 0.9);
-            transform: translateY(-2px);
+        .info-card-left::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: #ff3344;
         }
-        .method-select-chip.active {
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.12) 0%, rgba(0, 80, 255, 0.06) 100%);
-            border-color: #00d2ff;
-            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.25), inset 0 0 20px rgba(0, 210, 255, 0.15);
-        }
-        .method-icon-box {
-            width: 48px; height: 48px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
+        .info-card-icon-box {
+            width: 45px; height: 45px;
+            background: rgba(255, 51, 68, 0.12);
+            border: 1px solid rgba(255, 51, 68, 0.3);
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: #94a3b8; font-size: 20px;
-            transition: all 0.35s;
+            color: #ff3344; font-size: 20px;
+            margin-bottom: 20px;
         }
-        .method-select-chip.active .method-icon-box {
-            background: linear-gradient(135deg, rgba(0, 100, 255, 0.3), rgba(0, 210, 255, 0.3));
-            border-color: #00d2ff;
-            color: #00d2ff;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
-        }
-        .method-info .title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
-        .method-info .desc { font-size: 12px; color: #94a3b8; }
+        .info-card-left h3 { font-size: 18px; font-weight: 800; color: #fff; margin: 0 0 8px 0; }
+        .info-card-left p { font-size: 13px; color: #94a3b8; margin: 0 0 24px 0; line-height: 1.6; }
 
-        /* Main Glass Card Panel สุดพรีเมียม */
-        .cyber-card {
-            background: rgba(8, 9, 15, 0.9);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            border-radius: 28px;
-            padding: 40px;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(0, 210, 255, 0.04);
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .step-number {
+            width: 24px; height: 24px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; color: #94a3b8;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .step-text { font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+
+        .left-footer-links {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .left-footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .left-footer-links a:hover { color: #ff3344; }
+        .left-footer-links a i { font-size: 11px; }
+
+        /* ฝั่งขวา: ฟอร์มทำรายการ */
+        .form-card-right {
+            background: #141620;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
             position: relative;
         }
-        .cyber-card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 18px;
+        .form-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 16px;
         }
-        .cyber-card-header span { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
-        .secure-badge {
-            font-size: 11px; color: #00d2ff; background: rgba(0, 210, 255, 0.12);
-            border: 1px solid rgba(0, 210, 255, 0.35); padding: 5px 14px; border-radius: 99px;
-            display: flex; align-items: center; gap: 7px; box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        .form-card-header span { font-size: 16px; font-weight: 700; color: #fff; }
+        .fee-badge {
+            font-size: 11px; color: #4ade80; background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.2); padding: 4px 10px; border-radius: 99px;
             font-weight: 600;
         }
 
-        .form-group-cyber { margin-bottom: 30px; }
-        .form-group-cyber label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 12px; font-weight: 600; letter-spacing: 0.5px; }
-
-        .input-glow-wrapper {
-            position: relative; display: flex; align-items: center;
-        }
-        .input-glow-wrapper span {
-            position: absolute; left: 20px; color: #00d2ff; font-weight: 900; font-size: 20px;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
-        }
-        .cyber-input {
-            width: 100%; background: rgba(3, 4, 8, 0.95); border: 1px solid rgba(0, 210, 255, 0.35);
-            border-radius: 16px; padding: 18px 24px 18px 48px; color: #fff; font-size: 20px;
-            font-weight: 800; outline: none; font-family: 'Prompt', sans-serif;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.9);
-        }
-        .cyber-input:focus {
-            border-color: #00d2ff; box-shadow: 0 0 30px rgba(0, 210, 255, 0.4), inset 0 0 15px rgba(0, 210, 255, 0.15);
+        .alert-banner-expired {
+            background: rgba(120, 30, 30, 0.25);
+            border: 1px solid rgba(255, 51, 68, 0.3);
+            color: #ff99a0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 24px;
+            line-height: 1.5;
         }
 
-        /* ปุ่มจำนวนเงินด่วนสไตล์ Metallic Hologram Chips */
-        .quick-grid-cyber {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 15px;
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 10px; font-weight: 600; }
+
+        .input-currency-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
-        .quick-chip {
-            background: linear-gradient(135deg, rgba(14, 16, 26, 0.9) 0%, rgba(8, 9, 15, 0.9) 100%);
+        .input-currency-wrapper span {
+            position: absolute; left: 18px; color: #fff; font-weight: 800; font-size: 18px;
+        }
+        .topup-input {
+            width: 100%;
+            background: #0b0c10;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 16px 20px 16px 42px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .topup-input:focus { border-color: #ff3344; }
+
+        /* ปุ่มเลือกจำนวนเงินด่วนสไตล์ 12bitstore */
+        .quick-amount-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .quick-btn {
+            background: #0b0c10;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #cbd5e1; padding: 14px 0; border-radius: 14px; font-size: 14px; font-weight: 800;
-            cursor: pointer; text-align: center; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            color: #cbd5e1;
+            padding: 12px 0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
         }
-        .quick-chip:hover {
-            border-color: #00d2ff; background: rgba(0, 210, 255, 0.15); color: #00d2ff;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4); transform: translateY(-3px);
-        }
-
-        .submit-cyber-btn {
-            width: 100%; background: linear-gradient(135deg, #0052d4 0%, #4364f7 50%, #00d2ff 100%);
-            border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 18px; border-radius: 16px; font-size: 17px;
-            font-weight: 800; cursor: pointer; box-shadow: 0 12px 35px rgba(0, 140, 255, 0.5);
-            transition: all 0.35s; display: flex; align-items: center; justify-content: center; gap: 12px;
-            letter-spacing: 0.5px; position: relative; overflow: hidden;
-        }
-        .submit-cyber-btn::after {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(60deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: rotate(30deg) translateX(-100%); transition: transform 0.7s ease;
-        }
-        .submit-cyber-btn:hover::after { transform: rotate(30deg) translateX(100%); }
-        .submit-cyber-btn:hover {
-            filter: brightness(1.15); transform: translateY(-2px);
-            box-shadow: 0 18px 45px rgba(0, 180, 255, 0.7);
+        .quick-btn:hover {
+            border-color: #ff3344;
+            background: rgba(255, 51, 68, 0.1);
+            color: #ff3344;
         }
 
-        .hint-text { text-align: center; font-size: 12px; color: #64748b; margin-top: 18px; letter-spacing: 0.3px; }
+        .submit-action-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #a81c24 0%, #ff3344 100%);
+            border: none;
+            color: #fff;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 51, 68, 0.35);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .submit-action-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
 
-        /* ส่วนแสดง QR Code สไตล์ Hologram Result หรูหราสุดล้ำ */
+        .form-footer-hint {
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 16px;
+        }
+
+        /* ส่วนแสดง QR Code ผลลัพธ์ */
         #qrResultSection {
-            display: none; margin-top: 35px; text-align: center; background: rgba(3, 4, 8, 0.98);
-            border: 1px solid rgba(0, 210, 255, 0.5); border-radius: 24px; padding: 35px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.95), inset 0 0 40px rgba(0, 210, 255, 0.12);
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none;
+            margin-top: 25px;
+            text-align: center;
+            background: #0b0c10;
+            border: 1px solid rgba(255, 51, 68, 0.4);
+            border-radius: 16px;
+            padding: 25px;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        .qr-hologram-frame {
-            background: #ffffff; padding: 22px; border-radius: 20px; display: inline-block; margin: 22px 0 15px 0;
-            box-shadow: 0 0 50px rgba(0, 210, 255, 0.45); position: relative;
+        .qr-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 15px 0;
         }
-        .qr-hologram-frame img { display: block; width: 230px; height: 230px; }
-        .qr-amount-display { font-size: 26px; font-weight: 900; color: #00d2ff; text-shadow: 0 0 20px rgba(0, 210, 255, 0.6); }
-        .qr-instruction-title { font-size: 14px; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
-        
-        .cancel-cyber-btn {
-            background: transparent; border: 1px solid rgba(255, 77, 77, 0.4); color: #ff5c5c;
-            padding: 11px 28px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer;
-            margin-top: 18px; transition: all 0.25s;
-        }
-        .cancel-cyber-btn:hover { background: rgba(255, 77, 77, 0.15); border-color: #ff5c5c; box-shadow: 0 0 20px rgba(255, 77, 77, 0.3); }
+        .qr-box img { display: block; width: 200px; height: 200px; }
+        .qr-amount-text { font-size: 22px; font-weight: 900; color: #ff3344; }
 
-        /* Modal & Auth Styles สุดหรู */
-        .auth-modal-overlay {
-            display: flex; opacity: 0; visibility: hidden;
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 5, 0.9); backdrop-filter: blur(20px);
-            z-index: 99999; justify-content: center; align-items: center;
-            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+        .cancel-qr-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #94a3b8;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
         }
-        .auth-modal-overlay.active { opacity: 1; visibility: visible; }
-        .auth-modal-box {
-            background: rgba(8, 9, 15, 0.98); border: 1px solid rgba(0, 210, 255, 0.4);
-            width: 100%; max-width: 440px; border-radius: 28px; padding: 30px;
-            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.95), inset 0 0 30px rgba(0, 210, 255, 0.08);
-            position: relative; color: #fff;
-            transform: scale(0.9) translateY(20px); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .auth-modal-overlay.active .auth-modal-box { transform: scale(1) translateY(0); }
-        .auth-close-btn {
-            position: absolute; top: 20px; right: 22px; background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; width: 34px; height: 34px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: all 0.25s;
-        }
-        .auth-close-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.15); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
-        .auth-brand { font-weight: 900; font-size: 16px; margin-bottom: 18px; color: #00d2ff; letter-spacing: 1.5px; text-shadow: 0 0 10px rgba(0, 210, 255, 0.4); }
-        .auth-tabs { display: flex; background: rgba(3, 4, 8, 0.95); border-radius: 14px; padding: 5px; margin-bottom: 22px; border: 1px solid rgba(255, 255, 255, 0.08); position: relative; }
-        .auth-tab { flex: 1; text-align: center; padding: 11px; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; border-radius: 10px; z-index: 2; transition: color 0.25s; }
-        .auth-tab.active { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .auth-tab-indicator {
-            position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc(50% - 5px);
-            background: linear-gradient(135deg, rgba(0, 100, 255, 0.35), rgba(0, 210, 255, 0.35));
-            border-radius: 10px; border: 1px solid rgba(0, 210, 255, 0.5);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
-        }
-        .auth-tabs.register-mode .auth-tab-indicator { transform: translateX(100%); }
-        .auth-form-panel { display: none; }
-        .auth-form-panel.active { display: block; }
-        .auth-form-group { margin-bottom: 16px; }
-        .auth-form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 7px; font-weight: 600; }
-        .auth-input-wrap { position: relative; display: flex; align-items: center; }
-        .auth-input-wrap > i:first-child { position: absolute; left: 16px; color: #64748b; font-size: 14px; }
-        .auth-input-wrap input {
-            width: 100%; background: rgba(3, 4, 8, 0.95); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px; padding: 12px 16px 12px 42px; color: #fff; font-size: 13px; outline: none;
-            transition: all 0.25s;
-        }
-        .auth-input-wrap input:focus { border-color: #00d2ff; box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); }
-        .password-toggle { position: absolute; right: 16px; color: #64748b; font-size: 13px; cursor: pointer; transition: color 0.2s; }
-        .password-toggle:hover { color: #00d2ff; }
-        .turnstile-container { display: flex; justify-content: center; margin: 16px 0; transform: scale(0.95); min-height: 65px; }
-        .auth-submit-btn {
-            width: 100%; background: linear-gradient(135deg, #0052d4 0%, #00d2ff 100%);
-            border: none; color: #fff; padding: 13px; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0, 180, 255, 0.4); transition: all 0.25s;
-        }
-        .auth-submit-btn:hover { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 15px 35px rgba(0, 210, 255, 0.6); }
-        .auth-switch-text { text-align: center; font-size: 12px; color: #64748b; margin-top: 16px; }
-        .auth-switch-text span { color: #00d2ff; cursor: pointer; font-weight: 700; text-decoration: underline; }
+        .cancel-qr-btn:hover { color: #fff; border-color: #fff; }
 
-        .footer-bar { text-align: center; padding: 35px 0; color: #64748b; font-size: 12px; }
-
-        @media (max-width: 768px) {
-            .quick-grid-cyber { grid-template-columns: repeat(3, 1fr); }
-            .futuristic-hero-banner { flex-direction: column; align-items: flex-start; gap: 20px; padding: 25px; }
-            .method-selector-wrapper { flex-direction: column; }
+        @media (max-width: 900px) {
+            .topup-grid-layout { grid-template-columns: 1fr; }
+            .quick-amount-grid { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
@@ -461,11 +435,12 @@
     <header class="navbar">
         <div class="nav-inner">
             <nav class="nav-menu">
-                <a href="shop.html"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
-                <a href="fivem-project.html"><i class="fa-solid fa-store"></i> ร้านค้า</a>
+                <a href="shop.html"><i class="fa-solid fa-house"></i> หน้าแรก</a>
+                <a href="fivem-project.html"><i class="fa-solid fa-store"></i> สินค้าทั้งหมด</a>
+                <a href="#"><i class="fa-solid fa-magnifying-glass"></i> หารินค้า</a>
                 <a href="topup.html" class="active"><i class="fa-solid fa-wallet"></i> เติมเงิน</a>
-                <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติ</a>
-                <a href="#"><i class="fa-solid fa-key"></i> HWID</a>
+                <a href="#"><i class="fa-solid fa-list-check"></i> คำสั่งซื้อ</a>
+                <a href="#"><i class="fa-solid fa-key"></i> Reset HWID</a>
             </nav>
 
             <div class="search-container">
@@ -478,181 +453,122 @@
                 </div>
             </div>
 
-            <div class="nav-right-actions" id="navRightSection">
-                <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #94a3b8; padding: 0 4px;">
-                    <i class="fa-solid fa-globe" style="color: #00d2ff;"></i> TH
+            <div class="nav-right-actions">
+                <div class="balance-badge-nav">
+                    <i class="fa-solid fa-wallet"></i> <span id="headerBalanceDisplay">฿4.00</span>
                 </div>
-                <div class="nav-divider"></div>
-                <a href="#" id="openRegisterModal" style="color: #cbd5e1; text-decoration: none; font-size: 13px; font-weight: 500; padding: 0 6px;">สมัครสมาชิก</a>
-                <a href="#" id="openLoginModal" class="btn-login-capsule"><i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ</a>
             </div>
         </div>
     </header>
 
-    <!-- ================= CONTENT หน้าเติมเงิน ================= -->
+    <!-- ================= CONTENT ================= -->
     <main class="main-container">
         
-        <!-- Hero Banner สุดล้ำหรูหรา -->
-        <div class="futuristic-hero-banner">
-            <div class="hero-title-group">
-                <h1>EXECUTIVE TOPUP CENTER</h1>
-                <p>ระบบเติมเงินออโต้ความเร็วสูงระดับพรีเมียม ปลอดภัย มั่นใจได้ 24 ชั่วโมง</p>
-            </div>
-            <div class="balance-holo-card">
-                <i class="fa-solid fa-wallet"></i>
-                <div>
-                    <div class="label">ยอดเงินคงเหลือ</div>
-                    <div class="amount" id="headerBalanceDisplay">฿0.00</div>
-                </div>
-            </div>
+        <div class="breadcrumb">
+            <a href="shop.html" style="color: inherit; text-decoration: none;">หน้าแรก</a> <i class="fa-solid fa-chevron-right" style="font-size: 9px;"></i> 
+            <span>เติมเงิน</span> <i class="fa-solid fa-chevron-right" style="font-size: 9px;"></i> 
+            <span style="color: #fff;">พร้อมเพย์อัตโนมัติ</span>
         </div>
 
-        <!-- แถบเลือกวิธีเติมเงิน -->
-        <div class="method-selector-wrapper">
-            <div class="method-select-chip active" id="methodChipPromptpay" onclick="switchTopupMethod('promptpay')">
-                <div class="method-icon-box"><i class="fa-solid fa-qrcode"></i></div>
-                <div class="method-info">
-                    <div class="title">พร้อมเพย์ QR Code อัตโนมัติ</div>
-                    <div class="desc">สแกนปุ๊บ ยอดเข้าบัญชีทันทีโดยไม่ต้องแนบสลิป</div>
-                </div>
-            </div>
-            <div class="method-select-chip" id="methodChipTruemoney" onclick="switchTopupMethod('truemoney')">
-                <div class="method-icon-box"><i class="fa-solid fa-ticket"></i></div>
-                <div class="method-info">
-                    <div class="title">TrueMoney Gift (ซองอั่งเปา)</div>
-                    <div class="desc">เติมเงินผ่านลิงก์ซองของขวัญรวดเร็วปลอดภัย</div>
-                </div>
-            </div>
+        <div class="page-title-section">
+            <h1>เติมเงินเข้ากระเป๋า</h1>
+            <p>เลือกวิธีที่สะดวก แล้วเติมยอดให้พร้อมสำหรับสินค้าที่คุณต้องการ</p>
         </div>
 
-        <!-- กล่องทำรายการหลัก -->
-        <div class="cyber-card">
-            <div class="cyber-card-header">
-                <span id="cardMainTitle">พร้อมเพย์ QR Code อัตโนมัติ</span>
-                <div class="secure-badge"><i class="fa-solid fa-shield-halved"></i> SECURE ENCRYPTED SYSTEM</div>
-            </div>
-
-            <div class="form-group-cyber">
-                <label id="inputLabelTitle">ระบุจำนวนเงินที่ต้องการเติม (บาท)</label>
-                <div class="input-glow-wrapper" id="inputWrapperBox">
-                    <span>฿</span>
-                    <input type="number" id="topupInput" class="cyber-input" value="100" min="1" step="any">
-                </div>
-                <!-- ปุ่มด่วน -->
-                <div class="quick-grid-cyber" id="quickAmountGrid">
-                    <button type="button" class="quick-chip" onclick="setAmount(20)">20</button>
-                    <button type="button" class="quick-chip" onclick="setAmount(50)">50</button>
-                    <button type="button" class="quick-chip" onclick="setAmount(100)">100</button>
-                    <button type="button" class="quick-chip" onclick="setAmount(200)">200</button>
-                    <button type="button" class="quick-chip" onclick="setAmount(500)">500</button>
-                    <button type="button" class="quick-chip" onclick="setAmount(1000)">1,000</button>
-                </div>
-            </div>
-
-            <button class="submit-cyber-btn" id="topupSubmitBtn">
-                <i class="fa-solid fa-bolt"></i> สร้างคิวอาร์โค้ดชำระเงิน
+        <!-- แท็บเลือกช่องทาง -->
+        <div class="topup-method-tabs">
+            <button class="method-tab-btn" onclick="switchMethod('truemoney')">
+                <i class="fa-solid fa-ticket"></i> TrueMoney Gift
             </button>
-            <div class="hint-text" id="bottomHintText">ขั้นต่ำ 1 บาท • สูงสุด 999,999 บาท • ระบบตรวจสอบสถานะเรียลไทม์</div>
+            <button class="method-tab-btn active" onclick="switchMethod('promptpay')">
+                <i class="fa-solid fa-qrcode"></i> พร้อมเพย์อัตโนมัติ
+            </button>
+        </div>
 
-            <!-- ผลลัพธ์ QR Code -->
-            <div id="qrResultSection">
-                <div class="qr-instruction-title">สแกนด้วยแอปธนาคารใดก็ได้ (กรุณาโอนให้ตรงยอดรวมเศษสตางค์)</div>
-                <div class="qr-amount-display" id="displayAmount">฿0.00 บาท</div>
-                <div class="qr-hologram-frame">
-                    <img id="qrImage" alt="PromptPay QR Code">
+        <!-- Layout 2 คอลัมน์แบบ 12bitstore -->
+        <div class="topup-grid-layout">
+            
+            <!-- ฝั่งซ้าย: ข้อมูล/ขั้นตอน -->
+            <div class="info-card-left">
+                <div class="info-card-icon-box">
+                    <i class="fa-solid fa-qrcode"></i>
                 </div>
-                <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">ระบบจะทำการเติมเงินเข้าไอดีให้อัตโนมัติภายใน 5-10 วินาที</div>
-                <button type="button" class="cancel-cyber-btn" onclick="cancelQrSession()">ยกเลิกรายการนี้</button>
+                <h3 id="infoTitle">พร้อมเพย์อัตโนมัติ</h3>
+                <p id="infoDesc">สแกน QR และรับยอดอัตโนมัติ</p>
+
+                <div class="step-list" id="stepListContainer">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-text">ระบุจำนวนเงินที่ต้องการเติม</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-text">สแกน QR และชำระให้ตรงยอดรวมสตางค์</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-text">รอระบบยืนยันยอด ไม่ต้องแนบสลิป</div>
+                    </div>
+                </div>
+
+                <div class="left-footer-links">
+                    <a href="#"><span>ประวัติเติมเงิน</span> <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#"><span>ติดต่อแอดมิน</span> <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
             </div>
+
+            <!-- ฝั่งขวา: ฟอร์มทำรายการ -->
+            <div class="form-card-right">
+                <div class="form-card-header">
+                    <span id="rightCardTitle">ทำรายการเติมเงิน</span>
+                    <div class="fee-badge">ค่าธรรมเนียม 0%</div>
+                </div>
+
+                <div class="alert-banner-expired">
+                    รายการหมดอายุแล้ว หากโอนแล้วกรุณารอการตรวจสอบก่อนสร้างรายการใหม่
+                </div>
+
+                <div class="form-group">
+                    <label id="inputLabelTitle">จำนวนเงินที่ต้องการเติม (บาท)</label>
+                    <div class="input-currency-wrapper" id="inputWrapperBox">
+                        <span>฿</span>
+                        <input type="number" id="topupInput" class="topup-input" value="2222" min="1" step="any">
+                    </div>
+                    <!-- ปุ่มด่วน -->
+                    <div class="quick-amount-grid" id="quickGrid">
+                        <button type="button" class="quick-btn" onclick="setAmount(10)">10</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(50)">50</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(100)">100</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(200)">200</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(500)">500</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(1000)">1k</button>
+                    </div>
+                </div>
+
+                <button class="submit-action-btn" id="submitBtn">
+                    <i class="fa-solid fa-qrcode"></i> สร้าง QR พร้อมเพย์
+                </button>
+                <div class="form-footer-hint">ขั้นต่ำ 1 บาท • สูงสุด 999,999 บาท • ชำระตามยอดที่ระบุใน QR</div>
+
+                <!-- QR Result Section -->
+                <div id="qrResultSection">
+                    <div style="font-size: 13px; color: #94a3b8; margin-bottom: 6px;">สแกนด้วยแอปธนาคาร (โอนให้ตรงเศษสตางค์)</div>
+                    <div class="qr-amount-text" id="displayQrAmount">฿0.00</div>
+                    <div class="qr-box">
+                        <img id="qrImage" alt="PromptPay QR">
+                    </div>
+                    <div style="font-size: 11px; color: #64748b;">ยอดเงินจะเข้าบัญชีออโต้ภายใน 5-10 วินาที</div>
+                    <button type="button" class="cancel-qr-btn" onclick="cancelQr()">ยกเลิกรายการ</button>
+                </div>
+            </div>
+
         </div>
     </main>
-
-    <!-- ================= AUTH MODAL POPUP ================= -->
-    <div id="authModalOverlay" class="auth-modal-overlay">
-        <div class="auth-modal-box">
-            <div class="auth-close-btn" id="closeAuthModal"><i class="fa-solid fa-xmark"></i></div>
-            <div class="auth-brand">KRYPTONITE X SYSTEM</div>
-
-            <div class="auth-tabs" id="authTabsContainer">
-                <div class="auth-tab-indicator"></div>
-                <div id="tabLoginBtn" class="auth-tab" onclick="switchAuthTab('login')">เข้าสู่ระบบ</div>
-                <div id="tabRegisterBtn" class="auth-tab" onclick="switchAuthTab('register')">สมัครสมาชิก</div>
-            </div>
-
-            <div class="auth-forms-container">
-                <div id="loginPanel" class="auth-form-panel">
-                    <form onsubmit="handleLoginSubmit(event)">
-                        <div class="auth-form-group">
-                            <label>ชื่อผู้ใช้งาน</label>
-                            <div class="auth-input-wrap">
-                                <i class="fa-solid fa-user"></i>
-                                <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้" required>
-                            </div>
-                        </div>
-                        <div class="auth-form-group">
-                            <label>รหัสผ่าน</label>
-                            <div class="auth-input-wrap">
-                                <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน" required>
-                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
-                            </div>
-                        </div>
-                        <div class="turnstile-container" id="loginTurnstileBox"></div>
-                        <button type="submit" class="auth-submit-btn">เข้าสู่ระบบ <i class="fa-solid fa-arrow-right"></i></button>
-                    </form>
-                    <div class="auth-switch-text">ยังไม่มีบัญชีใช่ไหม? <span onclick="switchAuthTab('register')">สมัครสมาชิกที่นี่</span></div>
-                </div>
-
-                <div id="registerPanel" class="auth-form-panel">
-                    <form onsubmit="handleRegisterSubmit(event)">
-                        <div class="auth-form-group">
-                            <label>ชื่อผู้ใช้งาน</label>
-                            <div class="auth-input-wrap">
-                                <i class="fa-solid fa-user"></i>
-                                <input type="text" id="regUsername" placeholder="ตั้งชื่อผู้ใช้" required>
-                            </div>
-                        </div>
-                        <div class="auth-form-group">
-                            <label>อีเมล (ถ้ามี)</label>
-                            <div class="auth-input-wrap">
-                                <i class="fa-solid fa-envelope"></i>
-                                <input type="email" id="regEmail" placeholder="name@example.com">
-                            </div>
-                        </div>
-                        <div class="auth-form-group">
-                            <label>รหัสผ่าน</label>
-                            <div class="auth-input-wrap">
-                                <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร" required>
-                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
-                            </div>
-                        </div>
-                        <div class="auth-form-group">
-                            <label>ยืนยันรหัสผ่าน</label>
-                            <div class="auth-input-wrap">
-                                <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่านอีกครั้ง" required>
-                                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('regConfirmPassword', this)"></i>
-                            </div>
-                        </div>
-                        <div class="turnstile-container" id="regTurnstileBox"></div>
-                        <button type="submit" class="auth-submit-btn">ยืนยันการสมัคร <i class="fa-solid fa-arrow-right"></i></button>
-                    </form>
-                    <div class="auth-switch-text">มีบัญชีอยู่แล้ว? <span onclick="switchAuthTab('login')">เข้าสู่ระบบ</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer-bar">
-        <p>&copy; 2026 kryptonitexnitroprime — All rights reserved.</p>
-    </footer>
 
     <!-- ================= SCRIPT ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBeNLxh_6mPR9L8Ftw8XlmxgezY2dP_1LU",
@@ -667,62 +583,72 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let currentMethod = 'promptpay';
+        let activeMethod = 'promptpay';
 
-        window.setAmount = function(amount) {
-            document.getElementById('topupInput').value = amount;
+        window.setAmount = function(val) {
+            document.getElementById('topupInput').value = val;
         }
 
-        window.switchTopupMethod = function(method) {
-            currentMethod = method;
-            const chipPp = document.getElementById('methodChipPromptpay');
-            const chipTm = document.getElementById('methodChipTruemoney');
-            const mainTitle = document.getElementById('cardMainTitle');
-            const labelTitle = document.getElementById('inputLabelTitle');
-            const inputWrap = document.getElementById('inputWrapperBox');
-            const topupInput = document.getElementById('topupInput');
-            const quickGrid = document.getElementById('quickAmountGrid');
-            const submitBtn = document.getElementById('topupSubmitBtn');
-            const hintText = document.getElementById('bottomHintText');
-            const qrSection = document.getElementById('qrResultSection');
+        window.switchMethod = function(method) {
+            activeMethod = method;
+            const buttons = document.querySelectorAll('.method-tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
 
-            qrSection.style.display = 'none';
+            const infoTitle = document.getElementById('infoTitle');
+            const infoDesc = document.getElementById('infoDesc');
+            const stepList = document.getElementById('stepListContainer');
+            const inputLabel = document.getElementById('inputLabelTitle');
+            const inputWrapper = document.getElementById('inputWrapperBox');
+            const topupInput = document.getElementById('topupInput');
+            const quickGrid = document.getElementById('quickGrid');
+            const submitBtn = document.getElementById('submitBtn');
+            const qrSec = document.getElementById('qrResultSection');
+
+            qrSec.style.display = 'none';
 
             if (method === 'promptpay') {
-                chipPp.classList.add('active');
-                chipTm.classList.remove('active');
-                mainTitle.innerText = "พร้อมเพย์ QR Code อัตโนมัติ";
-                labelTitle.innerText = "ระบุจำนวนเงินที่ต้องการเติม (บาท)";
-                inputWrap.style.display = 'flex';
+                event.currentTarget.classList.add('active');
+                infoTitle.innerText = "พร้อมเพย์อัตโนมัติ";
+                infoDesc.innerText = "สแกน QR และรับยอดอัตโนมัติ";
+                stepList.innerHTML = `
+                    <div class="step-item"><div class="step-number">1</div><div class="step-text">ระบุจำนวนเงินที่ต้องการเติม</div></div>
+                    <div class="step-item"><div class="step-number">2</div><div class="step-text">สแกน QR และชำระให้ตรงยอดรวมสตางค์</div></div>
+                    <div class="step-item"><div class="step-number">3</div><div class="step-text">รอระบบยืนยันยอด ไม่ต้องแนบสลิป</div></div>
+                `;
+                inputLabel.innerText = "จำนวนเงินที่ต้องการเติม (บาท)";
+                inputWrapper.style.display = 'flex';
                 topupInput.type = "number";
                 topupInput.value = "100";
                 quickGrid.style.display = 'grid';
-                submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> สร้างคิวอาร์โค้ดชำระเงิน';
-                hintText.style.display = 'block';
+                submitBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i> สร้าง QR พร้อมเพย์';
             } else {
-                chipTm.classList.add('active');
-                chipPp.classList.remove('active');
-                mainTitle.innerText = "เติมเงินด้วย TrueMoney ซองของขวัญ";
-                labelTitle.innerText = "ลิงก์ซองของขวัญ TrueMoney Wallet";
-                inputWrap.style.display = 'none';
+                event.currentTarget.classList.add('active');
+                infoTitle.innerText = "TrueMoney Gift (ซองอั่งเปา)";
+                infoDesc.innerText = "เติมเงินผ่านลิงก์ซองของขวัญ Wallet";
+                stepList.innerHTML = `
+                    <div class="step-item"><div class="step-number">1</div><div class="step-text">สร้างซองของขวัญจาก TrueMoney Wallet</div></div>
+                    <div class="step-item"><div class="step-number">2</div><div class="step-text">คัดลอกลิงก์ซองของขวัญมาวางในช่องด้านขวา</div></div>
+                    <div class="step-item"><div class="step-number">3</div><div class="step-text">กดatยืนยันเพื่อรับยอดเงินออโต้ทันที</div></div>
+                `;
+                inputLabel.innerText = "ลิงก์ซองของขวัญ TrueMoney";
+                inputWrapper.style.display = 'none';
                 topupInput.type = "text";
                 topupInput.value = "";
                 topupInput.placeholder = "https://gift.truemoney.com/campaign/?v=...";
                 quickGrid.style.display = 'none';
-                submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ยืนยันซองอั่งเปา';
-                hintText.style.display = 'none';
+                submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ยืนยันซองของขวัญ';
             }
         }
 
-        window.cancelQrSession = function() {
+        window.cancelQr = function() {
             document.getElementById('qrResultSection').style.display = 'none';
         }
 
         const promptpayNumber = "0933998364";
-        document.getElementById('topupSubmitBtn').addEventListener('click', function() {
+        document.getElementById('submitBtn').addEventListener('click', function() {
             const val = document.getElementById('topupInput').value.trim();
 
-            if (currentMethod === 'promptpay') {
+            if (activeMethod === 'promptpay') {
                 const amount = parseFloat(val);
                 if (!amount || amount <= 0) {
                     alert('❌ กรุณาระบุจำนวนเงินให้ถูกต้อง');
@@ -730,26 +656,19 @@
                 }
 
                 try {
-                    const qrApiUrl = `https://promptpay.io/${promptpayNumber}/${amount.toFixed(2)}.png`;
-                    const qrImg = document.getElementById('qrImage');
-                    qrImg.src = qrApiUrl;
-                    
-                    qrImg.onerror = function() {
-                        alert('❌ ไม่สามารถโหลด QR Code ได้ กรุณาลองใหม่อีกครั้ง');
-                    };
-
-                    document.getElementById('displayAmount').innerText = `฿${amount.toFixed(2)} บาท`;
+                    const qrUrl = `https://promptpay.io/${promptpayNumber}/${amount.toFixed(2)}.png`;
+                    document.getElementById('qrImage').src = qrUrl;
+                    document.getElementById('displayQrAmount').innerText = `฿${amount.toFixed(2)}`;
                     document.getElementById('qrResultSection').style.display = 'block';
-                } catch (err) {
-                    alert('❌ เกิดข้อผิดพลาดในการประมวลผล');
-                    console.error(err);
+                } catch (e) {
+                    alert('เกิดข้อผิดพลาดในการสร้าง QR Code');
                 }
             } else {
                 if (!val) {
                     alert('❌ กรุณากรอกลิงก์ซองของขวัญ TrueMoney');
                     return;
                 }
-                alert('ระบบซองของขวัญกำลังตรวจสอบข้อมูล...');
+                alert('ระบบกำลังตรวจสอบซองของขวัญ...');
             }
         });
 
@@ -764,197 +683,25 @@
             if (searchInputWrapper.classList.contains('active')) searchInputField.focus();
         });
 
-        // Auth Modal Handlers
-        const modalOverlay = document.getElementById('authModalOverlay');
-        const openLoginBtn = document.getElementById('openLoginModal');
-        const openRegisterBtn = document.getElementById('openRegisterModal');
-        const closeBtn = document.getElementById('closeAuthModal');
-        const siteKey = "0x4AAAAAAFFDJZV0J7eWABVq";
-
-        function renderTurnstiles() {
-            if (window.turnstile) {
-                const loginBox = document.getElementById('loginTurnstileBox');
-                if (loginBox && loginBox.childElementCount === 0) window.turnstile.render(loginBox, { sitekey: siteKey, theme: 'dark' });
-                const regBox = document.getElementById('regTurnstileBox');
-                if (regBox && regBox.childElementCount === 0) window.turnstile.render(regBox, { sitekey: siteKey, theme: 'dark' });
-            }
-        }
-
-        function openModal(tabName) {
-            modalOverlay.classList.add('active');
-            switchAuthTab(tabName);
-            setTimeout(renderTurnstiles, 100);
-        }
-
-        function closeModal() { modalOverlay.classList.remove('active'); }
-
-        if (openLoginBtn) openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
-        if (openRegisterBtn) openRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('register'); });
-        if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-        window.switchAuthTab = function(tab) {
-            const loginPanel = document.getElementById('loginPanel');
-            const registerPanel = document.getElementById('registerPanel');
-            const loginTabBtn = document.getElementById('tabLoginBtn');
-            const regTabBtn = document.getElementById('tabRegisterBtn');
-            const tabsContainer = document.getElementById('authTabsContainer');
-
-            if (tab === 'login') {
-                tabsContainer.classList.remove('register-mode');
-                loginPanel.classList.add('active');
-                registerPanel.classList.remove('active');
-                loginTabBtn.classList.add('active');
-                regTabBtn.classList.remove('active');
-            } else {
-                tabsContainer.classList.add('register-mode');
-                registerPanel.classList.add('active');
-                loginPanel.classList.remove('active');
-                regTabBtn.classList.add('active');
-                loginTabBtn.classList.remove('active');
-            }
-        }
-
-        window.togglePassword = function(fieldId, iconEl) {
-            const field = document.getElementById(fieldId);
-            if (field.type === 'password') {
-                field.type = 'text';
-                iconEl.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                field.type = 'password';
-                iconEl.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-
-        window.handleLoginSubmit = async function(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (username === 'admin' && password === '123') {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('username', 'admin');
-                localStorage.setItem('isAdmin', 'true');
-                alert('✅ เข้าสู่ระบบสำเร็จ (Admin)');
-                location.reload();
-                return;
-            }
-
-            try {
-                const q = query(collection(db, "members"), where("username", "==", username), where("password", "==", password));
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('username', username);
-                    alert('✅ เข้าสู่ระบบสำเร็จ!');
-                    location.reload();
-                } else {
-                    alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-                }
-            } catch (err) {
-                alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ');
-            }
-        }
-
-        window.handleRegisterSubmit = async function(e) {
-            e.preventDefault();
-            const username = document.getElementById('regUsername').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-
-            if (password !== confirmPassword) {
-                alert('❌ รหัสผ่านไม่ตรงกัน');
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "members"), {
-                    username: username, email: email || '-', password: password, balance: 0.00, role: 'MEMBER'
-                });
-                alert('🎉 สมัครสมาชิกสำเร็จ!');
-                switchAuthTab('login');
-            } catch (err) {
-                alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก');
-            }
-        }
-
+        // ดึงยอดเงินคงเหลือจาก Firebase ถ้ามีบันทึกบัญชีไว้
         window.addEventListener('DOMContentLoaded', async () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const username = localStorage.getItem('username');
-
-            if (isLoggedIn && username) {
-                if (username === 'admin') {
-                    renderNavbar('admin', '0.00', true);
-                    return;
-                }
+            if (username && username !== 'admin') {
                 try {
                     const q = query(collection(db, "members"), where("username", "==", username));
-                    const querySnapshot = await getDocs(q);
-                    if (!querySnapshot.empty) {
-                        let userData = null;
-                        querySnapshot.forEach(docSnap => userData = docSnap.data());
-                        const bal = (parseFloat(userData.balance) || 0).toFixed(2);
-                        renderNavbar(username, bal, userData.role === 'ADMIN');
-                        document.getElementById('headerBalanceDisplay').innerText = `฿${bal}`;
+                    const snapshot = await getDocs(q);
+                    if (!snapshot.empty) {
+                        snapshot.forEach(docSnap => {
+                            const data = docSnap.data();
+                            const bal = (parseFloat(data.balance) || 0).toFixed(2);
+                            document.getElementById('headerBalanceDisplay').innerText = `฿${bal}`;
+                        });
                     }
-                } catch (error) {
-                    console.error(error);
+                } catch (err) {
+                    console.error(err);
                 }
             }
         });
-
-        function renderNavbar(username, userBalance, isAdmin) {
-            document.getElementById('headerBalanceDisplay').innerText = `฿${userBalance}`;
-            const navRight = document.getElementById('navRightSection');
-            navRight.innerHTML = `
-                <div style="position: relative; display: inline-block;">
-                    <div id="profileToggleBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: rgba(12,14,22,0.9); border: 1px solid rgba(0, 210, 255, 0.4); padding: 6px 14px; border-radius: 99px;">
-                        <div style="width: 28px; height: 28px; background: rgba(0, 210, 255, 0.2); border: 1px solid #00d2ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00d2ff;">
-                            <i class="fa-solid fa-user" style="font-size: 11px;"></i>
-                        </div>
-                        <span style="font-size: 13px; font-weight: 700; color: #fff;">${username}</span>
-                        <span style="font-size: 12px; color: #00d2ff; font-weight: 800;">฿${userBalance}</span>
-                    </div>
-                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; width: 290px; background: rgba(8,9,15,0.98); border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 20px; padding: 18px; box-shadow: 0 30px 70px rgba(0,0,0,0.95); z-index: 9999; color: #fff; text-align: left;">
-                        <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="width: 40px; height: 40px; background: rgba(0, 210, 255, 0.2); border: 1px solid #00d2ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #00d2ff; font-weight: 800;">${username.substring(0, 2).toUpperCase()}</div>
-                            <div>
-                                <div style="font-size: 14px; font-weight: 800;">${username}</div>
-                                <div style="font-size: 10px; color: #00d2ff; background: rgba(0, 210, 255, 0.15); padding: 2px 9px; border-radius: 99px; display: inline-block; margin-top: 3px; font-weight: 700;">${isAdmin ? 'ADMINISTRATOR' : 'VIP MEMBER'}</div>
-                            </div>
-                        </div>
-                        <div style="background: rgba(3,4,8,0.95); border: 1px solid rgba(0, 210, 255, 0.3); border-radius: 14px; padding: 14px; margin: 14px 0; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 10px; color: #94a3b8; font-weight: 600;">ยอดเงินคงเหลือ</div>
-                                <div style="font-size: 16px; font-weight: 900; color: #00d2ff;">฿${userBalance} บาท</div>
-                            </div>
-                            <button onclick="window.location.href='topup.html'" style="background: linear-gradient(135deg, #0052d4 0%, #00d2ff 100%); border: none; color: #fff; padding: 7px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 0 15px rgba(0,210,255,0.4);">เติมเงิน</button>
-                        </div>
-                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
-                            <a href="#" id="logoutBtn" style="color: #ff5c5c; text-decoration: none; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 10px; transition: background 0.2s;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            const toggleBtn = document.getElementById('profileToggleBtn');
-            const dropdown = document.getElementById('profileDropdown');
-            if(toggleBtn) {
-                toggleBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                });
-            }
-            window.addEventListener('click', () => { if(dropdown) dropdown.style.display = 'none'; });
-            const logoutBtn = document.getElementById('logoutBtn');
-            if(logoutBtn) {
-                logoutBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    localStorage.clear();
-                    location.reload();
-                });
-            }
-        }
     </script>
 </body>
 </html>
